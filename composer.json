@@ -1,0 +1,23 @@
+{
+    "name": "xynha/dicontainer",
+    "description": "PHP dependency injection container",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Asis Pattisahusiwa",
+            "email": "asis.pattisahusiwa@gmail.com"
+        }
+    ],
+    "homepage": "https://github.com/pattisahusiwa/dicontainer",
+    "support": {
+        "issues": "https://github.com/pattisahusiwa/dicontainer/issues"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "require": {}
+}
