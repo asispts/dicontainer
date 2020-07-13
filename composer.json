@@ -19,5 +19,22 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Xynha\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Xynha\\Test\\": "tests"
+        }
+    },
+    "require": {
+        "php": "^7.0",
+        "psr/container": "^1.0"
+    },
+    "require-dev": {
+        "pattisahusiwa/coding-standard": "^0.3.0",
+        "phpunit/phpunit": "^9.2"
+    }
 }
