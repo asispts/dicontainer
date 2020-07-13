@@ -4,5 +4,10 @@ parameters:
         - src
         - tests
 
+    ignoreErrors:
+        -
+            message: '#Method [a-zA-Z0-9:\\_]+\(\) has no return typehint specified.#'
+            path: tests/
+
     # Miscellaneous parameters
     inferPrivatePropertyTypeFromConstructor: true

@@ -1,6 +1,7 @@
 /vendor/
 /.phive/
 /tools/
+/docs/
 
 composer.lock
 phpcs.xml
