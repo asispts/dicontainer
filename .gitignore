@@ -3,3 +3,6 @@
 /tools/
 
 composer.lock
+phpcs.xml
+phpstan.neon
+phpunit.xml

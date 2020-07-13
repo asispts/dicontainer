@@ -11,4 +11,8 @@
   <exclude-pattern>vendor</exclude-pattern>
 
   <rule ref="ptscs"/>
+
+  <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+    <exclude-pattern>./tests/*</exclude-pattern>
+  </rule>
 </ruleset>
