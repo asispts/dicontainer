@@ -1,25 +1,12 @@
 <?php declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Xynha\Container\DiContainer;
-use Xynha\Tests\Data\AbstractClass;
-use Xynha\Tests\Data\PrivateConstructor;
-use Xynha\Tests\Data\ProtectedConstructor;
+use Xynha\Tests\AbstractTestCase;
 
-final class FailedTest extends TestCase
+final class FailedTest extends AbstractTestCase
 {
 
-    /** @var DiContainer */
-    private $dic;
-
-    protected function setUp()
-    {
-        $this->dic = new DiContainer();
-    }
-
-    /** @return void */
     public function testCreateNotExistClass()
     {
         $msg = sprintf('Class or rule `%s` is not found or it is an interface', 'NotExistClass');
@@ -31,34 +18,34 @@ final class FailedTest extends TestCase
 
     public function testInterface()
     {
-        $msg = sprintf('Class or rule `%s` is not found or it is an interface', ArrayAccess::class);
+        $msg = sprintf('Class or rule `%s` is not found or it is an interface', 'ArrayAccess');
         $this->expectException(ContainerExceptionInterface::class);
         $this->expectExceptionMessage($msg);
 
-        $this->dic->get(ArrayAccess::class);
+        $this->dic->get('ArrayAccess');
     }
 
     public function testAbstractClass()
     {
         $this->expectException(ContainerExceptionInterface::class);
-        $this->expectExceptionMessage('Cannot instantiate abstract class ' . AbstractClass::class);
+        $this->expectExceptionMessage('Cannot instantiate abstract class AbstractFailed');
 
-        $this->dic->get(AbstractClass::class);
+        $this->dic->get('AbstractFailed');
     }
 
     public function testPrivateConstructor()
     {
         $this->expectException(ContainerExceptionInterface::class);
-        $this->expectExceptionMessage('Access to non-public constructor of class ' . PrivateConstructor::class);
+        $this->expectExceptionMessage('Access to non-public constructor of class PrivateFailed');
 
-        $this->dic->get(PrivateConstructor::class);
+        $this->dic->get('PrivateFailed');
     }
 
     public function testProtectedConstructor()
     {
         $this->expectException(ContainerExceptionInterface::class);
-        $this->expectExceptionMessage('Access to non-public constructor of class ' . ProtectedConstructor::class);
+        $this->expectExceptionMessage('Access to non-public constructor of class ProtectedFailed');
 
-        $this->dic->get(ProtectedConstructor::class);
+        $this->dic->get('ProtectedFailed');
     }
 }

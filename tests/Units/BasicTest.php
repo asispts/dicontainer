@@ -1,25 +1,15 @@
 <?php declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
-use Xynha\Container\DiContainer;
+use Xynha\Tests\AbstractTestCase;
 
-final class BasicTest extends TestCase
+final class BasicTest extends AbstractTestCase
 {
-
-    /** @var DiContainer */
-    private $dic;
-
-    protected function setUp()
-    {
-        $this->dic = new DiContainer();
-    }
 
     public function testNoConstructor()
     {
-        $this->getMockBuilder('NoConstructorClass')->getMock();
-        $this->assertTrue($this->dic->has('NoConstructorClass'));
+        $this->assertTrue($this->dic->has('NoConstructor'));
 
-        $obj = $this->dic->get('NoConstructorClass');
-        $this->assertInstanceOf('NoConstructorClass', $obj);
+        $obj = $this->dic->get('NoConstructor');
+        $this->assertInstanceOf('NoConstructor', $obj);
     }
 }
