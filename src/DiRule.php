@@ -9,7 +9,7 @@ final class DiRule
     private $key;
 
     /** @var bool */
-    private $shared;
+    private $shared = false;
 
     public function __construct(string $key)
     {

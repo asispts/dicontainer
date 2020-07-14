@@ -19,6 +19,9 @@ final class DiBuilder
     /** @var DiRule */
     private $rule;
 
+    /** @var object[] */
+    private $instances;
+
     public function __construct(ContainerInterface $dic)
     {
         $this->dic = $dic;
@@ -26,13 +29,22 @@ final class DiBuilder
 
     public function createObject(DiRule $rule) : object
     {
+        if (isset($this->instances[$rule->getKey()])) {
+            return $this->instances[$rule->getKey()];
+        }
+
         $this->rule = $rule;
         $ref = new ReflectionClass($rule->getClassname());
 
         $constructor = $ref->getConstructor();
         $params = $constructor ? $this->fetchMethod($constructor) : [];
         try {
-            return $ref->newInstanceArgs($params);
+            $object = $ref->newInstanceArgs($params);
+
+            if ($rule->isShared()) {
+                $this->instances[$rule->getKey()] = $object;
+            }
+            return $object;
         } catch (Error $exc) {
             throw new ContainerException($exc->getMessage(), 1, $exc);
         } catch (ReflectionException $exc) {

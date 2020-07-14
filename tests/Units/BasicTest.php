@@ -40,4 +40,16 @@ final class BasicTest extends AbstractTestCase
         $this->assertSame(6, $dv->i);
         $this->assertSame(3.14, $dv->f);
     }
+
+    public function testSharedInstance()
+    {
+        $this->rule->newRule('SharedInstance')->setShared(true);
+
+        $objA = $this->dic->get('SharedInstance');
+        $objB = $this->dic->get('SharedInstance');
+
+        $objA->arg = 'Replace value';
+
+        $this->assertSame($objA->arg, $objB->arg);
+    }
 }
