@@ -8,6 +8,7 @@ parameters:
         - tests/data/*
 
     ignoreErrors:
+        - '#.+ with generic class ReflectionClass but does not specify its types.+#'
         -
             message: '#Method [a-zA-Z0-9:\\_]+\(\) has no return typehint specified.#'
             path: tests/

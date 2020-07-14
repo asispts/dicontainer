@@ -4,16 +4,21 @@ namespace Xynha\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Xynha\Container\DiContainer;
+use Xynha\Container\DiRuleList;
 
 abstract class AbstractTestCase extends TestCase
 {
+
+    /** @var DiRuleList */
+    protected $rule;
 
     /** @var DiContainer */
     protected $dic;
 
     protected function setUp()
     {
-        $this->dic = new DiContainer();
+        $this->rule = new DiRuleList();
+        $this->dic = new DiContainer($this->rule);
     }
 
     public function __construct()

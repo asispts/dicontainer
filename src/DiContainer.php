@@ -12,6 +12,14 @@ use ReflectionParameter;
 final class DiContainer implements ContainerInterface
 {
 
+    /** @var DiRuleList */
+    private $rule;
+
+    public function __construct(DiRuleList $rule)
+    {
+        $this->rule = $rule;
+    }
+
     /**
      * @param class-string|string $id
      */
