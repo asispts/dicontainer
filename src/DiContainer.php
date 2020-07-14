@@ -6,6 +6,8 @@ use Error;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionMethod;
+use ReflectionParameter;
 
 final class DiContainer implements ContainerInterface
 {
@@ -19,9 +21,7 @@ final class DiContainer implements ContainerInterface
             throw new NotFoundException(sprintf('Class or rule `%s` is not found or it is an interface', $id));
         }
 
-        /** @var class-string $classname */
-        $classname = $id;
-        return $this->createObject($classname, []);
+        return $this->createObject($id);
     }
 
     /**
@@ -33,19 +33,47 @@ final class DiContainer implements ContainerInterface
     }
 
     /**
-     * @param class-string $id
-     * @param array<mixed> $args
+     * @param class-string|string $id
      */
-    private function createObject(string $id, array $args) : object
+    private function createObject(string $id) : object
     {
-        $ref = new ReflectionClass($id);
+        /** @var class-string $classname */
+        $classname = $id;
+        $ref = new ReflectionClass($classname);
 
+        $constructor = $ref->getConstructor();
+        $params = $constructor ? $this->fetchMethod($constructor) : [];
         try {
-            return $ref->newInstanceArgs($args);
+            return $ref->newInstanceArgs($params);
         } catch (Error $exc) {
             throw new ContainerException($exc->getMessage(), 1, $exc);
         } catch (ReflectionException $exc) {
             throw new ContainerException($exc->getMessage(), 1, $exc);
         }
+    }
+
+    private function fetchMethod(ReflectionMethod $cons) : array
+    {
+        $args = [];
+        $params = $cons->getParameters();
+
+        foreach ($params as $param) {
+            $args[$param->getName()] = $this->getParamValue($param);
+        }
+
+        return $args;
+    }
+
+    /** @return mixed */
+    private function getParamValue(ReflectionParameter $param)
+    {
+        if (is_object($param->getClass())) {
+            return $this->getObjectValue($param);
+        }
+    }
+
+    private function getObjectValue(ReflectionParameter $param)
+    {
+        return $this->get($param->getClass()->getName());
     }
 }

@@ -12,4 +12,15 @@ final class BasicTest extends AbstractTestCase
         $obj = $this->dic->get('NoConstructor');
         $this->assertInstanceOf('NoConstructor', $obj);
     }
+
+    public function testCreateObjectGraph()
+    {
+        $a = $this->dic->get('A');
+
+        $this->assertInstanceOf('B', $a->b);
+        $this->assertInstanceOf('c', $a->b->c);
+        $this->assertInstanceOf('D', $a->b->c->d);
+        $this->assertInstanceOf('E', $a->b->c->e);
+        $this->assertInstanceOf('F', $a->b->c->e->f);
+    }
 }
