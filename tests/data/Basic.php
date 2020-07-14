@@ -66,6 +66,8 @@ class F
 class GenericDefaultValue
 {
 
+    public $std;
+
     public $a;
 
     public $b;
@@ -74,8 +76,14 @@ class GenericDefaultValue
 
     public $f;
 
-    public function __construct(string $a = 'Default', array $b = ['Default'], int $i = 6, float $f = 3.14)
-    {
+    public function __construct(
+        stdClass $std = null,
+        string $a = 'Default',
+        array $b = ['Default'],
+        int $i = 6,
+        float $f = 3.14
+    ) {
+        $this->std = $std;
         $this->a = $a;
         $this->b = $b;
         $this->i = $i;

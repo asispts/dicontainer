@@ -29,4 +29,15 @@ final class BasicTest extends AbstractTestCase
         $obj = $this->dic->get('DateTime');
         $this->assertInstanceOf('DateTime', $obj);
     }
+
+    public function testCreateGenericDefaultValue()
+    {
+        $dv = $this->dic->get('GenericDefaultValue');
+
+        $this->assertNull($dv->std);
+        $this->assertSame('Default', $dv->a);
+        $this->assertSame(['Default'], $dv->b);
+        $this->assertSame(6, $dv->i);
+        $this->assertSame(3.14, $dv->f);
+    }
 }

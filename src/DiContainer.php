@@ -69,13 +69,21 @@ final class DiContainer implements ContainerInterface
     private function getParamValue(ReflectionParameter $param)
     {
         if (is_object($param->getClass())) {
-            return $this->getObjectValue($param->getClass());
+            return $this->getObjectValue($param, $param->getClass());
+        }
+
+        if ($param->isDefaultValueAvailable()) {
+            return $param->getDefaultValue();
         }
     }
 
     /** @return object */
-    private function getObjectValue(ReflectionClass $class)
+    private function getObjectValue(ReflectionParameter $param, ReflectionClass $class)
     {
+        if ($param->isDefaultValueAvailable()) {
+            return $param->getDefaultValue();
+        }
+
         return $this->get($class->getName());
     }
 }
