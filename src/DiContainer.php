@@ -28,7 +28,8 @@ final class DiContainer implements ContainerInterface
             throw new NotFoundException(sprintf('Class or rule `%s` is not found or it is an interface', $id));
         }
 
-        return $this->builder->createObject($id);
+        $rule = $this->rule->hasRule($id) ? $this->rule->getRule($id) : $this->rule->newRule($id);
+        return $this->builder->createObject($rule);
     }
 
     /**

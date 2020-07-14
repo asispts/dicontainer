@@ -16,19 +16,18 @@ final class DiBuilder
     /** @var ContainerInterface */
     private $dic;
 
+    /** @var DiRule */
+    private $rule;
+
     public function __construct(ContainerInterface $dic)
     {
         $this->dic = $dic;
     }
 
-    /**
-     * @param string $id
-     */
-    public function createObject(string $id) : object
+    public function createObject(DiRule $rule) : object
     {
-        /** @var class-string $classname */
-        $classname = $id;
-        $ref = new ReflectionClass($classname);
+        $this->rule = $rule;
+        $ref = new ReflectionClass($rule->getClassname());
 
         $constructor = $ref->getConstructor();
         $params = $constructor ? $this->fetchMethod($constructor) : [];
