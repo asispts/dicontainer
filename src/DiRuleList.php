@@ -22,14 +22,14 @@ final class DiRuleList
         $this->rules[$rule->getKey()] = $rule;
     }
 
-    /** @return DiRule|null */
+    /** @return DiRule */
     public function getRule(string $key)
     {
         if ($this->hasRule($key)) {
             return $this->rules[$key];
         }
 
-        return null;
+        throw new NotFoundException(sprintf('Rule %s is not found', $key));
     }
 
     public function hasRule(string $key) : bool

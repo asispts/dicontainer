@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
+use Psr\Container\NotFoundExceptionInterface;
 use Xynha\Container\DiRule;
 use Xynha\Container\DiRuleList;
 
@@ -17,7 +18,10 @@ final class DiRuleTest extends TestCase
 
     public function testGetNotExistRule()
     {
-        $this->assertNull($this->list->getRule('key'));
+        $this->expectException(NotFoundExceptionInterface::class);
+        $this->expectExceptionMessage('Rule key is not found');
+
+        $this->list->getRule('key');
     }
 
     public function testAddRuleObject()
