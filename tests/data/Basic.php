@@ -62,3 +62,23 @@ class F
 {
 
 }
+
+class GenericDefaultValue
+{
+
+    public $a;
+
+    public $b;
+
+    public $i;
+
+    public $f;
+
+    public function __construct(string $a = 'Default', array $b = ['Default'], int $i = 6, float $f = 3.14)
+    {
+        $this->a = $a;
+        $this->b = $b;
+        $this->i = $i;
+        $this->f = $f;
+    }
+}

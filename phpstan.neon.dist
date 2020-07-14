@@ -4,6 +4,9 @@ parameters:
         - src
         - tests
 
+    excludes_analyse:
+        - tests/data/*
+
     ignoreErrors:
         -
             message: '#Method [a-zA-Z0-9:\\_]+\(\) has no return typehint specified.#'

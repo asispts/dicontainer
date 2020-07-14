@@ -23,4 +23,10 @@ final class BasicTest extends AbstractTestCase
         $this->assertInstanceOf('E', $a->b->c->e);
         $this->assertInstanceOf('F', $a->b->c->e->f);
     }
+
+    public function testObjectWithMixedDefaultValue()
+    {
+        $obj = $this->dic->get('DateTime');
+        $this->assertInstanceOf('DateTime', $obj);
+    }
 }

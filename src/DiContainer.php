@@ -52,6 +52,7 @@ final class DiContainer implements ContainerInterface
         }
     }
 
+    /** @return array<mixed> */
     private function fetchMethod(ReflectionMethod $cons) : array
     {
         $args = [];
@@ -68,12 +69,13 @@ final class DiContainer implements ContainerInterface
     private function getParamValue(ReflectionParameter $param)
     {
         if (is_object($param->getClass())) {
-            return $this->getObjectValue($param);
+            return $this->getObjectValue($param->getClass());
         }
     }
 
-    private function getObjectValue(ReflectionParameter $param)
+    /** @return object */
+    private function getObjectValue(ReflectionClass $class)
     {
-        return $this->get($param->getClass()->getName());
+        return $this->get($class->getName());
     }
 }
