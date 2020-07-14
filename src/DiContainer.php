@@ -21,7 +21,7 @@ final class DiContainer implements ContainerInterface
     }
 
     /**
-     * @param class-string|string $id
+     * @param string $id
      */
     public function get($id)
     {
@@ -33,15 +33,26 @@ final class DiContainer implements ContainerInterface
     }
 
     /**
-     * @param class-string|string $id
+     * This code is intended for test coverage purpose.
+     * Do not simplify!
+     *
+     * @param string $id
      */
     public function has($id)
     {
-        return class_exists($id);
+        if ($this->rule->hasRule($id)) {
+            return true;
+        }
+
+        if (class_exists($id)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * @param class-string|string $id
+     * @param string $id
      */
     private function createObject(string $id) : object
     {

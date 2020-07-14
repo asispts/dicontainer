@@ -28,6 +28,8 @@ final class DiRuleList
         if ($this->hasRule($key)) {
             return $this->rules[$key];
         }
+
+        return null;
     }
 
     public function hasRule(string $key) : bool

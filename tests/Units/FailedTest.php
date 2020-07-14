@@ -1,20 +1,10 @@
 <?php declare(strict_types=1);
 
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Xynha\Tests\AbstractTestCase;
 
 final class FailedTest extends AbstractTestCase
 {
-
-    public function testCreateNotExistClass()
-    {
-        $msg = sprintf('Class or rule `%s` is not found or it is an interface', 'NotExistClass');
-        $this->expectException(NotFoundExceptionInterface::class);
-        $this->expectExceptionMessage($msg);
-
-        $this->dic->get('NotExistClass');
-    }
 
     public function testInterface()
     {
