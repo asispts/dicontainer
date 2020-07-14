@@ -21,6 +21,14 @@ final class DiRule
         return $this->key;
     }
 
+    /** @return class-string */
+    public function getClassname() : string
+    {
+        /** @var class-string $classname */
+        $classname = $this->key;
+        return $classname;
+    }
+
     /** @return void */
     public function setShared(bool $shared)
     {
