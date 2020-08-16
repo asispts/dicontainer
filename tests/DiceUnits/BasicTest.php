@@ -54,8 +54,8 @@ final class BasicTest extends DiceTest
 
     public function testDefaultRuleWorks()
     {
-        $ruleA = new DiRule('A', ['shared' => false]);
-        $ruleB = new DiRule('B', ['shared' => false]);
+        $ruleA = new DiRule('A', []);
+        $ruleB = new DiRule('B', []);
         $global = new DiRule('*', ['shared' => true]);
 
         $list = $this->rlist->addRule($ruleA);
@@ -167,10 +167,6 @@ final class BasicTest extends DiceTest
 
     public function testSharedOverride()
     {
-        if (DIC_BASIC === false) {
-            $this->markTestIncomplete('Unimplemented feature');
-        }
-
         //Set everything to shared by default
         $list = $this->rlist->addRule(new DiRule('*', ['shared' => true]));
         $list = $list->addRule(new DiRule('A', ['shared' => false]));

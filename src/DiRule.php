@@ -14,14 +14,8 @@ final class DiRule
     /** @var class-string */
     private $className;
 
-    /** @var bool */
-    private $shared = false;
-
-    /** @var array<int,mixed> */
-    private $params;
-
-    /** @var array<string,string> */
-    private $interfaces;
+    /** @var array<string,mixed> */
+    private $rules;
 
     /** @param array<string,mixed> $rules */
     public function __construct(string $key, array $rules)
@@ -29,9 +23,7 @@ final class DiRule
         $this->key = $key;
 
         $this->className = $rules['instanceOf'] ?? $key;
-        $this->shared = (bool)($rules['shared'] ?? false);
-        $this->params = $rules['constructParams'] ?? [];
-        $this->interfaces = $rules['substitutions'] ?? [];
+        $this->rules = $rules;
     }
 
     public function getKey() : string
@@ -47,24 +39,36 @@ final class DiRule
 
     public function isShared() : bool
     {
-        return $this->shared;
+        return (bool)($this->rules['shared'] ?? false);
     }
 
     /** @return array<int,mixed> */
     public function getParams() : array
     {
-        return $this->params;
+        return $this->rules['constructParams'] ?? [];
     }
 
     /** @return array<string,string> */
     public function getSubstitutions() : array
     {
-        return $this->interfaces;
+        return $this->rules['substitutions'] ?? [];
     }
 
     public function cloneFrom(DiRule $rule) : void
     {
-        $this->shared = $rule->shared;
+        foreach ($rule->rules as $key => $value) {
+            switch ($key) {
+                case 'shared':
+                    if (array_key_exists($key, $this->rules) === false) {
+                        $this->rules[$key] = $value;
+                    }
+                    break;
+                case 'constructParams':
+                case 'substitutions':
+                    $this->rules[$key] = array_merge($this->rules[$key], $value);
+                    break;
+            }
+        }
     }
 
     public function addGlobalRule(DiRule $rule): void
