@@ -5,6 +5,9 @@ namespace Xynha\Container;
 final class DiRule
 {
 
+    /** @var bool */
+    private $global = false;
+
     /** @var string */
     private $key;
 
@@ -62,5 +65,13 @@ final class DiRule
     public function cloneFrom(DiRule $rule) : void
     {
         $this->shared = $rule->shared;
+    }
+
+    public function addGlobalRule(DiRule $rule): void
+    {
+        if ($this->global === false) {
+            $this->global = true;
+            $this->cloneFrom($rule);
+        }
     }
 }

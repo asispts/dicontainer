@@ -17,6 +17,27 @@ final class DiRuleList
 
     public function getRule(string $key) : DiRule
     {
+        $rule = $this->findRule($key);
+
+        if (array_key_exists('*', $this->rules)) {
+            $rule->addGlobalRule($this->rules['*']);
+        }
+
+        return $rule;
+    }
+
+    public function hasRule(string $key) : bool
+    {
+        return array_key_exists($key, $this->rules);
+    }
+
+    private function addToRule(DiRuleList $list, DiRule $rule) : void
+    {
+        $list->rules[$rule->getKey()] = $rule;
+    }
+
+    private function findRule(string $key) : DiRule
+    {
         if ($this->hasRule($key)) {
             return $this->rules[$key];
         }
@@ -37,15 +58,5 @@ final class DiRuleList
         }
 
         throw new NotFoundException(sprintf('Rule %s is not found', $key));
-    }
-
-    public function hasRule(string $key) : bool
-    {
-        return array_key_exists($key, $this->rules);
-    }
-
-    private function addToRule(DiRuleList $list, DiRule $rule) : void
-    {
-        $list->rules[$rule->getKey()] = $rule;
     }
 }

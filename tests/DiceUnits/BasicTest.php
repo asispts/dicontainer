@@ -44,31 +44,33 @@ final class BasicTest extends DiceTest
 
     public function testSetDefaultRule()
     {
-        // $defaultBehaviour = [];
-        // $defaultBehaviour['shared'] = true;
-        // $this->rlist->newRule('*', $defaultBehaviour);
+        $global = new DiRule('*', ['shared' => true]);
+        $list = $this->rlist->addRule($global);
+        $rule = $list->getRule('*');
 
-        // $rule = $dice->getRule('*');
-        // foreach ($defaultBehaviour as $name => $value) {
-        //     $this->assertEquals($rule[$name], $defaultBehaviour[$name]);
-        // }
+        $this->assertTrue($rule->isShared());
     }
 
     public function testDefaultRuleWorks()
     {
-        // $defaultBehaviour = [];
-        // $defaultBehaviour['shared'] = true;
+        $ruleA = new DiRule('A', ['shared' => false]);
+        $ruleB = new DiRule('B', ['shared' => false]);
+        $global = new DiRule('*', ['shared' => true]);
 
-        // $this->rlist->newRule('*', $defaultBehaviour);
+        $list = $this->rlist->addRule($ruleA);
+        $list = $list->addRule($global);
+        $list = $list->addRule($ruleB);
 
-        // $rule = $dice->getRule('A');
+        $a = $list->getRule('A');
+        $b = $list->getRule('B');
+        $this->assertTrue($a->isShared());
+        $this->assertTrue($b->isShared());
 
-        // $this->assertTrue($rule['shared']);
+        $dic = new DiContainer($list);
+        $a1 = $dic->get('A');
+        $a2 = $dic->get('A');
 
-        // $a1 = $this->dic->get('A');
-        // $a2 = $this->dic->get('A');
-
-        // $this->assertSame($a1, $a2);
+        $this->assertSame($a1, $a2);
     }
 
     // /*
