@@ -46,7 +46,7 @@ final class DiContainer extends AbstractDiContainer
     {
         $params = [];
         foreach ($info->getParams() as $arg) {
-            if ($arg->isObject()) {
+            if ($arg->isObject() && !$arg->isInterface()) {
                 $this->checkCircular($info->className(), $arg->className());
             }
             $params[] = $this->getParamValue($arg);

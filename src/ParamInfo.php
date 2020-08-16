@@ -17,6 +17,8 @@ final class ParamInfo
     /** @var bool */
     private $isObject = false;
 
+    private $interface = false;
+
     /** @var bool */
     private $hasValue = false;
 
@@ -41,6 +43,11 @@ final class ParamInfo
     public function isObject() : bool
     {
         return $this->isObject;
+    }
+
+    public function isInterface() : bool
+    {
+        return $this->interface;
     }
 
     public function className() : string
@@ -93,12 +100,11 @@ final class ParamInfo
         $this->className = $cls->getName();
 
         if ($cls->isInterface()) {
-            if (array_key_exists($this->className, $subs) === false) {
-                throw new ContainerException(sprintf('Missing %s substitution', $this->className));
+            $this->interface = true;
+            if (array_key_exists($this->className, $subs)) {
+                $this->className = $subs[$this->className];
+                return;
             }
-
-            $this->className = $subs[$this->className];
-            return;
         }
 
         try {

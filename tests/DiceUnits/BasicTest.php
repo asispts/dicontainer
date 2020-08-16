@@ -180,10 +180,6 @@ final class BasicTest extends DiceTest
 
     public function testOptionalInterface()
     {
-        if (DIC_BASIC === false) {
-            $this->markTestIncomplete('Unimplemented feature');
-        }
-
         $dic = new DiContainer($this->rlist);
         $optionalInterface = $dic->get('OptionalInterface');
 
