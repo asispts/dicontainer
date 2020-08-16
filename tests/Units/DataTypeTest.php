@@ -21,4 +21,10 @@ final class DataTypeTest extends AbstractTestCase
 
         $this->dic->get(ScalarType::class);
     }
+
+    public function testScalarType()
+    {
+        $obj = $this->dic->get(ScalarType::class);
+        $this->assertInstanceOf(ScalarType::class, $obj);
+    }
 }

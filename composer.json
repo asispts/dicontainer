@@ -1,6 +1,13 @@
 {
     "name": "xynha/dicontainer",
-    "description": "PHP dependency injection container",
+    "description": "PSR-11 compliant PHP dependency injection container",
+    "keywords": [
+        "psr-11",
+        "dependency-injection",
+        "container",
+        "container-interop",
+        "di"
+    ],
     "type": "library",
     "license": "Apache-2.0",
     "authors": [
