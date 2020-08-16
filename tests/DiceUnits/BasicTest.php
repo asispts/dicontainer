@@ -242,18 +242,7 @@ final class BasicTest extends DiceTest
 
     public function testPassSelf()
     {
-        // $this->rlist->newRule(
-        //     'CheckConstructorArgs',
-        //     [
-        //      'constructParams' => [
-        //                            ['Dice::INSTANCE' => 'Dice::SELF'],
-        //                           ]
-        //     ]
-        // );
-
-        // $obj = $this->dic->get('CheckConstructorArgs');
-
-        // $this->assertEquals($dice, $obj->arg1);
+        $this->markTestSkipped('This feature is not supported');
     }
 
     // Issue 180
