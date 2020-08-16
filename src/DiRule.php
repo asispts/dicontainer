@@ -20,7 +20,7 @@ final class DiRule
     /** @param array<string,mixed> $rules */
     public function __construct(string $key, array $rules)
     {
-        $this->key = $key;
+        $this->key = ltrim($key, '\\');
 
         $this->className = $rules['instanceOf'] ?? $key;
         $this->rules = $rules;

@@ -3,7 +3,6 @@
 use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
 use Xynha\Container\DiRule;
-use Xynha\Container\DiRuleList;
 use Xynha\Container\NotFoundException;
 use Xynha\Tests\DiceUnits\DiceTest;
 
@@ -237,7 +236,7 @@ final class BasicTest extends DiceTest
     public function testImmutability()
     {
         $this->assertFalse($this->rlist->hasRule('Foo'));
-        $list = $this->rlist->addRule(new DiRule('Foo', ['shared' => true]));
+        $this->rlist->addRule(new DiRule('Foo', ['shared' => true]));
         $this->assertFalse($this->rlist->hasRule('Foo'));
     }
 
@@ -260,10 +259,6 @@ final class BasicTest extends DiceTest
     // Issue 180
     public function testSlashNoSlash()
     {
-        if (DIC_BASIC === false) {
-            $this->markTestIncomplete('Unimplemented feature');
-        }
-
         $list = $this->rlist->addRule(new DiRule('\someclass', ['shared' => true]));
         $dic = new DiContainer($list);
 
