@@ -8,12 +8,13 @@ final class ClassInfo
 {
 
     /** @var ParamInfo[] */
-    private $params;
+    private $params = [];
 
-    public function __construct(?ReflectionMethod $con)
+    /** @param array<int,mixed> $values */
+    public function __construct(?ReflectionMethod $con, array $values)
     {
         if ($con !== null) {
-            $this->parse($con);
+            $this->parse($con, $values);
         }
     }
 
@@ -23,12 +24,13 @@ final class ClassInfo
         return $this->params ?? [];
     }
 
-    private function parse(ReflectionMethod $con) : void
+    /** @param array<int,mixed> $values */
+    private function parse(ReflectionMethod $con, array $values) : void
     {
         $params = $con->getParameters();
 
         foreach ($params as $param) {
-            $arg = new ParamInfo($param);
+            $arg = new ParamInfo($param, $values);
             $this->params[$arg->name()] = $arg;
         }
     }

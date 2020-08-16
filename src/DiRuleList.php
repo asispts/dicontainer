@@ -8,9 +8,10 @@ final class DiRuleList
     /** @var array<string,DiRule> */
     private $rules = [];
 
-    public function newRule(string $key) : DiRule
+    /** @param array<string,mixed> $rules */
+    public function newRule(string $key, array $rules) : DiRule
     {
-        $rule = new DiRule($key);
+        $rule = new DiRule($key, $rules);
         $this->addRule($rule);
 
         return $rule;

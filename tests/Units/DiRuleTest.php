@@ -23,22 +23,4 @@ final class DiRuleTest extends TestCase
 
         $this->list->getRule('key');
     }
-
-    public function testAddRuleObject()
-    {
-        $rule = new DiRule('key');
-        $this->list->addRule($rule);
-
-        $rule->setShared(true);
-
-        $this->assertSame($rule, $this->list->getRule('key'));
-    }
-
-    public function testNewRule()
-    {
-        $rule = $this->list->newRule('key');
-        $rule->setShared(true);
-
-        $this->assertSame($rule, $this->list->getRule('key'));
-    }
 }

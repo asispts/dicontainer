@@ -11,9 +11,15 @@ final class DiRule
     /** @var bool */
     private $shared = false;
 
-    public function __construct(string $key)
+    /** @var array<int,mixed> */
+    private $params;
+
+    /** @param array<string,mixed> $rules */
+    public function __construct(string $key, array $rules)
     {
         $this->key = $key;
+        $this->params = $rules['constructParams'] ?? [];
+        $this->shared = (bool)($rules['shared'] ?? false);
     }
 
     public function getKey() : string
@@ -29,14 +35,14 @@ final class DiRule
         return $classname;
     }
 
-    /** @return void */
-    public function setShared(bool $shared)
-    {
-        $this->shared = $shared;
-    }
-
     public function isShared() : bool
     {
         return $this->shared;
+    }
+
+    /** @return array<int,mixed> */
+    public function getParams() : array
+    {
+        return $this->params;
     }
 }

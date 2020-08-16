@@ -2,7 +2,9 @@
 
 namespace Xynha\Container;
 
+use ReflectionNamedType;
 use ReflectionParameter;
+use RuntimeException;
 
 final class ParamInfo
 {
@@ -17,18 +19,16 @@ final class ParamInfo
     private $isObject = false;
 
     /** @var bool */
-    private $hasDefault = false;
+    private $hasValue = false;
 
-    /** @var bool */
-    private $defValue;
+    /** @var mixed */
+    private $value;
 
-    /** @var bool */
-    private $allowsNull = false;
-
-    public function __construct(ReflectionParameter $param)
+    /** @param array<int,mixed> $values */
+    public function __construct(ReflectionParameter $param, array &$values)
     {
         $this->name = $param->getName();
-        $this->fetchInfo($param);
+        $this->fetchInfo($param, $values);
     }
 
     public function name() : string
@@ -46,34 +46,68 @@ final class ParamInfo
         return $this->className;
     }
 
-    public function hasDefaultValue() : bool
+    public function hasValue() : bool
     {
-        return $this->hasDefault;
+        return $this->hasValue;
     }
 
     /** @return mixed */
-    public function defaultValue()
+    public function getValue()
     {
-        return $this->defValue;
+        return $this->value;
     }
 
-    public function allowsNull() : bool
-    {
-        return $this->allowsNull;
-    }
-
-    private function fetchInfo(ReflectionParameter $param) : void
+    /** @param array<int,mixed> $values */
+    private function fetchInfo(ReflectionParameter $param, array &$values) : void
     {
         if (is_object($param->getClass())) {
+            $this->getObjectValue($param, $values);
+            return;
+        }
+
+        if (count($values) <= 0) {
+            $this->getDefaultValue($param);
+            return;
+        }
+
+        // @todo: Validate scalar type
+        // Get from passed values
+        $key = key($values);
+        $value = $values[$key];
+        unset($values[$key]);
+        $this->setValue($value);
+    }
+
+    private function getObjectValue(ReflectionParameter $param, array &$values) : void
+    {
+        try {
             $this->isObject = true;
             $this->className = $param->getClass()->getName();
+            $this->getDefaultValue($param);
+        } catch (ContainerException $exc) {
         }
+        // @todo: get from passed values
+    }
 
+    private function getDefaultValue(ReflectionParameter $param) : void
+    {
         if ($param->isDefaultValueAvailable()) {
-            $this->hasDefault = true;
-            $this->defValue = $param->getDefaultValue();
+            $this->setValue($param->getDefaultValue());
+            return;
         }
 
-        $this->allowsNull = $param->allowsNull();
+        if ($param->allowsNull()) {
+            $this->setValue(null);
+            return;
+        }
+
+        throw new ContainerException('Missing required value for $' . $this->name);
+    }
+
+    /** @param mixed $value */
+    private function setValue($value) : void
+    {
+        $this->hasValue = true;
+        $this->value = $value;
     }
 }

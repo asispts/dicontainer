@@ -23,7 +23,7 @@ abstract class AbstractDiContainer implements ContainerInterface
             throw new NotFoundException(sprintf('Class or rule `%s` is not found or it is an interface', $id));
         }
 
-        $rule = $this->list->hasRule($id) ? $this->list->getRule($id) : $this->list->newRule($id);
+        $rule = $this->list->hasRule($id) ? $this->list->getRule($id) : $this->list->newRule($id, []);
         return $this->createObject($rule);
     }
 

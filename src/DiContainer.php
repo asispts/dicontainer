@@ -5,9 +5,6 @@ namespace Xynha\Container;
 use Error;
 use ReflectionClass;
 use ReflectionException;
-use ReflectionMethod;
-use ReflectionParameter;
-use RuntimeException;
 
 final class DiContainer extends AbstractDiContainer
 {
@@ -22,7 +19,7 @@ final class DiContainer extends AbstractDiContainer
         }
 
         $ref = new ReflectionClass($rule->getClassname());
-        $object = $this->getObject($ref, new ClassInfo($ref->getConstructor()));
+        $object = $this->getObject($ref, new ClassInfo($ref->getConstructor(), $rule->getParams()));
 
         if ($rule->isShared()) {
             $this->instances[$rule->getKey()] = $object;
@@ -45,7 +42,7 @@ final class DiContainer extends AbstractDiContainer
     }
 
     /** @return array<int,mixed> */
-    public function getParams(ClassInfo $info) : array
+    private function getParams(ClassInfo $info) : array
     {
         $params = [];
         foreach ($info->getParams() as $arg) {
@@ -59,27 +56,17 @@ final class DiContainer extends AbstractDiContainer
     private function getParamValue(ParamInfo $arg)
     {
         if ($arg->isObject()) {
-            if ($arg->hasDefaultValue()) {
-                return $arg->defaultValue();
+            if ($arg->hasValue()) {
+                return $arg->getValue();
             }
 
             return $this->get($arg->className());
         }
 
-        // Process scalar parameters:
-        // 1. Get value from rule
-        // 2. Get default value if available
-        // 3. Return null if supported
-        // 4. Throw required value exception
-        if ($arg->hasDefaultValue()) { // #2
-            return $arg->defaultValue();
+        if ($arg->hasValue()) {
+            return $arg->getValue();
         }
 
-        if ($arg->allowsNull()) { // #3
-            return null;
-        }
-
-        // #4
-        throw new ContainerException(sprintf('Required value for variable $%s', $arg->name()));
+        throw new ContainerException('Missing required value for $' . $arg->name());
     }
 }
