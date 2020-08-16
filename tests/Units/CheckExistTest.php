@@ -32,7 +32,7 @@ final class CheckExistTest extends AbstractTestCase
 
     public function testCheckExistRule()
     {
-        $this->rule->newRule('TestRule');
+        $this->rlist->newRule('TestRule');
         $this->assertTrue($this->dic->has('TestRule'));
     }
 }

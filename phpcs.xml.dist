@@ -9,6 +9,7 @@
   <file>tests</file>
 
   <exclude-pattern>vendor</exclude-pattern>
+  <exclude-pattern>tests/Data/*</exclude-pattern>
 
   <rule ref="ptscs"/>
 
@@ -18,13 +19,5 @@
 
   <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
     <exclude-pattern>tests/*</exclude-pattern>
-  </rule>
-
-  <rule ref="Generic.PHP.RequireStrictTypes">
-    <exclude-pattern>tests/data/*</exclude-pattern>
-  </rule>
-
-  <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
-    <exclude-pattern>tests/data/*</exclude-pattern>
   </rule>
 </ruleset>

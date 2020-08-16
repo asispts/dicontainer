@@ -3,6 +3,10 @@
 use Xynha\Container\ContainerException;
 use Xynha\Container\NotFoundException;
 use Xynha\Tests\AbstractTestCase;
+use Xynha\Tests\Data\Invalid\AbstractClass;
+use Xynha\Tests\Data\Invalid\PrivateClass;
+use Xynha\Tests\Data\Invalid\ProtectedClass;
+use Xynha\Tests\Data\Invalid\TraitTest;
 
 final class FailedTest extends AbstractTestCase
 {
@@ -13,30 +17,39 @@ final class FailedTest extends AbstractTestCase
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage($msg);
 
-        $this->dic->get('ArrayAccess');
+        $this->dic->get(ArrayAccess::class);
+    }
+
+    public function testConstructTrait()
+    {
+        $msg = sprintf('Class or rule `%s` is not found or it is an interface', TraitTest::class);
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage($msg);
+
+        $this->dic->get(TraitTest::class);
     }
 
     public function testAbstractClass()
     {
         $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage('Cannot instantiate abstract class AbstractFailed');
+        $this->expectExceptionMessage('Cannot instantiate abstract class ' . AbstractClass::class);
 
-        $this->dic->get('AbstractFailed');
+        $this->dic->get(AbstractClass::class);
     }
 
     public function testPrivateConstructor()
     {
         $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage('Access to non-public constructor of class PrivateFailed');
+        $this->expectExceptionMessage('Access to non-public constructor of class ' . PrivateClass::class);
 
-        $this->dic->get('PrivateFailed');
+        $this->dic->get(PrivateClass::class);
     }
 
     public function testProtectedConstructor()
     {
         $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage('Access to non-public constructor of class ProtectedFailed');
+        $this->expectExceptionMessage('Access to non-public constructor of class ' . ProtectedClass::class);
 
-        $this->dic->get('ProtectedFailed');
+        $this->dic->get(ProtectedClass::class);
     }
 }

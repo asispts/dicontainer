@@ -5,7 +5,7 @@ parameters:
         - tests
 
     excludes_analyse:
-        - tests/data/*
+        - tests/Data/*
 
     ignoreErrors:
         -
