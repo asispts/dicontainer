@@ -58,4 +58,9 @@ final class DiRule
     {
         return $this->interfaces;
     }
+
+    public function cloneFrom(DiRule $rule) : void
+    {
+        $this->shared = $rule->shared;
+    }
 }

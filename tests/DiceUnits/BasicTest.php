@@ -124,10 +124,6 @@ final class BasicTest extends DiceTest
 
     public function testInterfaceRule()
     {
-        if (DIC_BASIC === false) {
-            $this->markTestIncomplete('Unimplemented feature');
-        }
-
         $rule['shared'] = true;
         $list = $this->rlist->addRule(new DiRule('interfaceTest', $rule));
         $dic = new DiContainer($list);
