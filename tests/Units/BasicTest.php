@@ -1,5 +1,7 @@
 <?php declare(strict_types=1);
 
+namespace Xynha\Tests\Units;
+
 use Xynha\Tests\AbstractTestCase;
 use Xynha\Tests\Data\ClassGraph;
 use Xynha\Tests\Data\NoConstructor;

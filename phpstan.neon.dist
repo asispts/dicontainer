@@ -5,7 +5,11 @@ parameters:
         - tests
 
     excludes_analyse:
-        - tests/Data/*
+        - tests/Data
+        - tests/DiceUnits
+
+    bootstrapFiles:
+        - tests/bootstrap.php
 
     ignoreErrors:
         -
