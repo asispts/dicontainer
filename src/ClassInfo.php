@@ -10,11 +10,10 @@ final class ClassInfo
     /** @var ParamInfo[] */
     private $params = [];
 
-    /** @param array<int,mixed> $values */
-    public function __construct(?ReflectionMethod $con, array $values)
+    public function __construct(?ReflectionMethod $con, DiRule $rule)
     {
         if ($con !== null) {
-            $this->parse($con, $values);
+            $this->parse($con, $rule);
         }
     }
 
@@ -24,13 +23,13 @@ final class ClassInfo
         return $this->params ?? [];
     }
 
-    /** @param array<int,mixed> $values */
-    private function parse(ReflectionMethod $con, array $values) : void
+    private function parse(ReflectionMethod $con, DiRule $rule) : void
     {
         $params = $con->getParameters();
+        $values = $rule->getParams();
 
         foreach ($params as $param) {
-            $arg = new ParamInfo($param, $values);
+            $arg = new ParamInfo($param, $values, $rule->getSubstitutions());
             $this->params[$arg->name()] = $arg;
         }
     }

@@ -14,12 +14,17 @@ final class DiRule
     /** @var array<int,mixed> */
     private $params;
 
+    /** @var array<string,string> */
+    private $interfaces;
+
     /** @param array<string,mixed> $rules */
     public function __construct(string $key, array $rules)
     {
         $this->key = $key;
-        $this->params = $rules['constructParams'] ?? [];
+
         $this->shared = (bool)($rules['shared'] ?? false);
+        $this->params = $rules['constructParams'] ?? [];
+        $this->interfaces = $rules['substitutions'] ?? [];
     }
 
     public function getKey() : string
@@ -44,5 +49,11 @@ final class DiRule
     public function getParams() : array
     {
         return $this->params;
+    }
+
+    /** @return array<string,string> */
+    public function getSubstitutions() : array
+    {
+        return $this->interfaces;
     }
 }

@@ -19,7 +19,7 @@ final class DiContainer extends AbstractDiContainer
         }
 
         $ref = new ReflectionClass($rule->getClassname());
-        $object = $this->getObject($ref, new ClassInfo($ref->getConstructor(), $rule->getParams()));
+        $object = $this->getObject($ref, new ClassInfo($ref->getConstructor(), $rule));
 
         if ($rule->isShared()) {
             $this->instances[$rule->getKey()] = $object;

@@ -2,9 +2,8 @@
 
 namespace Xynha\Container;
 
-use ReflectionNamedType;
+use ReflectionClass;
 use ReflectionParameter;
-use RuntimeException;
 
 final class ParamInfo
 {
@@ -24,11 +23,14 @@ final class ParamInfo
     /** @var mixed */
     private $value;
 
-    /** @param array<int,mixed> $values */
-    public function __construct(ReflectionParameter $param, array &$values)
+    /**
+     * @param array<int,mixed> $values
+     * @param array<string,string> $subs
+     */
+    public function __construct(ReflectionParameter $param, array &$values, array $subs)
     {
         $this->name = $param->getName();
-        $this->fetchInfo($param, $values);
+        $this->fetchInfo($param, $values, $subs);
     }
 
     public function name() : string
@@ -57,11 +59,14 @@ final class ParamInfo
         return $this->value;
     }
 
-    /** @param array<int,mixed> $values */
-    private function fetchInfo(ReflectionParameter $param, array &$values) : void
+    /**
+     * @param array<int,mixed> $values
+     * @param array<string,string> $subs
+     */
+    private function fetchInfo(ReflectionParameter $param, array &$values, array $subs) : void
     {
         if (is_object($param->getClass())) {
-            $this->getObjectValue($param, $values);
+            $this->getObjectValue($param, $param->getClass(), $subs);
             return;
         }
 
@@ -78,11 +83,27 @@ final class ParamInfo
         $this->setValue($value);
     }
 
-    private function getObjectValue(ReflectionParameter $param, array &$values) : void
+    /**
+     * @param ReflectionClass<Object> $cls
+     * @param array<string,string> $subs
+     */
+    private function getObjectValue(ReflectionParameter $param, ReflectionClass $cls, array $subs) : void
     {
+        $this->isObject = true;
+        $this->className = $cls->getName();
+
+        if ($cls->isInterface()) {
+            if (array_key_exists($this->className, $subs) === false) {
+                throw new ContainerException(sprintf('Missing %s substitution', $this->className));
+            }
+
+            $this->className = $subs[$this->className];
+            return;
+        }
+
+
+
         try {
-            $this->isObject = true;
-            $this->className = $param->getClass()->getName();
             $this->getDefaultValue($param);
         } catch (ContainerException $exc) {
         }
