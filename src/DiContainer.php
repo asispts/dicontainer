@@ -2,52 +2,79 @@
 
 namespace Xynha\Container;
 
-use Psr\Container\ContainerInterface;
+use Error;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
+use ReflectionParameter;
 
-final class DiContainer implements ContainerInterface
+final class DiContainer extends AbstractDiContainer
 {
 
-    /** @var DiRuleList */
-    private $rule;
+    /** @var object[] */
+    private $instances;
 
-    /** @var DiBuilder */
-    private $builder;
-
-    public function __construct(DiRuleList $rule)
+    protected function createObject(DiRule $rule) : Object
     {
-        $this->rule = $rule;
-        $this->builder = new DiBuilder($this);
-    }
-
-    /**
-     * @param string $id
-     */
-    public function get($id)
-    {
-        if ($this->has($id) === false) {
-            throw new NotFoundException(sprintf('Class or rule `%s` is not found or it is an interface', $id));
+        if (isset($this->instances[$rule->getKey()])) {
+            return $this->instances[$rule->getKey()];
         }
 
-        $rule = $this->rule->hasRule($id) ? $this->rule->getRule($id) : $this->rule->newRule($id);
-        return $this->builder->createObject($rule);
+        $ref = new ReflectionClass($rule->getClassname());
+
+        $constructor = $ref->getConstructor();
+        $params = $constructor ? $this->fetchMethod($constructor) : [];
+
+        try {
+            $object = $ref->newInstanceArgs($params);
+        } catch (Error $exc) {
+            throw new ContainerException($exc->getMessage(), 1, $exc);
+        } catch (ReflectionException $exc) {
+            throw new ContainerException($exc->getMessage(), 1, $exc);
+        }
+
+        if ($rule->isShared()) {
+            $this->instances[$rule->getKey()] = $object;
+        }
+        return $object;
+    }
+
+    /** @return array<mixed> */
+    private function fetchMethod(ReflectionMethod $cons) : array
+    {
+        $args = [];
+        $params = $cons->getParameters();
+
+        foreach ($params as $param) {
+            $args[$param->getName()] = $this->getParamValue($param);
+        }
+
+        return $args;
+    }
+
+    /** @return mixed */
+    private function getParamValue(ReflectionParameter $param)
+    {
+        if (is_object($param->getClass())) {
+            return $this->getObjectValue($param, $param->getClass());
+        }
+
+        if ($param->isDefaultValueAvailable()) {
+            return $param->getDefaultValue();
+        }
     }
 
     /**
-     * This code is intended for test coverage purpose.
-     * Do not simplify!
+     * @param ReflectionClass<Object> $class
      *
-     * @param string $id
+     * @return object
      */
-    public function has($id)
+    private function getObjectValue(ReflectionParameter $param, ReflectionClass $class)
     {
-        if ($this->rule->hasRule($id)) {
-            return true;
+        if ($param->isDefaultValueAvailable()) {
+            return $param->getDefaultValue();
         }
 
-        if (class_exists($id)) {
-            return true;
-        }
-
-        return false;
+        return $this->get($class->getName());
     }
 }
