@@ -29,11 +29,7 @@ abstract class AbstractDiContainer implements ContainerInterface
 
     public function has($id)
     {
-        if ($this->list->hasRule($id)) {
-            return true;
-        }
-
-        if (class_exists($id)) {
+        if ($this->list->hasRule($id) || class_exists($id)) {
             return true;
         }
 
