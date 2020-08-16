@@ -3,6 +3,7 @@
 namespace Xynha\Tests\DiceUnits;
 
 use Xynha\Container\DiContainer;
+use Xynha\Container\DiRule;
 use Xynha\Container\DiRuleList;
 
 /**
@@ -19,13 +20,9 @@ abstract class DiceTest extends \PHPUnit\Framework\TestCase
     /** @var DiRuleList */
     protected $rlist;
 
-    /** @var DiContainer */
-    protected $dic;
-
     public function __construct()
     {
         parent::__construct();
-        //  spl_autoload_register(array($this, 'autoload'));
 
         //Load the test classes for this test
         $name = str_replace('Test', '', get_class($this));
@@ -37,27 +34,10 @@ abstract class DiceTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    // @phpstan-ignore-next-line
-    public function autoload($class)
-    {
-        //If Dice Triggers the autoloader the test fails
-        //This generally means something invalid has been passed to
-        //a method such as is_subclass_of or dice is trying to construct
-        //an object from something it shouldn't.
-        $this->fail('Autoload triggered: ' . $class);
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->rlist = new DiRuleList();
-        $this->dic = new DiContainer($this->rlist);
-    }
-
-    protected function tearDown(): void
-    {
-        unset($this->dic);
-        parent::tearDown();
     }
 }

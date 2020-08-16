@@ -1,5 +1,8 @@
 <?php declare(strict_types=1);
 
+use Xynha\Container\DiContainer;
+use Xynha\Container\DiRule;
+use Xynha\Container\DiRuleList;
 use Xynha\Container\NotFoundException;
 use Xynha\Tests\DiceUnits\DiceTest;
 
@@ -17,20 +20,25 @@ final class BasicTest extends DiceTest
     public function testCreate()
     {
         $this->getMockBuilder('TestCreate')->getMock();
-        $myobj = $this->dic->get('TestCreate');
+
+        $dic = new DiContainer($this->rlist);
+        $myobj = $dic->get('TestCreate');
+
         $this->assertInstanceOf('TestCreate', $myobj);
     }
 
     public function testCreateInvalid()
     {
         $this->expectException(NotFoundException::class);
-
-        $this->dic->get('SomeClassThatDoesNotExist');
+        $dic = new DiContainer($this->rlist);
+        $dic->get('SomeClassThatDoesNotExist');
     }
 
     public function testNoConstructor()
     {
-        $a = $this->dic->get('NoConstructor');
+        $dic = new DiContainer($this->rlist);
+        $a = $dic->get('NoConstructor');
+
         $this->assertInstanceOf('NoConstructor', $a);
     }
 
@@ -70,7 +78,9 @@ final class BasicTest extends DiceTest
     // */
     public function testObjectGraphCreation()
     {
-        $a = $this->dic->get('A');
+        $dic = new DiContainer($this->rlist);
+        $a = $dic->get('A');
+
         $this->assertInstanceOf('B', $a->b);
         $this->assertInstanceOf('c', $a->b->c);
         $this->assertInstanceOf('D', $a->b->c->d);
@@ -83,22 +93,24 @@ final class BasicTest extends DiceTest
         $rule['shared'] = true;
         $rule['instanceOf'] = 'A';
 
-        $this->rlist->newRule('[A]', $rule);
+        $list = $this->rlist->addRule(new DiRule('[A]', $rule));
+        $dic = new DiContainer($list);
 
-        $a1 = $this->dic->get('[A]');
-        $a2 = $this->dic->get('[A]');
+        $a1 = $dic->get('[A]');
+        $a2 = $dic->get('[A]');
         $this->assertSame($a1, $a2);
     }
 
     public function testSharedRule()
     {
-        $shared['shared'] = true;
-        $this->rlist->newRule('MyObj', $shared);
+        $rule['shared'] = true;
+        $list = $this->rlist->addRule(new DiRule('MyObj', $rule));
+        $dic = new DiContainer($list);
 
-        $obj = $this->dic->get('MyObj');
+        $obj = $dic->get('MyObj');
         $this->assertInstanceOf('MyObj', $obj);
 
-        $obj2 = $this->dic->get('MyObj');
+        $obj2 = $dic->get('MyObj');
         $this->assertInstanceOf('MyObj', $obj2);
 
         $this->assertSame($obj, $obj2);
@@ -117,10 +129,11 @@ final class BasicTest extends DiceTest
         }
 
         $rule['shared'] = true;
-        $this->rlist->newRule('interfaceTest', $rule);
+        $list = $this->rlist->addRule(new DiRule('interfaceTest', $rule));
+        $dic = new DiContainer($list);
 
-        $one = $this->dic->get('InterfaceTestClass');
-        $two = $this->dic->get('InterfaceTestClass');
+        $one = $dic->get('InterfaceTestClass');
+        $two = $dic->get('InterfaceTestClass');
 
         $this->assertSame($one, $two);
     }
@@ -132,9 +145,10 @@ final class BasicTest extends DiceTest
         }
 
         $rule['shared'] = true;
-        $this->rlist->newRule('CyclicB', $rule);
+        $list = $this->rlist->addRule(new DiRule('CyclicB', $rule));
+        $dic = new DiContainer($list);
 
-        $a = $this->dic->get('CyclicA');
+        $a = $dic->get('CyclicA');
 
         $this->assertInstanceOf('CyclicB', $a->b);
         $this->assertInstanceOf('CyclicA', $a->b->a);
@@ -149,10 +163,11 @@ final class BasicTest extends DiceTest
         }
 
         $rule = ['shared' => true, 'inherit' => false];
-        $this->rlist->newRule('ParentClass', $rule);
+        $list = $this->rlist->addRule(new DiRule('ParentClass', $rule));
+        $dic = new DiContainer($list);
 
-        $obj1 = $this->dic->get('Child');
-        $obj2 = $this->dic->get('Child');
+        $obj1 = $dic->get('Child');
+        $obj2 = $dic->get('Child');
 
         $this->assertNotSame($obj1, $obj2);
     }
@@ -164,11 +179,12 @@ final class BasicTest extends DiceTest
         }
 
         //Set everything to shared by default
-        $this->rlist->newRule('*', ['shared' => true]);
-        $this->rlist->newRule('A', ['shared' => false]);
+        $list = $this->rlist->addRule(new DiRule('*', ['shared' => true]));
+        $list = $list->addRule(new DiRule('A', ['shared' => false]));
+        $dic = new DiContainer($list);
 
-        $a1 = $this->dic->get('A');
-        $a2 = $this->dic->get('A');
+        $a1 = $dic->get('A');
+        $a2 = $dic->get('A');
 
         $this->assertNotSame($a1, $a2);
     }
@@ -179,7 +195,8 @@ final class BasicTest extends DiceTest
             $this->markTestIncomplete('Unimplemented feature');
         }
 
-        $optionalInterface = $this->dic->get('OptionalInterface');
+        $dic = new DiContainer($this->rlist);
+        $optionalInterface = $dic->get('OptionalInterface');
 
         $this->assertEquals(null, $optionalInterface->obj);
     }
@@ -190,9 +207,10 @@ final class BasicTest extends DiceTest
             $this->markTestIncomplete('Unimplemented feature');
         }
 
-        $this->rlist->newRule('ScalarTypeHint', ['shareInstances' => ['A']]);
+        $list = $this->rlist->addRule(new DiRule('ScalarTypeHint', ['shareInstances' => ['A']]));
+        $dic = new DiContainer($list);
 
-        $obj = $this->dic->get('ScalarTypeHint');
+        $obj = $dic->get('ScalarTypeHint');
 
         $this->assertInstanceOf('ScalarTypeHint', $obj);
     }
@@ -206,16 +224,12 @@ final class BasicTest extends DiceTest
         //write to the global $_GET variable
         $_GET['foo'] = 'bar';
 
-        $this->rlist->newRule(
-            'CheckConstructorArgs',
-            [
-             'constructParams' => [
-                                   ['Dice::GLOBAL' => '_GET'],
-                                  ]
-            ]
-        );
-
-        $obj = $this->dic->get('CheckConstructorArgs');
+        $rule['constructParams'] = [
+                                    ['Dice::GLOBAL' => '_GET'],
+                                   ];
+        $list = $this->rlist->addRule(new DiRule('CheckConstructorArgs', $rule));
+        $dic = new DiContainer($list);
+        $obj = $dic->get('CheckConstructorArgs');
 
         $this->assertEquals($_GET, $obj->arg1);
     }
@@ -225,28 +239,21 @@ final class BasicTest extends DiceTest
         if (DIC_BASIC === false) {
             $this->markTestIncomplete('Unimplemented feature');
         }
-
-        $this->rlist->newRule(
-            'CheckConstructorArgs',
-            [
-             'constructParams' => [
-                                   ['Dice::CONSTANT' => '\PDO::FETCH_ASSOC'],
-                                  ]
-            ]
-        );
-
-        $obj = $this->dic->get('CheckConstructorArgs');
+        $rule['constructParams'] = [
+                                    ['Dice::CONSTANT' => '\PDO::FETCH_ASSOC'],
+                                   ];
+        $list = $this->rlist->addRule(new DiRule('CheckConstructorArgs', $rule));
+        $dic = new DiContainer($list);
+        $obj = $dic->get('CheckConstructorArgs');
 
         $this->assertEquals(\PDO::FETCH_ASSOC, $obj->arg1);
     }
 
     public function testImmutability()
     {
-        // $this->assertEquals([], $this->dice->getRule('Foo'));
-
-        // $this->rlist->newRule('Foo', ['shared' => true]);
-
-        // $this->assertEquals([], $this->dice->getRule('Foo'));
+        $this->assertFalse($this->rlist->hasRule('Foo'));
+        $list = $this->rlist->addRule(new DiRule('Foo', ['shared' => true]));
+        $this->assertFalse($this->rlist->hasRule('Foo'));
     }
 
     public function testPassSelf()
@@ -272,10 +279,11 @@ final class BasicTest extends DiceTest
             $this->markTestIncomplete('Unimplemented feature');
         }
 
-        $this->rlist->newRule('\someclass', ['shared' => true]);
+        $list = $this->rlist->addRule(new DiRule('\someclass', ['shared' => true]));
+        $dic = new DiContainer($list);
 
-        $b = $this->dic->get('\someotherclass');
-        $a = $this->dic->get('\someclass');
+        $b = $dic->get('\someotherclass');
+        $a = $dic->get('\someclass');
 
         $this->assertSame($a, $b->obj);
     }

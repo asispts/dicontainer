@@ -8,19 +8,11 @@ final class DiRuleList
     /** @var array<string,DiRule> */
     private $rules = [];
 
-    /** @param array<string,mixed> $rules */
-    public function newRule(string $key, array $rules) : DiRule
+    public function addRule(DiRule $rule) : self
     {
-        $rule = new DiRule($key, $rules);
-        $this->addRule($rule);
-
-        return $rule;
-    }
-
-    /** @return void */
-    public function addRule(DiRule $rule)
-    {
-        $this->rules[$rule->getKey()] = $rule;
+        $new = clone $this;
+        $new->rules[$rule->getKey()] = $rule;
+        return $new;
     }
 
     /** @return DiRule */
