@@ -35,10 +35,6 @@ class SubstitutionsTest extends DiceTest
 
     public function testNullSubstitution()
     {
-        if (DIC_SUBSTITUTION === false) {
-            $this->markTestIncomplete('Unimplemented feature');
-        }
-
         $rule['substitutions']['B'] = null;
         $this->rlist->newRule('MethodWithDefaultNull', $rule);
         $obj = $this->dic->get('MethodWithDefaultNull');

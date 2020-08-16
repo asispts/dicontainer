@@ -53,6 +53,10 @@ class ConstructParamsTest extends DiceTest
 
     public function testDefaultNullAssigned()
     {
+        if (DIC_CONSTRUCT_PARAMS === false) {
+            $this->markTestIncomplete('Unimplemented feature');
+        }
+
         $rule['constructParams'] = [ ['Dice::INSTANCE' => 'A'], null];
         $this->rlist->newRule('MethodWithDefaultNull', $rule);
         $obj = $this->dic->get('MethodWithDefaultNull');
@@ -62,6 +66,10 @@ class ConstructParamsTest extends DiceTest
 
     public function testConstructParamsNested()
     {
+        if (DIC_CONSTRUCT_PARAMS === false) {
+            $this->markTestIncomplete('Unimplemented feature');
+        }
+
         $rule['constructParams'] = array('foo', 'bar');
         $this->rlist->newRule('RequiresConstructorArgsA', $rule);
 
