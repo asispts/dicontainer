@@ -46,6 +46,9 @@ final class DiContainer extends AbstractDiContainer
     {
         $params = [];
         foreach ($info->getParams() as $arg) {
+            if ($arg->isObject()) {
+                $this->checkCircular($info->className(), $arg->className());
+            }
             $params[] = $this->getParamValue($arg);
         }
 
@@ -68,5 +71,17 @@ final class DiContainer extends AbstractDiContainer
         }
 
         throw new ContainerException('Missing required value for $' . $arg->name());
+    }
+
+    private function checkCircular(string $className, string $argName) : void
+    {
+        $ref = new ReflectionClass($argName);
+        $info = new ClassInfo($ref->getConstructor(), $this->list->getRule($argName));
+
+        foreach ($info->getParams() as $param) {
+            if ($param->isObject() && $className === $param->className()) {
+                throw new ContainerException('Cyclic dependencies detected');
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
 use Xynha\Container\DiRule;
 use Xynha\Container\DiRuleList;
@@ -138,20 +139,14 @@ final class BasicTest extends DiceTest
 
     public function testCyclicReferences()
     {
-        if (DIC_BASIC_CYCLIC === false) {
-            $this->markTestIncomplete('Unimplemented feature');
-        }
+        $this->expectException(ContainerException::class);
+        $this->expectExceptionMessage('Cyclic dependencies detected');
 
         $rule['shared'] = true;
         $list = $this->rlist->addRule(new DiRule('CyclicB', $rule));
         $dic = new DiContainer($list);
 
-        $a = $dic->get('CyclicA');
-
-        $this->assertInstanceOf('CyclicB', $a->b);
-        $this->assertInstanceOf('CyclicA', $a->b->a);
-
-        $this->assertSame($a->b, $a->b->a->b);
+        $dic->get('CyclicA');
     }
 
     public function testInherit()

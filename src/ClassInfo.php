@@ -2,19 +2,29 @@
 
 namespace Xynha\Container;
 
+use ReflectionClass;
 use ReflectionMethod;
 
 final class ClassInfo
 {
+
+    /** @var string */
+    private $className;
 
     /** @var ParamInfo[] */
     private $params = [];
 
     public function __construct(?ReflectionMethod $con, DiRule $rule)
     {
+        $this->className = $rule->getClassname();
         if ($con !== null) {
             $this->parse($con, $rule);
         }
+    }
+
+    public function className() : string
+    {
+        return $this->className;
     }
 
     /** @return ParamInfo[] */

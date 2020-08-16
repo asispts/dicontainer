@@ -101,8 +101,6 @@ final class ParamInfo
             return;
         }
 
-
-
         try {
             $this->getDefaultValue($param);
         } catch (ContainerException $exc) {
