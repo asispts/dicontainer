@@ -8,6 +8,9 @@ final class DiRule
     /** @var string */
     private $key;
 
+    /** @var class-string */
+    private $className;
+
     /** @var bool */
     private $shared = false;
 
@@ -22,6 +25,7 @@ final class DiRule
     {
         $this->key = $key;
 
+        $this->className = $rules['instanceOf'] ?? $key;
         $this->shared = (bool)($rules['shared'] ?? false);
         $this->params = $rules['constructParams'] ?? [];
         $this->interfaces = $rules['substitutions'] ?? [];
@@ -35,9 +39,7 @@ final class DiRule
     /** @return class-string */
     public function getClassname() : string
     {
-        /** @var class-string $classname */
-        $classname = $this->key;
-        return $classname;
+        return $this->className;
     }
 
     public function isShared() : bool
