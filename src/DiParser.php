@@ -61,13 +61,8 @@ final class DiParser
      */
     private function getObjectArg(ReflectionParameter $arg, ReflectionClass $objArg, array $subs) : ?object
     {
-        list($hasValue, $argValue) = $this->getDefaultValue($arg);
-        if ($hasValue) {
-            return $argValue;
-        }
-
         $className = $objArg->getName();
-        if ($objArg->isInterface() && !array_key_exists($className, $subs)) {
+        if ($objArg->isInterface() && !$arg->isOptional() && !array_key_exists($className, $subs)) {
             throw new ContainerException('Missing interface ' . $className . ' substitution');
         }
 
@@ -78,6 +73,11 @@ final class DiParser
         /** @var class-string|object $className */
         if (is_object($className)) {
             return $className;
+        }
+
+        list($hasValue, $argValue) = $this->getDefaultValue($arg);
+        if ($hasValue) {
+            return $argValue;
         }
 
         return call_user_func_array($this->creator, [$className]);
