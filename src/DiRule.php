@@ -71,6 +71,11 @@ final class DiRule
                     break;
                 case 'constructParams':
                 case 'substitutions':
+                    if (!isset($this->rules[$key])) {
+                        $this->rules[$key] = $value;
+                        break;
+                    }
+
                     $this->rules[$key] = array_merge($this->rules[$key], $value);
                     break;
             }

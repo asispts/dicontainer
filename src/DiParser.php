@@ -67,15 +67,19 @@ final class DiParser
         }
 
         $className = $objArg->getName();
-        if (!$objArg->isInterface()) {
-            return call_user_func_array($this->creator, [$className]);
-        }
-
-        if (!array_key_exists($className, $subs)) {
+        if ($objArg->isInterface() && !array_key_exists($className, $subs)) {
             throw new ContainerException('Missing interface ' . $className . ' substitution');
         }
 
-        return call_user_func_array($this->creator, [$subs[$className]]);
+        if (array_key_exists($className, $subs)) {
+            $className = $subs[$className];
+        }
+
+        if (is_object($className)) {
+            return $className;
+        }
+
+        return call_user_func_array($this->creator, [$className]);
     }
 
     /**
