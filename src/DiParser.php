@@ -43,7 +43,7 @@ final class DiParser
         foreach ($params as $arg) {
             $varName = $arg->getName();
             if (is_object($arg->getClass())) {
-                $varValue = $this->getObjectArg($arg, $arg->getClass(), $subs);
+                $varValue = $this->getObjectArg($arg, $arg->getClass(), $subs, $passedValues);
                 $tParams[$varName] = $varValue;
                 continue;
             }
@@ -59,8 +59,12 @@ final class DiParser
      * @param ReflectionClass<Object> $objArg
      * @param array<string,string> $subs
      */
-    private function getObjectArg(ReflectionParameter $arg, ReflectionClass $objArg, array $subs) : ?object
-    {
+    private function getObjectArg(
+        ReflectionParameter $arg,
+        ReflectionClass $objArg,
+        array $subs,
+        array &$value
+    ) : ?object {
         $className = $objArg->getName();
         if ($objArg->isInterface() && !$arg->isOptional() && !array_key_exists($className, $subs)) {
             throw new ContainerException('Missing interface ' . $className . ' substitution');
@@ -73,6 +77,11 @@ final class DiParser
         /** @var class-string|object $className */
         if (is_object($className)) {
             return $className;
+        }
+
+        if (isset($value[0]) && is_array($value[0]) && key($value[0]) === '.:INSTANCE:.') {
+            $instance = array_shift($value);
+            return call_user_func_array($this->creator, [$instance['.:INSTANCE:.']]);
         }
 
         list($hasValue, $argValue) = $this->getDefaultValue($arg);

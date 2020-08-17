@@ -58,11 +58,7 @@ class ConstructParamsTest extends DiceTest
 
     public function testDefaultNullAssigned()
     {
-        if (DIC_CONSTRUCT_PARAMS === false) {
-            $this->markTestIncomplete('Unimplemented feature');
-        }
-
-        $rule['constructParams'] = [ ['Dice::INSTANCE' => 'A'], null];
+        $rule['constructParams'] = [ ['.:INSTANCE:.' => 'A'], null];
         $rlist = $this->rlist->addRule(new DiRule('MethodWithDefaultNull', $rule));
         $dic = new DiContainer($rlist);
         $obj = $dic->get('MethodWithDefaultNull');
