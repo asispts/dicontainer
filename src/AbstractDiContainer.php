@@ -11,6 +11,9 @@ abstract class AbstractDiContainer implements ContainerInterface
     /** @var DiRuleList */
     protected $list;
 
+    /** @var DiParser */
+    protected $parser;
+
     /** @var array<string,string> */
     private $curKeys = [];
 
@@ -19,6 +22,7 @@ abstract class AbstractDiContainer implements ContainerInterface
     final public function __construct(DiRuleList $list)
     {
         $this->list = $list;
+        $this->parser = new DiParser([$this, 'get']);
     }
 
     public function get($id)

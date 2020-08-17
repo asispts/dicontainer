@@ -242,7 +242,7 @@ final class BasicTest extends DiceTest
 
     public function testPassSelf()
     {
-        $this->markTestSkipped('This feature is not supported');
+        $this->markTestSkipped('Unsupported feature');
     }
 
     // Issue 180

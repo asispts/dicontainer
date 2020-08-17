@@ -54,6 +54,12 @@ final class DiRule
         return $this->rules['substitutions'] ?? [];
     }
 
+    /** @return array<int,array{string,mixed}>|array<int,array{string,mixed,mixed}> */
+    public function getCall() : array
+    {
+        return $this->rules['call'] ?? [];
+    }
+
     public function cloneFrom(DiRule $rule) : void
     {
         foreach ($rule->rules as $key => $value) {

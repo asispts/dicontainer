@@ -23,12 +23,28 @@ final class DiContainer extends AbstractDiContainer
             throw new ContainerException('Cannot instantiate abstract class ' . $rule->getClassname());
         }
 
-        $parser = new DiParser([$this, 'get']);
-        $params = $parser->parse($ref->getConstructor(), $rule->getParams(), $rule->getSubstitutions());
+        $params = $this->parser->parse($ref->getConstructor(), $rule->getParams(), $rule->getSubstitutions());
         $object = $this->getObject($ref, $params);
 
         if ($rule->isShared()) {
             $this->instances[$rule->getKey()] = $object;
+        }
+
+        foreach ($rule->getCall() as $args) {
+            $fn = array_shift($args);
+            $callback = count($args) === 2 ? array_pop($args) : null;
+
+            $args = array_shift($args);
+
+            $method = $ref->getMethod($fn);
+            $params = $this->parser->parse($method, $args, []);
+            $retVal = $method->invokeArgs($object, $params);
+
+            if ($callback === null || !is_callable($callback)) {
+                continue;
+            }
+
+            call_user_func($callback, $retVal);
         }
 
         return $object;
