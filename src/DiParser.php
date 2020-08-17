@@ -58,13 +58,13 @@ final class DiParser
     /**
      * @param ReflectionClass<Object> $objArg
      * @param array<string,string> $subs
-     * @param array<mixed> $value
+     * @param array<mixed> $values
      */
     private function getObjectArg(
         ReflectionParameter $arg,
         ReflectionClass $objArg,
         array $subs,
-        array &$value
+        array &$values
     ) : ?object {
         $className = $objArg->getName();
         if ($objArg->isInterface() && !$arg->isOptional() && !array_key_exists($className, $subs)) {
@@ -80,9 +80,8 @@ final class DiParser
             return $className;
         }
 
-        if (isset($value[0]) && is_array($value[0]) && key($value[0]) === '.:INSTANCE:.') {
-            $instance = array_shift($value);
-            return call_user_func_array($this->creator, [$instance['.:INSTANCE:.']]);
+        if ($argValue = $this->getObjectFromValue($values)) {
+            return $argValue;
         }
 
         list($hasValue, $argValue) = $this->getDefaultValue($arg);
@@ -91,6 +90,35 @@ final class DiParser
         }
 
         return call_user_func_array($this->creator, [$className]);
+    }
+
+    /** @param array<mixed> $values */
+    private function getObjectFromValue(array &$values) : ?object
+    {
+        if (count($values) <= 0) {
+            return null;
+        }
+
+        if (is_object($values[0])) {
+            return array_shift($values);
+        }
+
+        if (key((array)$values[0]) !== '.:INSTANCE:.') {
+            return null;
+        }
+
+        $data = array_shift($values);
+        if (!is_array($data['.:INSTANCE:.'])) {
+            if (is_object($data['.:INSTANCE:.'])) {
+                return $data['.:INSTANCE:.'];
+            }
+
+            return call_user_func_array($this->creator, [$data['.:INSTANCE:.']]);
+        }
+
+        list($class, $fn) = $data['.:INSTANCE:.'];
+        $object = call_user_func_array($this->creator, [$class]);
+        return call_user_func_array([$object, $fn], []);
     }
 
     /**

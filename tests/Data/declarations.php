@@ -172,9 +172,21 @@ class ObjectAllowsNull
 
 class ObjectDefaultValue
 {
-    public $std;
-    public function __construct(stdClass $std = null)
+    public $obj;
+    public function __construct(ObjectAllowsNull $obj = null)
     {
-        $this->std = $std;
+        $this->obj = $obj;
+    }
+}
+
+class AllowsNullFactory
+{
+    public $obj;
+    public function getInstance()
+    {
+        if (!$this->obj) {
+            $this->obj = new ObjectAllowsNull(null);
+        }
+        return $this->obj;
     }
 }

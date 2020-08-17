@@ -5,8 +5,6 @@ namespace Xynha\Tests\Units;
 use ArrayAccess;
 use DateTime;
 use Xynha\Container\ContainerException;
-use Xynha\Container\DiContainer;
-use Xynha\Container\DiRule;
 use Xynha\Container\NotFoundException;
 use Xynha\Tests\AbstractTestCase;
 use Xynha\Tests\Data\AbstractClass;
@@ -106,36 +104,6 @@ final class BasicTest extends AbstractTestCase
         $this->assertSame([3.14, 3.8], $obj->floatArray);
     }
 
-    public function testScalarType()
-    {
-        $rules['constructParams'] = [
-                                     true,
-                                     'String value',
-                                     2020,
-                                     0.1,
-                                     [],
-                                     [false, true],
-                                     ['string', 'value'],
-                                     [2019, 2020],
-                                     [0.1, 0.2],
-                                    ];
-
-        $rlist = $this->rlist->addRule(new DiRule(ScalarRequired::class, $rules));
-        $dic = new DiContainer($rlist);
-        $obj = $dic->get(ScalarRequired::class);
-
-        $this->assertInstanceOf(ScalarRequired::class, $obj);
-        $this->assertSame(true, $obj->bool);
-        $this->assertSame('String value', $obj->string);
-        $this->assertSame(2020, $obj->int);
-        $this->assertSame(0.1, $obj->float);
-        $this->assertSame([], $obj->emptyArray);
-        $this->assertSame([false, true], $obj->boolArray);
-        $this->assertSame(['string', 'value'], $obj->stringArray);
-        $this->assertSame([2019, 2020], $obj->intArray);
-        $this->assertSame([0.1, 0.2], $obj->floatArray);
-    }
-
     public function testScalarAllowsNull()
     {
         $obj = $this->dic->get(ScalarAllowsNull::class);
@@ -160,23 +128,6 @@ final class BasicTest extends AbstractTestCase
         );
 
         $this->dic->get(ScalarRequired::class);
-    }
-
-    public function testPassInvalidScalarType()
-    {
-        $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage(
-            sprintf(
-                'Argument 1 passed to %s::__construct() must be of the type bool or null, array given',
-                ScalarAllowsNull::class
-            )
-        );
-
-        $rules['constructParams'] = [[]];
-
-        $rlist = $this->rlist->addRule(new DiRule(ScalarAllowsNull::class, $rules));
-        $dic = new DiContainer($rlist);
-        $dic->get(ScalarAllowsNull::class);
     }
 
     public function testCreateObjectGraph()
@@ -204,6 +155,6 @@ final class BasicTest extends AbstractTestCase
         $obj = $this->dic->get(ObjectDefaultValue::class);
 
         $this->assertInstanceOf(ObjectDefaultValue::class, $obj);
-        $this->assertNull($obj->std);
+        $this->assertNull($obj->obj);
     }
 }
