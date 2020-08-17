@@ -19,69 +19,33 @@ final class DiContainer extends AbstractDiContainer
         }
 
         $ref = new ReflectionClass($rule->getClassname());
-        $object = $this->getObject($ref, new ClassInfo($ref->getConstructor(), $rule));
+        if ($ref->isAbstract()) {
+            throw new ContainerException('Cannot instantiate abstract class ' . $rule->getClassname());
+        }
+
+        $parser = new DiParser([$this, 'get']);
+        $params = $parser->parse($ref->getConstructor(), $rule->getParams(), $rule->getSubstitutions());
+        $object = $this->getObject($ref, $params);
 
         if ($rule->isShared()) {
             $this->instances[$rule->getKey()] = $object;
         }
+
         return $object;
     }
 
-    /** @param ReflectionClass<Object> $ref */
-    private function getObject(ReflectionClass $ref, ClassInfo $info) : object
+    /**
+     * @param ReflectionClass<Object> $ref
+     * @param array<mixed> $params
+     */
+    private function getObject(ReflectionClass $ref, array $params) : object
     {
-        $params = $this->getParams($info);
-
         try {
             return $ref->newInstanceArgs($params);
         } catch (Error $exc) {
             throw new ContainerException($exc->getMessage(), 1, $exc);
         } catch (ReflectionException $exc) {
             throw new ContainerException($exc->getMessage(), 1, $exc);
-        }
-    }
-
-    /** @return array<int,mixed> */
-    private function getParams(ClassInfo $info) : array
-    {
-        $params = [];
-        foreach ($info->getParams() as $arg) {
-            if ($arg->isObject() && !$arg->isInterface()) {
-                $this->checkCircular($info->className(), $arg->className());
-            }
-            $params[] = $this->getParamValue($arg);
-        }
-
-        return $params;
-    }
-
-    /** @return mixed */
-    private function getParamValue(ParamInfo $arg)
-    {
-        if ($arg->isObject()) {
-            if ($arg->hasValue()) {
-                return $arg->getValue();
-            }
-
-            return $this->get($arg->className());
-        }
-
-        if ($arg->hasValue()) {
-            return $arg->getValue();
-        }
-
-        throw new ContainerException('Missing required value for $' . $arg->name());
-    }
-
-    private function checkCircular(string $className, string $argName) : void
-    {
-        $ref = new ReflectionClass($argName);
-        $info = new ClassInfo($ref->getConstructor(), $this->list->getRule($argName));
-
-        foreach ($info->getParams() as $param) {
-            if ($param->isObject() && $className === $param->className()) {
-                throw new ContainerException('Cyclic dependencies detected');
-            }
         }
     }
 }

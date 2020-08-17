@@ -139,7 +139,7 @@ final class BasicTest extends DiceTest
     public function testCyclicReferences()
     {
         $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage('Cyclic dependencies detected');
+        $this->expectExceptionMessage('Circular dependencies detected');
 
         $rule['shared'] = true;
         $list = $this->rlist->addRule(new DiRule('CyclicB', $rule));

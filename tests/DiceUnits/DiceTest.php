@@ -2,8 +2,6 @@
 
 namespace Xynha\Tests\DiceUnits;
 
-use Xynha\Container\DiContainer;
-use Xynha\Container\DiRule;
 use Xynha\Container\DiRuleList;
 
 /**
