@@ -9,15 +9,8 @@ use ReflectionException;
 final class DiContainer extends AbstractDiContainer
 {
 
-    /** @var object[] */
-    private $instances;
-
     protected function createObject(DiRule $rule) : Object
     {
-        if (isset($this->instances[$rule->getKey()])) {
-            return $this->instances[$rule->getKey()];
-        }
-
         $ref = new ReflectionClass($rule->getClassname());
         if ($ref->isAbstract()) {
             throw new ContainerException('Cannot instantiate abstract class ' . $rule->getClassname());
@@ -25,10 +18,6 @@ final class DiContainer extends AbstractDiContainer
 
         $params = $this->parser->parse($ref->getConstructor(), $rule->getParams(), $rule->getSubstitutions());
         $object = $this->getObject($ref, $params);
-
-        if ($rule->isShared()) {
-            $this->instances[$rule->getKey()] = $object;
-        }
 
         foreach ($rule->getCall() as $args) {
             $fn = array_shift($args);

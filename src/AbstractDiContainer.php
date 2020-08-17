@@ -14,6 +14,9 @@ abstract class AbstractDiContainer implements ContainerInterface
     /** @var DiParser */
     protected $parser;
 
+    /** @var object[] */
+    private $instances;
+
     /** @var array<string,string> */
     private $curKeys = [];
 
@@ -32,19 +35,29 @@ abstract class AbstractDiContainer implements ContainerInterface
         }
 
         $rule = $this->list->getRule($id);
+        if (isset($this->instances[$rule->getKey()])) {
+            return $this->instances[$rule->getKey()];
+        }
+
         if (array_key_exists($rule->getKey(), $this->curKeys) || in_array($rule->getClassname(), $this->curKeys)) {
             throw new ContainerException('Cyclic dependencies detected');
         }
 
+        $this->curKeys[$rule->getKey()] = $rule->getClassname();
+
         try {
-            $this->curKeys[$rule->getKey()] = $rule->getClassname();
             $object = $this->createObject($rule);
             unset($this->curKeys[$rule->getKey()]);
-            return $object;
         } catch (Throwable $exc) {
             unset($this->curKeys[$rule->getKey()]);
             throw $exc;
         }
+
+        if ($rule->isShared()) {
+            $this->instances[$rule->getKey()] = $object;
+        }
+
+        return $object;
     }
 
     public function has($id)
