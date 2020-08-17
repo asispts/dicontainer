@@ -75,6 +75,7 @@ final class DiParser
             $className = $subs[$className];
         }
 
+        /** @var class-string|object $className */
         if (is_object($className)) {
             return $className;
         }

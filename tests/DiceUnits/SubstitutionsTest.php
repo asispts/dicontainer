@@ -23,7 +23,7 @@ class SubstitutionsTest extends DiceTest
 
         $rule['substitutions']['Bar77'] = [
                                            'Dice::INSTANCE' => function () {
-                                                    return Baz77::create();
+                                                    return Baz77::create(); // @phpstan-ignore-line
                                            }
                                           ];
 
@@ -79,7 +79,7 @@ class SubstitutionsTest extends DiceTest
             $this->markTestIncomplete('Unimplemented feature');
         }
 
-        $injection = $this->dic;
+        $injection = new DiContainer($this->rlist);
         $rule['substitutions']['B'] = [
                                        'Dice::INSTANCE' => function () use ($injection) {
                                                 return $injection->get('ExtendedB');
