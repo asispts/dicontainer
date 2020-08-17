@@ -58,6 +58,7 @@ final class DiParser
     /**
      * @param ReflectionClass<Object> $objArg
      * @param array<string,string> $subs
+     * @param array<mixed> $value
      */
     private function getObjectArg(
         ReflectionParameter $arg,
@@ -112,7 +113,15 @@ final class DiParser
             return $argValue;
         }
 
-        throw new ContainerException('Missing required value for $' . $arg->getName());
+        if (!$arg->isOptional()) {
+            $msg = sprintf(
+                'Missing required argument $%s passed to %s::%s()',
+                $arg->getName(),
+                $arg->getDeclaringClass()->getName(), // @phpstan-ignore-line
+                $arg->getDeclaringFunction()->getName()  // @phpstan-ignore-line
+            );
+            throw new ContainerException($msg);
+        }
     }
 
     /** @return array{bool,mixed} */

@@ -33,7 +33,7 @@ abstract class AbstractDiContainer implements ContainerInterface
 
         $rule = $this->list->getRule($id);
         if (array_key_exists($rule->getKey(), $this->curKeys) || in_array($rule->getClassname(), $this->curKeys)) {
-            throw new ContainerException('Circular dependencies detected');
+            throw new ContainerException('Cyclic dependencies detected');
         }
 
         try {
