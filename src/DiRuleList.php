@@ -44,6 +44,11 @@ final class DiRuleList
 
     private function addToList(DiRuleList $list, DiRule $rule) : void
     {
+        if ($list->hasRule($rule->getKey())) {
+            $oldRule = $list->getRule($rule->getKey());
+            $rule->cloneFrom($oldRule);
+        }
+
         $list->rules[$rule->getKey()] = $rule;
     }
 
@@ -68,6 +73,6 @@ final class DiRuleList
             return $rule;
         }
 
-        throw new NotFoundException(sprintf('Rule %s is not found', $key));
+        throw new NotFoundException(sprintf('Rule %s does not exist', $key));
     }
 }

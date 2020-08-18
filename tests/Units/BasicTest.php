@@ -25,7 +25,7 @@ final class BasicTest extends AbstractTestCase
 
     public function testInterface()
     {
-        $msg = sprintf('Class or rule `%s` is not found or it is an interface', 'ArrayAccess');
+        $msg = sprintf('Class or rule `%s` does not exist', 'ArrayAccess');
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage($msg);
 
@@ -34,7 +34,7 @@ final class BasicTest extends AbstractTestCase
 
     public function testTrait()
     {
-        $msg = sprintf('Class or rule `%s` is not found or it is an interface', TraitTest::class);
+        $msg = sprintf('Class or rule `%s` does not exist', TraitTest::class);
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage($msg);
 

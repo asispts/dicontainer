@@ -12,7 +12,7 @@ final class SubstitutionTest extends AbstractTestCase
 
     public function testMissingInterface()
     {
-        $msg = sprintf('Class or rule `%s` is not found or it is an interface', InterfaceA::class);
+        $msg = sprintf('Class or rule `%s` does not exist', InterfaceA::class);
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage($msg);
 
