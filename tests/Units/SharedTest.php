@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
 use Xynha\Container\DiContainer;
-use Xynha\Container\DiRule;
 use Xynha\Tests\AbstractTestCase;
 use Xynha\Tests\Data\ClassGraph;
 use Xynha\Tests\Data\E;
@@ -12,7 +11,7 @@ final class SharedTest extends AbstractTestCase
 
     public function testSharedInstance()
     {
-        $rlist = $this->rlist->addRule(new DiRule(ObjectAllowsNull::class, ['shared' => true]));
+        $rlist = $this->rlist->addRule(ObjectAllowsNull::class, ['shared' => true]);
         $dic = new DiContainer($rlist);
 
         $objA = $dic->get(ObjectAllowsNull::class);
@@ -26,7 +25,7 @@ final class SharedTest extends AbstractTestCase
 
     public function testSharedArgument()
     {
-        $rlist = $this->rlist->addRule(new DiRule(E::class, ['shared' => true]));
+        $rlist = $this->rlist->addRule(E::class, ['shared' => true]);
         $dic = new DiContainer($rlist);
 
         $objA = $dic->get(ClassGraph::class);

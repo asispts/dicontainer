@@ -8,10 +8,21 @@ final class DiRuleList
     /** @var array<string,DiRule> */
     private $rules = [];
 
-    public function addRule(DiRule $rule) : self
+    public function addRule(string $key, array $rule) : self
     {
         $new = clone $this;
-        $this->addToRule($new, $rule);
+        $this->addToList($new, new DiRule($key, $rule));
+        return $new;
+    }
+
+    public function addRules(array $rules) : self
+    {
+        $new = clone $this;
+
+        foreach ($rules as $key => $values) {
+            $this->addToList($new, new DiRule($key, $values));
+        }
+
         return $new;
     }
 
@@ -31,7 +42,7 @@ final class DiRuleList
         return array_key_exists($key, $this->rules);
     }
 
-    private function addToRule(DiRuleList $list, DiRule $rule) : void
+    private function addToList(DiRuleList $list, DiRule $rule) : void
     {
         $list->rules[$rule->getKey()] = $rule;
     }
@@ -46,14 +57,14 @@ final class DiRuleList
             if (is_subclass_of($key, $rule->getClassname())) {
                 $newRule = new DiRule($key, []);
                 $newRule->cloneFrom($rule);
-                $this->addToRule($this, $newRule);
+                $this->addToList($this, $newRule);
                 return $newRule;
             }
         }
 
         if (class_exists($key)) {
             $rule = new DiRule($key, []);
-            $this->addToRule($this, $rule);
+            $this->addToList($this, $rule);
             return $rule;
         }
 

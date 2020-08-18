@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
 use Xynha\Container\DiContainer;
-use Xynha\Container\DiRule;
 use Xynha\Tests\AbstractTestCase;
 use Xynha\Tests\Data\ChainUnit;
 use Xynha\Tests\Data\DbUnit;
@@ -14,7 +13,7 @@ final class CallTest extends AbstractTestCase
     public function testSetterInjection()
     {
         $rules['call'] = [['setAttribute', [1, 'setter injection']]];
-        $rlist = $this->rlist->addRule(new DiRule(PdoUnit::class, $rules));
+        $rlist = $this->rlist->addRule(PdoUnit::class, $rules);
         $dic = new DiContainer($rlist);
 
         $obj = $dic->get(PdoUnit::class);
@@ -24,7 +23,7 @@ final class CallTest extends AbstractTestCase
     public function testDependOnSetterInjection()
     {
         $rules['call'] = [['setAttribute', [1, 'setter injection']]];
-        $rlist = $this->rlist->addRule(new DiRule(PdoUnit::class, $rules));
+        $rlist = $this->rlist->addRule(PdoUnit::class, $rules);
         $dic = new DiContainer($rlist);
 
         $obj = $dic->get(DbUnit::class);
@@ -45,10 +44,10 @@ final class CallTest extends AbstractTestCase
         $dbRule['instanceOf'] = DbUnit::class;
         $dbRule['constructParams'] = [['.:INSTANCE:.' => '$getPdo']];
 
-        $rlist = $this->rlist->addRule(new DiRule(PdoUnit::class, $pdoRule));
-        $rlist = $rlist->addRule(new DiRule('$db', $dbRule));
-        $rlist = $rlist->addRule(new DiRule('$pdo', $namedRule));
-        $rlist = $rlist->addRule(new DiRule('$getPdo', $factoryRules));
+        $rlist = $this->rlist->addRule(PdoUnit::class, $pdoRule);
+        $rlist = $rlist->addRule('$db', $dbRule);
+        $rlist = $rlist->addRule('$pdo', $namedRule);
+        $rlist = $rlist->addRule('$getPdo', $factoryRules);
         $dic = new DiContainer($rlist);
 
         $obj = $dic->get(DbUnit::class);
@@ -66,7 +65,7 @@ final class CallTest extends AbstractTestCase
                           ['chain3', ['multiple', ['values']], '.:CHAIN:.'],
                           ['chain4', [], '.:CHAIN:.'],
                          ];
-        $rlist = $this->rlist->addRule(new DiRule(ChainUnit::class, $rules));
+        $rlist = $this->rlist->addRule(ChainUnit::class, $rules);
         $dic = new DiContainer($rlist);
 
         $obj = $dic->get(ChainUnit::class);

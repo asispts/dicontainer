@@ -2,7 +2,6 @@
 
 use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
-use Xynha\Container\DiRule;
 use Xynha\Tests\AbstractTestCase;
 use Xynha\Tests\Data\AllowsNullFactory;
 use Xynha\Tests\Data\DbUnit;
@@ -17,7 +16,7 @@ final class ConstructParamsTest extends AbstractTestCase
     public function testMalformedRule()
     {
         $rules['constructParams'] = ['.:INSTANCE:.' => '$pdo']; // will not use this rule
-        $rlist = $this->rlist->addRule(new DiRule(DbUnit::class, $rules));
+        $rlist = $this->rlist->addRule(DbUnit::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(DbUnit::class);
         $this->assertNull($obj->pdo->attr);
@@ -35,7 +34,7 @@ final class ConstructParamsTest extends AbstractTestCase
 
         $rules['constructParams'] = [[]];
 
-        $rlist = $this->rlist->addRule(new DiRule(ScalarAllowsNull::class, $rules));
+        $rlist = $this->rlist->addRule(ScalarAllowsNull::class, $rules);
         $dic = new DiContainer($rlist);
         $dic->get(ScalarAllowsNull::class);
     }
@@ -54,7 +53,7 @@ final class ConstructParamsTest extends AbstractTestCase
                                      [0.1, 0.2],
                                     ];
 
-        $rlist = $this->rlist->addRule(new DiRule(ScalarRequired::class, $rules));
+        $rlist = $this->rlist->addRule(ScalarRequired::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(ScalarRequired::class);
 
@@ -73,7 +72,7 @@ final class ConstructParamsTest extends AbstractTestCase
     public function testInvalidArrayConstructParams()
     {
         $rules['constructParams'] = [['invalid type']];
-        $rlist = $this->rlist->addRule(new DiRule(ObjectDefaultValue::class, $rules));
+        $rlist = $this->rlist->addRule(ObjectDefaultValue::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(ObjectDefaultValue::class);
 
@@ -83,7 +82,7 @@ final class ConstructParamsTest extends AbstractTestCase
     public function testInvalidNonArrayConstructParams()
     {
         $rules['constructParams'] = ['invalid type'];
-        $rlist = $this->rlist->addRule(new DiRule(ObjectDefaultValue::class, $rules));
+        $rlist = $this->rlist->addRule(ObjectDefaultValue::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(ObjectDefaultValue::class);
 
@@ -93,7 +92,7 @@ final class ConstructParamsTest extends AbstractTestCase
     public function testPassOptionalObject()
     {
         $rules['constructParams'] = [new ObjectAllowsNull(null)];
-        $rlist = $this->rlist->addRule(new DiRule(ObjectDefaultValue::class, $rules));
+        $rlist = $this->rlist->addRule(ObjectDefaultValue::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(ObjectDefaultValue::class);
 
@@ -103,7 +102,7 @@ final class ConstructParamsTest extends AbstractTestCase
     public function testPassObjectWithInstanceKey()
     {
         $rules['constructParams'] = [['.:INSTANCE:.' => new ObjectAllowsNull(null)]];
-        $rlist = $this->rlist->addRule(new DiRule(ObjectDefaultValue::class, $rules));
+        $rlist = $this->rlist->addRule(ObjectDefaultValue::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(ObjectDefaultValue::class);
 
@@ -113,7 +112,7 @@ final class ConstructParamsTest extends AbstractTestCase
     public function testPassClassWithInstanceKey()
     {
         $rules['constructParams'] = [['.:INSTANCE:.' => ObjectAllowsNull::class]];
-        $rlist = $this->rlist->addRule(new DiRule(ObjectDefaultValue::class, $rules));
+        $rlist = $this->rlist->addRule(ObjectDefaultValue::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(ObjectDefaultValue::class);
 
@@ -123,8 +122,8 @@ final class ConstructParamsTest extends AbstractTestCase
     public function testAllowsNullFactory()
     {
         $rules['constructParams'] = [['.:INSTANCE:.' => [AllowsNullFactory::class, 'getInstance']]];
-        $rlist = $this->rlist->addRule(new DiRule(ObjectDefaultValue::class, $rules));
-        $rlist = $rlist->addRule(new DiRule(AllowsNullFactory::class, ['shared' => true]));
+        $rlist = $this->rlist->addRule(ObjectDefaultValue::class, $rules);
+        $rlist = $rlist->addRule(AllowsNullFactory::class, ['shared' => true]);
         $dic = new DiContainer($rlist);
 
         $factory = $dic->get(AllowsNullFactory::class);

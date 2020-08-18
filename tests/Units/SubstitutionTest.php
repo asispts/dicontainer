@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
 use Xynha\Container\DiContainer;
-use Xynha\Container\DiRule;
 use Xynha\Container\NotFoundException;
 use Xynha\Tests\AbstractTestCase;
 use Xynha\Tests\Data\DependInterfaceA;
@@ -23,7 +22,7 @@ final class SubstitutionTest extends AbstractTestCase
     public function testSubstitution()
     {
         $rules['substitutions'] = [InterfaceA::class => ImplementInterfaceA::class];
-        $rlist = $this->rlist->addRule(new DiRule(DependInterfaceA::class, $rules));
+        $rlist = $this->rlist->addRule(DependInterfaceA::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(DependInterfaceA::class);
 
@@ -33,7 +32,7 @@ final class SubstitutionTest extends AbstractTestCase
     public function testObjectSubstitution()
     {
         $rules['substitutions'] = [InterfaceA::class => new ImplementInterfaceA];
-        $rlist = $this->rlist->addRule(new DiRule(DependInterfaceA::class, $rules));
+        $rlist = $this->rlist->addRule(DependInterfaceA::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(DependInterfaceA::class);
 
