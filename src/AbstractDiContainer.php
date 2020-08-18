@@ -50,10 +50,14 @@ abstract class AbstractDiContainer implements ContainerInterface
     private function doGet(string $id) : object
     {
         if ($this->has($id) === false) {
-            throw new NotFoundException(sprintf('Class or rule `%s` does not exist', $id));
+            throw new NotFoundException(sprintf('Class or rule %s does not exist', $id));
         }
 
         $rule = $this->list->getRule($id);
+        if ($rule->getKey() === static::class) {
+            return $this;
+        }
+
         if (isset($this->instances[$rule->getKey()])) {
             return $this->instances[$rule->getKey()];
         }

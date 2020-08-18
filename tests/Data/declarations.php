@@ -2,6 +2,7 @@
 
 namespace Xynha\Tests\Data;
 
+use Psr\Container\ContainerInterface;
 use stdClass;
 
 trait TraitTest {
@@ -188,5 +189,14 @@ class AllowsNullFactory
             $this->obj = new ObjectAllowsNull(null);
         }
         return $this->obj;
+    }
+}
+
+class DicDependant
+{
+    public $dic;
+    public function __construct(ContainerInterface $dic)
+    {
+        $this->dic = $dic;
     }
 }
