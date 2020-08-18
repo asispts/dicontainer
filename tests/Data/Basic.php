@@ -2,9 +2,6 @@
 
 namespace Xynha\Tests\Data;
 
-use Psr\Container\ContainerInterface;
-use stdClass;
-
 trait TraitTest {
     public function sayHello() {
         echo 'Hello ';
@@ -30,10 +27,13 @@ class CyclicB {
     public function __construct(CyclicA $a){}
 }
 
-class NoConstructor{}
+class NoConstructor
+{
+}
 
 class ClassGraph
 {
+
     public $b;
 
     public function __construct(B $b)
@@ -68,29 +68,66 @@ class C
 }
 
 
-class D{}
+class D
+{
+}
 
 class E
 {
+
     public $f;
+
     public function __construct(F $f)
     {
         $this->f = $f;
     }
 }
 
-class F{}
+class F
+{
+}
+
+class ObjectAllowsNull
+{
+
+    public $std;
+
+    public function __construct(?NoConstructor $std)
+    {
+        $this->std = $std;
+    }
+}
+
+class ObjectDefaultValue
+{
+
+    public $obj;
+
+    public function __construct(ObjectAllowsNull $obj = null)
+    {
+        $this->obj = $obj;
+    }
+}
 
 class ScalarTypeDefaultValue
 {
+
     public $bool;
+
     public $string;
+
     public $int;
+
     public $float;
+
     public $boolArray;
+
     public $emptyArray;
+
     public $stringArray;
+
     public $intArray;
+
     public $floatArray;
 
     public function __construct(
@@ -118,11 +155,17 @@ class ScalarTypeDefaultValue
 
 class ScalarAllowsNull
 {
+
     public $bool;
+
     public $string;
+
     public $int;
+
     public $float;
+
     public $array;
+
     public function __construct(?bool $bool, ?string $string, ?int $int, ?float $float, ?array $array)
     {
         $this->bool = $bool;
@@ -136,18 +179,35 @@ class ScalarAllowsNull
 
 class ScalarRequired
 {
+
     public $bool;
+
     public $string;
+
     public $int;
+
     public $float;
+
     public $boolArray;
+
     public $emptyArray;
+
     public $stringArray;
+
     public $intArray;
+
     public $floatArray;
 
-    public function __construct(bool $bool, string $string, int $int, float $float,
-    array $emptyArray, array $boolArray, array $stringArray, array $intArray, array $floatArray
+    public function __construct(
+        bool $bool,
+        string $string,
+        int $int,
+        float $float,
+        array $emptyArray,
+        array $boolArray,
+        array $stringArray,
+        array $intArray,
+        array $floatArray
     ) {
         $this->bool = $bool;
         $this->string = $string;
@@ -162,40 +222,24 @@ class ScalarRequired
     }
 }
 
-class ObjectAllowsNull
-{
-    public $std;
-    public function __construct(?stdClass $std)
-    {
-        $this->std = $std;
-    }
-}
+interface InterfaceA{}
+class ImplementInterfaceA implements InterfaceA{}
 
-class ObjectDefaultValue
+class DependInterfaceA
 {
-    public $obj;
-    public function __construct(ObjectAllowsNull $obj = null)
+    public $arg;
+    public function __construct(InterfaceA $arg)
     {
-        $this->obj = $obj;
-    }
-}
-
-class AllowsNullFactory
-{
-    public $obj;
-    public function getInstance()
-    {
-        if (!$this->obj) {
-            $this->obj = new ObjectAllowsNull(null);
-        }
-        return $this->obj;
+        $this->arg = $arg;
     }
 }
 
 class DicDependant
 {
+
     public $dic;
-    public function __construct(ContainerInterface $dic)
+
+    public function __construct(\Psr\Container\ContainerInterface $dic)
     {
         $this->dic = $dic;
     }

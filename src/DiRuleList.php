@@ -8,6 +8,7 @@ final class DiRuleList
     /** @var array<string,DiRule> */
     private $rules = [];
 
+    /** @param array<string,mixed> $rule */
     public function addRule(string $key, array $rule) : self
     {
         $new = clone $this;
@@ -15,6 +16,7 @@ final class DiRuleList
         return $new;
     }
 
+    /** @param array<string,array<string,mixed>> $rules */
     public function addRules(array $rules) : self
     {
         $new = clone $this;

@@ -88,6 +88,34 @@ final class BasicTest extends AbstractTestCase
         $this->assertInstanceOf(NoConstructor::class, $obj);
     }
 
+    public function testCreateObjectGraph()
+    {
+        $graph = $this->dic->get(ClassGraph::class);
+
+        $this->assertInstanceOf(ClassGraph::class, $graph);
+        $this->assertInstanceOf('Xynha\Tests\Data\B', $graph->b);
+        $this->assertInstanceOf('Xynha\Tests\Data\C', $graph->b->c);
+        $this->assertInstanceOf('Xynha\Tests\Data\D', $graph->b->c->d);
+        $this->assertInstanceOf('Xynha\Tests\Data\E', $graph->b->c->e);
+        $this->assertInstanceOf('Xynha\Tests\Data\F', $graph->b->c->e->f);
+    }
+
+    public function testObjectAllowsNull()
+    {
+        $obj = $this->dic->get(ObjectAllowsNull::class);
+
+        $this->assertInstanceOf(ObjectAllowsNull::class, $obj);
+        $this->assertNull($obj->std);
+    }
+
+    public function testObjectDefaultValue()
+    {
+        $obj = $this->dic->get(ObjectDefaultValue::class);
+
+        $this->assertInstanceOf(ObjectDefaultValue::class, $obj);
+        $this->assertNull($obj->obj);
+    }
+
     public function testScalarTypeDefaultValue()
     {
         $obj = $this->dic->get(ScalarTypeDefaultValue::class);
@@ -128,33 +156,5 @@ final class BasicTest extends AbstractTestCase
         );
 
         $this->dic->get(ScalarRequired::class);
-    }
-
-    public function testCreateObjectGraph()
-    {
-        $graph = $this->dic->get(ClassGraph::class);
-
-        $this->assertInstanceOf(ClassGraph::class, $graph);
-        $this->assertInstanceOf('Xynha\Tests\Data\B', $graph->b);
-        $this->assertInstanceOf('Xynha\Tests\Data\C', $graph->b->c);
-        $this->assertInstanceOf('Xynha\Tests\Data\D', $graph->b->c->d);
-        $this->assertInstanceOf('Xynha\Tests\Data\E', $graph->b->c->e);
-        $this->assertInstanceOf('Xynha\Tests\Data\F', $graph->b->c->e->f);
-    }
-
-    public function testObjectAllowsNull()
-    {
-        $obj = $this->dic->get(ObjectAllowsNull::class);
-
-        $this->assertInstanceOf(ObjectAllowsNull::class, $obj);
-        $this->assertNull($obj->std);
-    }
-
-    public function testObjectDefaultValue()
-    {
-        $obj = $this->dic->get(ObjectDefaultValue::class);
-
-        $this->assertInstanceOf(ObjectDefaultValue::class, $obj);
-        $this->assertNull($obj->obj);
     }
 }
