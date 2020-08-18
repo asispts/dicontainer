@@ -91,7 +91,7 @@ final class DiParser
     /** @param array<mixed> $values */
     private function getObjectFromValue(array &$values) : ?object
     {
-        if (count($values) <= 0) {
+        if (!array_key_exists(0, $values)) {
             return null;
         }
 
@@ -128,11 +128,8 @@ final class DiParser
     private function getNonObjectValue(ReflectionParameter $arg, array &$values)
     {
         // @todo: Validate scalar type
-        if (count($values) > 0) {
-            $key = key($values);
-            $value = $values[$key];
-            unset($values[$key]);
-            return $value;
+        if (array_key_exists(0, $values)) {
+            return array_shift($values);
         }
 
         list($hasValue, $argValue) = $this->getDefaultValue($arg);

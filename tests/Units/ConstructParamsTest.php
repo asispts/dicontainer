@@ -5,6 +5,7 @@ use Xynha\Container\DiContainer;
 use Xynha\Container\DiRule;
 use Xynha\Tests\AbstractTestCase;
 use Xynha\Tests\Data\AllowsNullFactory;
+use Xynha\Tests\Data\DbUnit;
 use Xynha\Tests\Data\ObjectAllowsNull;
 use Xynha\Tests\Data\ObjectDefaultValue;
 use Xynha\Tests\Data\ScalarAllowsNull;
@@ -12,6 +13,15 @@ use Xynha\Tests\Data\ScalarRequired;
 
 final class ConstructParamsTest extends AbstractTestCase
 {
+
+    public function testMalformedRule()
+    {
+        $rules['constructParams'] = ['.:INSTANCE:.' => '$pdo']; // will not use this rule
+        $rlist = $this->rlist->addRule(new DiRule(DbUnit::class, $rules));
+        $dic = new DiContainer($rlist);
+        $obj = $dic->get(DbUnit::class);
+        $this->assertNull($obj->pdo->attr);
+    }
 
     public function testPassInvalidScalarType()
     {

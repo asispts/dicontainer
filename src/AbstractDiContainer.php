@@ -3,6 +3,7 @@
 namespace Xynha\Container;
 
 use Psr\Container\ContainerInterface;
+use ReflectionException;
 use Throwable;
 
 abstract class AbstractDiContainer implements ContainerInterface
@@ -29,6 +30,24 @@ abstract class AbstractDiContainer implements ContainerInterface
     }
 
     public function get($id)
+    {
+        try {
+            return $this->doGet($id);
+        } catch (ReflectionException $exc) {
+            throw new ContainerException($exc->getMessage(), $exc->getCode(), $exc);
+        }
+    }
+
+    public function has($id)
+    {
+        if ($this->list->hasRule($id) || class_exists($id)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function doGet(string $id) : object
     {
         if ($this->has($id) === false) {
             throw new NotFoundException(sprintf('Class or rule `%s` is not found or it is an interface', $id));
@@ -58,14 +77,5 @@ abstract class AbstractDiContainer implements ContainerInterface
         }
 
         return $object;
-    }
-
-    public function has($id)
-    {
-        if ($this->list->hasRule($id) || class_exists($id)) {
-            return true;
-        }
-
-        return false;
     }
 }
