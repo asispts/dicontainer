@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
 use Xynha\Container\DiRule;
+use Xynha\Container\NotFoundException;
 use Xynha\Tests\AbstractTestCase;
 use Xynha\Tests\Data\DependInterfaceA;
 use Xynha\Tests\Data\ImplementInterfaceA;
@@ -13,8 +13,9 @@ final class SubstitutionTest extends AbstractTestCase
 
     public function testMissingInterface()
     {
-        $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage(sprintf('Missing interface %s substitution', InterfaceA::class));
+        $msg = sprintf('Class or rule `%s` is not found or it is an interface', InterfaceA::class);
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage($msg);
 
         $this->dic->get(DependInterfaceA::class);
     }

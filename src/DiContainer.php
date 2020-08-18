@@ -17,26 +17,30 @@ final class DiContainer extends AbstractDiContainer
         }
 
         $params = $this->parser->parse($ref->getConstructor(), $rule->getParams(), $rule->getSubstitutions());
-        $object = $this->getObject($ref, $params);
+        $retObj = $this->getObject($ref, $params);
+
 
         foreach ($rule->getCall() as $args) {
             $fn = array_shift($args);
-            $callback = count($args) === 2 ? array_pop($args) : null;
-
+            $type = null;
+            if (count($args) === 2) {
+                $type = array_pop($args);
+            }
             $args = array_shift($args);
 
             $method = $ref->getMethod($fn);
             $params = $this->parser->parse($method, $args, []);
-            $retVal = $method->invokeArgs($object, $params);
-
-            if ($callback === null || !is_callable($callback)) {
+            if ($type === null) {
+                $method->invokeArgs($retObj, $params);
                 continue;
             }
 
-            call_user_func($callback, $retVal);
+            if ($type === '.:CHAIN:.') {
+                $retObj = $method->invokeArgs($retObj, $params);
+            }
         }
 
-        return $object;
+        return $retObj;
     }
 
     /**

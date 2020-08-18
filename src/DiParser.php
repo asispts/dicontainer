@@ -67,12 +67,8 @@ final class DiParser
         array &$values
     ) : ?object {
         $className = $objArg->getName();
-        if ($objArg->isInterface() && !$arg->isOptional() && !array_key_exists($className, $subs)) {
-            throw new ContainerException('Missing interface ' . $className . ' substitution');
-        }
-
-        if (array_key_exists($className, $subs)) {
-            $className = $subs[$className];
+        if ($objArg->isInterface() && !$arg->isOptional()) {
+            $className = $this->getSubstitution($className, $subs);
         }
 
         /** @var class-string|object $className */
@@ -118,7 +114,10 @@ final class DiParser
 
         list($class, $fn) = $data['.:INSTANCE:.'];
         $object = call_user_func_array($this->creator, [$class]);
-        return call_user_func_array([$object, $fn], []);
+        /** @var callable $callable */
+        $callable = [$object, $fn];
+
+        return call_user_func_array($callable, []);
     }
 
     /**
@@ -164,5 +163,19 @@ final class DiParser
         }
 
         return [false, null];
+    }
+
+    /**
+     * @param array<string,string> $subs
+     *
+     * @return string|object
+     */
+    private function getSubstitution(string $key, array $subs)
+    {
+        if (array_key_exists($key, $subs)) {
+            return $subs[$key];
+        }
+
+        return call_user_func_array($this->creator, [$key]);
     }
 }

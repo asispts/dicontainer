@@ -13,3 +13,15 @@ class DependInterfaceA
         $this->arg = $arg;
     }
 }
+
+class InterfaceAFactory
+{
+    public $obj;
+    public function getInstance()
+    {
+        if (!$this->obj) {
+            $this->obj = new ImplementInterfaceA();
+        }
+        return $this->obj;
+    }
+}
