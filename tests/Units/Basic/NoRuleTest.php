@@ -16,7 +16,6 @@ use Xynha\Tests\Data\ObjectDefaultValue;
 use Xynha\Tests\Data\PrivateClass;
 use Xynha\Tests\Data\ProtectedClass;
 use Xynha\Tests\Data\ScalarAllowsNull;
-use Xynha\Tests\Data\ScalarRequired;
 use Xynha\Tests\Data\ScalarTypeDefaultValue;
 use Xynha\Tests\Data\TraitTest;
 
@@ -142,19 +141,5 @@ final class BasicTest extends AbstractTestCase
         $this->assertNull($obj->int);
         $this->assertNull($obj->float);
         $this->assertNull($obj->array);
-    }
-
-    public function testScalarRequired()
-    {
-        $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage(
-            sprintf(
-                'Missing required argument $%s passed to %s::__construct()',
-                'bool',
-                ScalarRequired::class
-            )
-        );
-
-        $this->dic->get(ScalarRequired::class);
     }
 }

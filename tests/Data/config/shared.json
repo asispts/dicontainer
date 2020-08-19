@@ -1,0 +1,8 @@
+{
+    "Xynha\\Tests\\Data\\ObjectAllowsNull": {
+        "shared": true
+    },
+    "Xynha\\Tests\\Data\\E": {
+        "shared": true
+    }
+}

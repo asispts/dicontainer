@@ -18,7 +18,10 @@ abstract class AbstractConfigTest extends TestCase
         $filename = str_replace('Test', '', array_pop($nspaces)); // @phpstan-ignore-line
 
         // Load unit tests
-        require_once DATA_DIR . '/' . $filename . '.php';
+        $unit = DATA_DIR . '/' . $filename . '.php';
+        if (file_exists($unit)) {
+            require_once $unit;
+        }
 
         $rlist = $this->loadList(strtolower($filename));
         $this->dic = new DiContainer($rlist);

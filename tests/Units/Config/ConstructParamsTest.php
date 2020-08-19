@@ -4,32 +4,34 @@ namespace Xynha\Tests\Units;
 
 use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
-use Xynha\Tests\Units\AbstractTestCase;
+use Xynha\Container\DiRuleList;
 use Xynha\Tests\Data\ObjectAllowsNull;
 use Xynha\Tests\Data\ObjectDefaultValue;
 use Xynha\Tests\Data\ScalarAllowsNull;
 use Xynha\Tests\Data\ScalarRequired;
+use Xynha\Tests\Units\Config\AbstractConfigTest;
 
-final class ConstructParamsTest extends AbstractTestCase
+final class ConstructParamsTest extends AbstractConfigTest
 {
+
+    public function testScalarRequired()
+    {
+        $this->expectException(ContainerException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Missing required argument $%s passed to %s::__construct()',
+                'bool',
+                ScalarRequired::class
+            )
+        );
+
+        $dic = new DiContainer(new DiRuleList);
+        $dic->get(ScalarRequired::class);
+    }
 
     public function testScalarType()
     {
-        $rules['constructParams'] = [
-                                     true,
-                                     'String value',
-                                     2020,
-                                     0.1,
-                                     [],
-                                     [false, true],
-                                     ['string', 'value'],
-                                     [2019, 2020],
-                                     [0.1, 0.2],
-                                    ];
-
-        $rlist = $this->rlist->addRule(ScalarRequired::class, $rules);
-        $dic = new DiContainer($rlist);
-        $obj = $dic->get(ScalarRequired::class);
+        $obj = $this->dic->get(ScalarRequired::class);
 
         $this->assertInstanceOf(ScalarRequired::class, $obj);
         $this->assertSame(true, $obj->bool);
@@ -55,7 +57,8 @@ final class ConstructParamsTest extends AbstractTestCase
 
         $rules['constructParams'] = [[]];
 
-        $rlist = $this->rlist->addRule(ScalarAllowsNull::class, $rules);
+        $rlist = new DiRuleList();
+        $rlist = $rlist->addRule(ScalarAllowsNull::class, $rules);
         $dic = new DiContainer($rlist);
         $dic->get(ScalarAllowsNull::class);
     }
@@ -63,7 +66,9 @@ final class ConstructParamsTest extends AbstractTestCase
     public function testInvalidObjectValueArray()
     {
         $rules['constructParams'] = [['invalid type']];
-        $rlist = $this->rlist->addRule(ObjectDefaultValue::class, $rules);
+
+        $rlist = new DiRuleList();
+        $rlist = $rlist->addRule(ObjectDefaultValue::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(ObjectDefaultValue::class);
 
@@ -73,7 +78,9 @@ final class ConstructParamsTest extends AbstractTestCase
     public function testInvalidObjectValueScalar()
     {
         $rules['constructParams'] = ['invalid type'];
-        $rlist = $this->rlist->addRule(ObjectDefaultValue::class, $rules);
+
+        $rlist = new DiRuleList();
+        $rlist = $rlist->addRule(ObjectDefaultValue::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(ObjectDefaultValue::class);
 
@@ -83,7 +90,9 @@ final class ConstructParamsTest extends AbstractTestCase
     public function testPassOptionalObject()
     {
         $rules['constructParams'] = [new ObjectAllowsNull(null)];
-        $rlist = $this->rlist->addRule(ObjectDefaultValue::class, $rules);
+
+        $rlist = new DiRuleList();
+        $rlist = $rlist->addRule(ObjectDefaultValue::class, $rules);
         $dic = new DiContainer($rlist);
         $obj = $dic->get(ObjectDefaultValue::class);
 

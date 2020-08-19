@@ -2,16 +2,13 @@ parameters:
     level: max
     paths:
         - src
-        - tests
-
-    excludes_analyse:
-        - tests/Data
+        - tests/Units
 
     bootstrapFiles:
         - tests/bootstrap.php
 
-    scanFiles:
-        - tests/Data/Interface.php
+    scanDirectories:
+        - tests/Data
 
     ignoreErrors:
         -
