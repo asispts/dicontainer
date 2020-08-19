@@ -6,7 +6,7 @@ use Xynha\Container\NotFoundException;
 use Xynha\Tests\AbstractTestCase;
 use Xynha\Tests\Data\DicDependant;
 
-final class DicDependantTest extends AbstractTestCase
+final class GlobalRuleDic extends AbstractTestCase
 {
 
     public function testEmptyRule()
