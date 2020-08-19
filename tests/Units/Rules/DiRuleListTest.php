@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use Xynha\Container\DiRuleList;
+use Xynha\Container\NotFoundException;
 
 final class DiRuleListTest extends TestCase
 {
@@ -31,5 +32,14 @@ final class DiRuleListTest extends TestCase
 
         $this->assertSame([], $rlist->getRule('key1')->getParams());
         $this->assertSame(['string', ['array', 'value']], $rlist->getRule('key2')->getParams());
+    }
+
+    public function testNotExistRule()
+    {
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('Rule $rule does not exist');
+
+        $rlist = new DiRuleList();
+        $rlist->getRule('$rule');
     }
 }

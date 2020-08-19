@@ -46,11 +46,6 @@ final class DiRuleList
 
     private function addToList(DiRuleList $list, DiRule $rule) : void
     {
-        if ($list->hasRule($rule->getKey())) {
-            $oldRule = $list->getRule($rule->getKey());
-            $rule->cloneFrom($oldRule);
-        }
-
         $list->rules[$rule->getKey()] = $rule;
     }
 
@@ -58,15 +53,6 @@ final class DiRuleList
     {
         if ($this->hasRule($key)) {
             return $this->rules[$key];
-        }
-
-        foreach ($this->rules as $rule) {
-            if (is_subclass_of($key, $rule->getClassname())) {
-                $newRule = new DiRule($key, []);
-                $newRule->cloneFrom($rule);
-                $this->addToList($this, $newRule);
-                return $newRule;
-            }
         }
 
         if (class_exists($key)) {

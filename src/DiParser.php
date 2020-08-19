@@ -99,25 +99,7 @@ final class DiParser
             return array_shift($values);
         }
 
-        if (key((array)$values[0]) !== '.:INSTANCE:.') {
-            return null;
-        }
-
-        $data = array_shift($values);
-        if (!is_array($data['.:INSTANCE:.'])) {
-            if (is_object($data['.:INSTANCE:.'])) {
-                return $data['.:INSTANCE:.'];
-            }
-
-            return call_user_func_array($this->creator, [$data['.:INSTANCE:.']]);
-        }
-
-        list($class, $fn) = $data['.:INSTANCE:.'];
-        $object = call_user_func_array($this->creator, [$class]);
-        /** @var callable $callable */
-        $callable = [$object, $fn];
-
-        return call_user_func_array($callable, []);
+        return null;
     }
 
     /**

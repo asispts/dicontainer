@@ -31,11 +31,7 @@ abstract class AbstractDiContainer implements ContainerInterface
 
     public function get($id)
     {
-        try {
-            return $this->doGet($id);
-        } catch (ReflectionException $exc) {
-            throw new ContainerException($exc->getMessage(), $exc->getCode(), $exc);
-        }
+        return $this->doGet($id);
     }
 
     public function has($id)
