@@ -46,3 +46,14 @@ class ScalarRequired
         $this->floatArray = $floatArray;
     }
 }
+
+class ObjectDependencies
+{
+    public $scalar;
+    public $obj;
+    public function __construct(ScalarAllowsNull $scalar, ObjectAllowsNull $obj)
+    {
+        $this->scalar = $scalar;
+        $this->obj = $obj;
+    }
+}

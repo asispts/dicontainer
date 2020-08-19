@@ -5,8 +5,10 @@ namespace Xynha\Tests\Units;
 use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
 use Xynha\Container\DiRuleList;
+use Xynha\Tests\Data\NoConstructor;
 use Xynha\Tests\Data\ObjectAllowsNull;
 use Xynha\Tests\Data\ObjectDefaultValue;
+use Xynha\Tests\Data\ObjectDependencies;
 use Xynha\Tests\Data\ScalarAllowsNull;
 use Xynha\Tests\Data\ScalarRequired;
 use Xynha\Tests\Units\Config\AbstractConfigTest;
@@ -97,5 +99,23 @@ final class ConstructParamsTest extends AbstractConfigTest
         $obj = $dic->get(ObjectDefaultValue::class);
 
         $this->assertInstanceOf(ObjectAllowsNull::class, $obj->obj);
+    }
+
+    public function testPassObject()
+    {
+        $obj = $this->dic->get(ObjectDependencies::class);
+        $this->assertInstanceOf(ObjectDependencies::class, $obj);
+        $this->assertInstanceOf(ScalarAllowsNull::class, $obj->scalar);
+        $this->assertInstanceOf(ObjectAllowsNull::class, $obj->obj);
+        $this->assertNull($obj->obj->std);
+
+        $null = new ObjectAllowsNull(new NoConstructor);
+        $rule['constructParams'] = [$null];
+        $rlist = $this->loadList('constructparams');
+        $rlist = $rlist->addRule(ObjectDependencies::class, $rule);
+        $dic = new DiContainer($rlist);
+
+        $obj = $dic->get(ObjectDependencies::class);
+        $this->assertSame($null, $obj->obj);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Xynha\Container;
 
-use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 
@@ -42,68 +41,80 @@ final class DiParser
         $params = $method->getParameters();
         foreach ($params as $arg) {
             $varName = $arg->getName();
-            if (is_object($arg->getClass())) {
-                $varValue = $this->getObjectArg($arg, $arg->getClass(), $subs, $passedValues);
-                $tParams[$varName] = $varValue;
+
+            if (is_object($arg->getClass()) && $arg->getClass()->isInterface()) {
+                $classname = $arg->getClass()->getName();
+                $tParams[$varName] = $this->interfaceValue($arg, $classname, $subs, $passedValues);
                 continue;
             }
 
-            $varValue = $this->getNonObjectValue($arg, $passedValues);
-            $tParams[$varName] = $varValue;
+            if (is_object($arg->getClass())) {
+                $classname = $arg->getClass()->getName();
+                $tParams[$varName] = $this->classValue($arg, $classname, $passedValues);
+                continue;
+            }
+
+            $tParams[$varName] = $this->scalarValue($arg, $passedValues);
         }
 
         return $tParams;
     }
 
     /**
-     * @param ReflectionClass<Object> $objArg
      * @param array<string,string> $subs
      * @param array<mixed> $values
+     *
+     * @return void|null|object
      */
-    private function getObjectArg(
-        ReflectionParameter $arg,
-        ReflectionClass $objArg,
-        array $subs,
-        array &$values
-    ) : ?object {
-        $className = $objArg->getName();
-        if ($objArg->isInterface() && !$arg->isOptional()) {
-            $className = $this->getSubstitution($className, $subs);
-        }
-
-        /**
-         * Object from `$this->getSubstitution` or supplied by user
-         *
-         * @var class-string|object $className
-         */
-        if (is_object($className)) {
-            return $className;
-        }
-
-        if ($argValue = $this->getObjectFromValue($values)) {
-            return $argValue;
-        }
-
-        list($hasValue, $argValue) = $this->getDefaultValue($arg);
-        if ($hasValue) {
-            return $argValue;
-        }
-
-        return call_user_func_array($this->creator, [$className]);
-    }
-
-    /** @param array<mixed> $values */
-    private function getObjectFromValue(array &$values) : ?object
+    private function interfaceValue(ReflectionParameter $param, string $name, array $subs, array &$values)
     {
-        if (!array_key_exists(0, $values)) {
-            return null;
-        }
-
-        if (is_object($values[0])) {
+        if (isset($values[0]) && is_object($values[0]) && ($values[0] instanceof $name)) {
             return array_shift($values);
         }
 
-        return null;
+        if (array_key_exists($name, $subs)) {
+            return call_user_func_array($this->creator, [$subs[$name]]);
+        }
+
+        if ($param->isDefaultValueAvailable()) {
+            return $param->getDefaultValue();
+        }
+
+        if ($param->allowsNull()) {
+            return null;
+        }
+
+        if ($param->isOptional()) {
+            return;
+        }
+
+        return call_user_func_array($this->creator, [$name]);
+    }
+
+    /**
+     * @param array<mixed> $values
+     *
+     * @return void|null|object
+     */
+    private function classValue(ReflectionParameter $param, string $className, array &$values)
+    {
+        if (isset($values[0]) && is_object($values[0]) && ($values[0] instanceof $className)) {
+            return array_shift($values);
+        }
+
+        if ($param->isDefaultValueAvailable()) {
+            return $param->getDefaultValue();
+        }
+
+        if ($param->allowsNull()) {
+            return null;
+        }
+
+        if ($param->isOptional()) {
+            return;
+        }
+
+        return call_user_func_array($this->creator, [$className]);
     }
 
     /**
@@ -111,54 +122,29 @@ final class DiParser
      *
      * @return mixed
      */
-    private function getNonObjectValue(ReflectionParameter $arg, array &$values)
+    private function scalarValue(ReflectionParameter $param, array &$values)
     {
         // @todo: Validate scalar type
         if (array_key_exists(0, $values)) {
             return array_shift($values);
         }
 
-        list($hasValue, $argValue) = $this->getDefaultValue($arg);
-        if ($hasValue) {
-            return $argValue;
+        if ($param->isDefaultValueAvailable()) {
+            return $param->getDefaultValue();
         }
 
-        if (!$arg->isOptional()) {
+        if ($param->allowsNull()) {
+            return null;
+        }
+
+        if (!$param->isOptional()) {
             $msg = sprintf(
                 'Missing required argument $%s passed to %s::%s()',
-                $arg->getName(),
-                $arg->getDeclaringClass()->getName(), // @phpstan-ignore-line
-                $arg->getDeclaringFunction()->getName()  // @phpstan-ignore-line
+                $param->getName(),
+                $param->getDeclaringClass()->getName(), // @phpstan-ignore-line
+                $param->getDeclaringFunction()->getName()  // @phpstan-ignore-line
             );
             throw new ContainerException($msg);
         }
-    }
-
-    /** @return array{bool,mixed} */
-    private function getDefaultValue(ReflectionParameter $arg) : array
-    {
-        if ($arg->isDefaultValueAvailable()) {
-            return [true, $arg->getDefaultValue()];
-        }
-
-        if ($arg->allowsNull()) {
-            return [true, null];
-        }
-
-        return [false, null];
-    }
-
-    /**
-     * @param array<string,string> $subs
-     *
-     * @return string|object
-     */
-    private function getSubstitution(string $key, array $subs)
-    {
-        if (array_key_exists($key, $subs)) {
-            return $subs[$key];
-        }
-
-        return call_user_func_array($this->creator, [$key]);
     }
 }
