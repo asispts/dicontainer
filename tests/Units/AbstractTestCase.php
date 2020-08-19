@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Xynha\Tests;
+namespace Xynha\Tests\Units;
 
 use PHPUnit\Framework\TestCase;
 use Xynha\Container\DiContainer;

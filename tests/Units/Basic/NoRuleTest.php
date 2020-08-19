@@ -6,7 +6,7 @@ use ArrayAccess;
 use DateTime;
 use Xynha\Container\ContainerException;
 use Xynha\Container\NotFoundException;
-use Xynha\Tests\AbstractTestCase;
+use Xynha\Tests\Units\AbstractTestCase;
 use Xynha\Tests\Data\AbstractClass;
 use Xynha\Tests\Data\ClassGraph;
 use Xynha\Tests\Data\CyclicA;

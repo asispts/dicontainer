@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use Xynha\Container\DiContainer;
-use Xynha\Tests\AbstractTestCase;
+use Xynha\Tests\Units\AbstractTestCase;
 use Xynha\Tests\Data\ClassGraph;
 use Xynha\Tests\Data\E;
 use Xynha\Tests\Data\ObjectAllowsNull;

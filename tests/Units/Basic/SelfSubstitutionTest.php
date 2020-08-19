@@ -3,7 +3,7 @@
 use Psr\Container\ContainerInterface;
 use Xynha\Container\DiContainer;
 use Xynha\Container\NotFoundException;
-use Xynha\Tests\AbstractTestCase;
+use Xynha\Tests\Units\AbstractTestCase;
 use Xynha\Tests\Data\DicDependant;
 use Xynha\Tests\Data\OverriddenDic;
 

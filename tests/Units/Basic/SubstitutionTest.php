@@ -2,7 +2,7 @@
 
 use Xynha\Container\DiContainer;
 use Xynha\Container\NotFoundException;
-use Xynha\Tests\AbstractTestCase;
+use Xynha\Tests\Units\AbstractTestCase;
 use Xynha\Tests\Data\DependInterfaceA;
 use Xynha\Tests\Data\ImplementInterfaceA;
 use Xynha\Tests\Data\InterfaceA;

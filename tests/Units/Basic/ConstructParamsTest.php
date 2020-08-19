@@ -4,7 +4,7 @@ namespace Xynha\Tests\Units;
 
 use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
-use Xynha\Tests\AbstractTestCase;
+use Xynha\Tests\Units\AbstractTestCase;
 use Xynha\Tests\Data\ObjectAllowsNull;
 use Xynha\Tests\Data\ObjectDefaultValue;
 use Xynha\Tests\Data\ScalarAllowsNull;
