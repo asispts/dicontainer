@@ -244,3 +244,9 @@ class DicDependant
         $this->dic = $dic;
     }
 }
+
+class OverriddenDic implements \Psr\Container\ContainerInterface
+{
+    public function get($id){}
+    public function has($id){}
+}

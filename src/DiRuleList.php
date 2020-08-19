@@ -33,7 +33,7 @@ final class DiRuleList
         $rule = $this->findRule($key);
 
         if (array_key_exists('*', $this->rules)) {
-            $rule->addGlobalRule($this->rules['*']);
+            $rule->cloneFrom($this->rules['*']);
         }
 
         return $rule;
