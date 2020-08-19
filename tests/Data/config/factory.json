@@ -1,0 +1,14 @@
+{
+    "Xynha\\Tests\\Data\\FactoryInterface": {
+        "instanceOf": "Xynha\\Tests\\Data\\FactoryInterfaceFactory",
+        "call": [
+            [
+                "getInstance",
+                [
+                    "passed value from config"
+                ],
+                ".:CHAIN:."
+            ]
+        ]
+    }
+}

@@ -22,17 +22,5 @@
     },
     "Xynha\\Tests\\Data\\GenericInterface": {
         "instanceOf": "Xynha\\Tests\\Data\\GenericInterfaceImpl"
-    },
-    "Xynha\\Tests\\Data\\FactoryInterface": {
-        "instanceOf": "Xynha\\Tests\\Data\\FactoryInterfaceFactory",
-        "call": [
-            [
-                "getInstance",
-                [
-                    "passed value from config"
-                ],
-                ".:CHAIN:."
-            ]
-        ]
     }
 }
