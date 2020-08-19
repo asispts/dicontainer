@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
 use Xynha\Container\NotFoundException;
+use Xynha\Tests\Data\FactoryInterfaceDep;
+use Xynha\Tests\Data\FactoryInterfaceImpl;
 use Xynha\Tests\Data\GenericInterfaceDep;
 use Xynha\Tests\Data\GenericInterfaceImpl;
 use Xynha\Tests\Data\GlobalInterfaceDep;
@@ -37,5 +39,13 @@ final class InterfaceTest extends AbstractConfigTest
     {
         $obj = $this->dic->get(GenericInterfaceDep::class);
         $this->assertInstanceOf(GenericInterfaceImpl::class, $obj->obj);
+    }
+
+    public function testFromFactory()
+    {
+        $obj = $this->dic->get(FactoryInterfaceDep::class);
+        $this->assertInstanceOf(FactoryInterfaceImpl::class, $obj->obj);
+        $this->assertStringStartsWith('factory_', $obj->obj->generated);
+        $this->assertSame('passed value from config', $obj->obj->passed);
     }
 }

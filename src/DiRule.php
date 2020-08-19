@@ -51,6 +51,12 @@ final class DiRule
         return $this->rules['substitutions'] ?? [];
     }
 
+    /** @return array<array<mixed>> */
+    public function call() : array
+    {
+        return $this->rules['call'] ?? [];
+    }
+
     public function cloneFrom(DiRule $rule) : void
     {
         $this->rules = array_replace_recursive($rule->rules, $this->rules);
