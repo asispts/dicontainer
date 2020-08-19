@@ -8,7 +8,7 @@
   </testsuites>
 
   <logging>
-    <log type="coverage-html" target="docs/coverage"/>
+    <log type="coverage-html" target="generated/coverage"/>
   </logging>
 
   <filter>

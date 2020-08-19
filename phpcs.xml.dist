@@ -10,6 +10,7 @@
 
   <exclude-pattern>vendor</exclude-pattern>
   <exclude-pattern>tests/Data</exclude-pattern>
+  <exclude-pattern>docs</exclude-pattern>
 
   <rule ref="ptscs"/>
 

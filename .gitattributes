@@ -2,6 +2,7 @@
 *.php text
 
 /tests export-ignore
+/docs export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
 /phpcs.xml.dist export-ignore
