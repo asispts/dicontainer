@@ -10,6 +10,9 @@ parameters:
     bootstrapFiles:
         - tests/bootstrap.php
 
+    scanFiles:
+        - tests/Data/Interface.php
+
     ignoreErrors:
         -
             message: '#[\w\\]+::(set[uU]p|test\w+)\(\) has no return typehint specified#'

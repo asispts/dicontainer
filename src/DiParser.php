@@ -71,7 +71,11 @@ final class DiParser
             $className = $this->getSubstitution($className, $subs);
         }
 
-        /** @var class-string|object $className */
+        /**
+         * Object from `$this->getSubstitution` or supplied by user
+         *
+         * @var class-string|object $className
+         */
         if (is_object($className)) {
             return $className;
         }

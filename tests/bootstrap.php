@@ -3,3 +3,6 @@
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 require_once __DIR__ . '/Data/Basic.php';
+
+// @phpcs:disable
+define('DATA_DIR', __DIR__ . '/Data');

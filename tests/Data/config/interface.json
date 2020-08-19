@@ -1,0 +1,16 @@
+{
+    "*": {
+        "substitutions": {
+            "Xynha\\Tests\\Data\\GlobalInterface": "Xynha\\Tests\\Data\\GlobalInterfaceImpl",
+            "Xynha\\Tests\\Data\\SubsInterface": "Xynha\\Tests\\Data\\SubsInterfaceImpl"
+        }
+    },
+    "Xynha\\Tests\\Data\\SubsInterfaceDep": {
+        "substitutions": {
+            "Xynha\\Tests\\Data\\SubsInterface": "Xynha\\Tests\\Data\\OverriddenGlobalSubsImpl"
+        }
+    },
+    "Xynha\\Tests\\Data\\GenericInterface": {
+        "instanceOf": "Xynha\\Tests\\Data\\GenericInterfaceImpl"
+    }
+}
