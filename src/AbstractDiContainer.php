@@ -3,17 +3,16 @@
 namespace Xynha\Container;
 
 use Psr\Container\ContainerInterface;
-use ReflectionException;
 use Throwable;
 
 abstract class AbstractDiContainer implements ContainerInterface
 {
 
-    /** @var DiRuleList */
-    protected $list;
-
     /** @var DiParser */
     protected $parser;
+
+    /** @var DiRuleList */
+    private $list;
 
     /** @var object[] */
     private $instances;

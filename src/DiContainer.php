@@ -4,7 +4,6 @@ namespace Xynha\Container;
 
 use Error;
 use ReflectionClass;
-use ReflectionException;
 
 final class DiContainer extends AbstractDiContainer
 {
