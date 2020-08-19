@@ -5,10 +5,20 @@
             "Xynha\\Tests\\Data\\SubsInterface": "Xynha\\Tests\\Data\\SubsInterfaceImpl"
         }
     },
+    "Xynha\\Tests\\Data\\GlobalInterfaceImpl": {
+        "constructParams": [
+            "passed value from config"
+        ]
+    },
     "Xynha\\Tests\\Data\\SubsInterfaceDep": {
         "substitutions": {
             "Xynha\\Tests\\Data\\SubsInterface": "Xynha\\Tests\\Data\\OverriddenGlobalSubsImpl"
         }
+    },
+    "Xynha\\Tests\\Data\\OverriddenGlobalSubsImpl": {
+        "constructParams": [
+            "passed value from config"
+        ]
     },
     "Xynha\\Tests\\Data\\GenericInterface": {
         "instanceOf": "Xynha\\Tests\\Data\\GenericInterfaceImpl"

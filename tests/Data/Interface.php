@@ -4,7 +4,14 @@ namespace Xynha\Tests\Data;
 
 interface GlobalInterface{}
 
-class GlobalInterfaceImpl implements GlobalInterface{}
+class GlobalInterfaceImpl implements GlobalInterface
+{
+    public $arg;
+    public function __construct(string $arg)
+    {
+        $this->arg = $arg;
+    }
+}
 
 class GlobalInterfaceDep
 {
@@ -17,8 +24,20 @@ class GlobalInterfaceDep
 
 
 interface SubsInterface{}
-class SubsInterfaceImpl implements SubsInterface{}
-class OverriddenGlobalSubsImpl extends SubsInterfaceImpl{}
+class SubsInterfaceImpl implements SubsInterface{
+    public $arg;
+    public function __construct(string $arg)
+    {
+        $this->arg = $arg;
+    }
+}
+class OverriddenGlobalSubsImpl implements SubsInterface{
+    public $arg;
+    public function __construct(string $arg)
+    {
+        $this->arg = $arg;
+    }
+}
 class SubsInterfaceDep
 {
     public $obj;
