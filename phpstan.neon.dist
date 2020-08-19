@@ -6,7 +6,6 @@ parameters:
 
     excludes_analyse:
         - tests/Data
-        - tests/DiceUnits/TestData
 
     bootstrapFiles:
         - tests/bootstrap.php

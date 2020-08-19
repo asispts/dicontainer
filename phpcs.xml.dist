@@ -10,7 +10,6 @@
 
   <exclude-pattern>vendor</exclude-pattern>
   <exclude-pattern>tests/Data</exclude-pattern>
-  <exclude-pattern>tests/DiceUnits/TestData</exclude-pattern>
 
   <rule ref="ptscs"/>
 
@@ -20,9 +19,6 @@
 
   <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
     <exclude-pattern>tests</exclude-pattern>
-  </rule>
-  <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
-    <exclude-pattern>tests/DiceUnits</exclude-pattern>
   </rule>
 
 </ruleset>
