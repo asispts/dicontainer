@@ -11,6 +11,8 @@ final class DiParser
     /** @var callable */
     private $creator;
 
+    private $keys = [];
+
     public function __construct(callable $creator)
     {
         $this->creator = $creator;
@@ -27,7 +29,7 @@ final class DiParser
         if ($method === null) {
             return [];
         }
-
+        $this->keys[] = $method->getDeclaringClass()->getName();
         if ($method->isPrivate() || $method->isProtected()) {
             $name = $method->getDeclaringClass()->getName();
             $msg = 'Access to non-public method of class ' . $name;
@@ -68,8 +70,8 @@ final class DiParser
      */
     private function interfaceValue(ReflectionParameter $param, string $name, array $subs, array &$values)
     {
-        if (isset($values[0]) && is_object($values[0]) && ($values[0] instanceof $name)) {
-            return array_shift($values);
+        if ($obj = $this->getObjectValue($name, $values)) {
+            return $obj;
         }
 
         if (array_key_exists($name, $subs)) {
@@ -98,8 +100,8 @@ final class DiParser
      */
     private function classValue(ReflectionParameter $param, string $className, array &$values)
     {
-        if (isset($values[0]) && is_object($values[0]) && ($values[0] instanceof $className)) {
-            return array_shift($values);
+        if ($obj = $this->getObjectValue($className, $values)) {
+            return $obj;
         }
 
         if ($param->isDefaultValueAvailable()) {
@@ -145,6 +147,51 @@ final class DiParser
                 $param->getDeclaringFunction()->getName()  // @phpstan-ignore-line
             );
             throw new ContainerException($msg);
+        }
+    }
+
+    /**
+     * @param array<mixed> $values
+     *
+     * @return object|string|null
+     */
+    private function getObjectValue(string $className, array &$values)
+    {
+        if (!isset($values[0])) {
+            return null;
+        }
+
+        if (is_object($values[0]) && ($values[0] instanceof $className)) {
+            return array_shift($values);
+        }
+
+        if (key((array)$values[0]) !== '.:INSTANCE:.') {
+            return null;
+        }
+
+        $data = $values[0];
+        if (!is_array($data['.:INSTANCE:.'])) {
+            if (is_object($data['.:INSTANCE:.']) && $data['.:INSTANCE:.'] instanceof $className) {
+                return $data['.:INSTANCE:.'];
+            }
+
+            $object = call_user_func_array($this->creator, [$data['.:INSTANCE:.']]);
+            if ($object instanceof $className) {
+                unset($values[0]);
+                return $object;
+            }
+        }
+
+        list($class, $fn) = $data['.:INSTANCE:.'];
+        $object = call_user_func_array($this->creator, [$class]);
+
+        /** @var callable $callable */
+        $callable = [$object, $fn];
+        $retval = call_user_func_array($callable, []);
+
+        if ($retval instanceof $className) {
+            unset($values[0]);
+            return $retval;
         }
     }
 }

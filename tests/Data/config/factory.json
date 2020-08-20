@@ -10,5 +10,60 @@
                 ".:CHAIN:."
             ]
         ]
+    },
+    "Xynha\\Tests\\Data\\ClassMapper": {
+        "shared": true,
+        "instanceOf": "Xynha\\Tests\\Data\\MapFactory",
+        "call": [
+            [
+                "getMapper",
+                [],
+                ".:CHAIN:."
+            ]
+        ]
+    },
+    "Xynha\\Tests\\Data\\ClassGenerator": {
+        "shared": true,
+        "instanceOf": "Xynha\\Tests\\Data\\MapFactory",
+        "call": [
+            [
+                "getGenerator",
+                [],
+                ".:CHAIN:."
+            ]
+        ]
+    },
+    "Xynha\\Tests\\Data\\MapFactory": {
+        "shared": true
+    },
+    "Xynha\\Tests\\Data\\MapperDep": {
+        "constructParams": [
+            {
+                ".:INSTANCE:.": [
+                    "Xynha\\Tests\\Data\\MapFactory",
+                    "getMapper"
+                ]
+            }
+        ]
+    },
+    "Xynha\\Tests\\Data\\GeneratorDep": {
+        "constructParams": [
+            {
+                ".:INSTANCE:.": [
+                    "Xynha\\Tests\\Data\\MapFactory",
+                    "getGenerator"
+                ]
+            }
+        ]
+    },
+    "Xynha\\Tests\\Data\\ComplexMapperDep": {
+        "constructParams": [
+            {
+                ".:INSTANCE:.": [
+                    "Xynha\\Tests\\Data\\MapFactory",
+                    "getMapper"
+                ]
+            }
+        ]
     }
 }
