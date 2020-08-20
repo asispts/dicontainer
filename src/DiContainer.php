@@ -44,19 +44,20 @@ final class DiContainer implements ContainerInterface
             return clone $this;
         }
 
-        $fromMethod = '';
-        $fromArg = [];
-        if (!empty($rule->getFrom())) {
-            list($fromClass, $fromMethod, $fromArg) = $rule->getFrom();
-            $rule = $this->list->getRule($fromClass);
+        if (empty($rule->getFrom())) {
+            return $this->getInstance($rule);
         }
 
-        $object = $this->getInstance($rule);
-        if ($fromMethod) {
-            return call_user_func_array([$object, $fromMethod], $fromArg);
+        list($fromClass, $fromMethod, $fromArg) = $rule->getFrom();
+        $fromRule = $this->list->getRule($fromClass);
+        $object = $this->getInstance($fromRule);
+        $callback = [$object, $fromMethod];
+
+        if (is_callable($callback)) {
+            return call_user_func_array($callback, $fromArg);
         }
 
-        return $object;
+        throw new ContainerException('Rule getFrom is not callable');
     }
 
     private function getInstance(DiRule $rule) : object

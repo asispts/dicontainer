@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use Xynha\Container\DiRule;
 use Xynha\Container\DiRuleList;
 use Xynha\Container\NotFoundException;
 
 final class DiRuleListTest extends TestCase
 {
 
+    /** @var string */
     private $json = '
     {
         "$empty": {

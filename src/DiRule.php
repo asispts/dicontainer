@@ -52,6 +52,7 @@ final class DiRule
         return $this->rules['call'] ?? [];
     }
 
+    /** @return array{class-string,string,array<mixed>} */
     public function getFrom() : array
     {
         return $this->rules['getFrom'] ?? [];
@@ -109,6 +110,7 @@ final class DiRule
         }
     }
 
+    /** @param array<string,string> $values */
     private function inheritInterface(array $values) : void
     {
         if (!isset($this->rules['substitutions'])) {
@@ -123,6 +125,7 @@ final class DiRule
         }
     }
 
+    /** @param array<string,string> $values */
     private function mergeInterface(array $values) : void
     {
         if (!isset($this->rules['substitutions'])) {
