@@ -11,8 +11,6 @@ final class DiParser
     /** @var callable */
     private $creator;
 
-    private $keys = [];
-
     public function __construct(callable $creator)
     {
         $this->creator = $creator;
@@ -29,7 +27,7 @@ final class DiParser
         if ($method === null) {
             return [];
         }
-        $this->keys[] = $method->getDeclaringClass()->getName();
+
         if ($method->isPrivate() || $method->isProtected()) {
             $name = $method->getDeclaringClass()->getName();
             $msg = 'Access to non-public method of class ' . $name;

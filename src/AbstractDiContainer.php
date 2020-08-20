@@ -49,7 +49,7 @@ abstract class AbstractDiContainer implements ContainerInterface
         }
 
         $rule = $this->list->getRule($id);
-        if ($rule->getKey() === static::class) {
+        if ($rule->getClassname() === static::class) {
             return clone $this;
         }
 

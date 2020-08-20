@@ -1,0 +1,5 @@
+{
+    "Psr\\Container\\ContainerInterface": {
+        "instanceOf": "Xynha\\Container\\DiContainer"
+    }
+}

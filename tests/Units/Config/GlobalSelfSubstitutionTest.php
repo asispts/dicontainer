@@ -25,15 +25,12 @@ final class GlobalSelfSubstitutionTest extends AbstractConfigTest
     {
         $obj = $this->dic->get(DicDependant::class);
 
-        $dicProp = new ReflectionProperty(AbstractDiContainer::class, 'list');
-        $dicProp->setAccessible(true);
-
-        $objProp = new ReflectionProperty(AbstractDiContainer::class, 'list');
-        $objProp->setAccessible(true);
+        $listVar = new ReflectionProperty(AbstractDiContainer::class, 'list');
+        $listVar->setAccessible(true);
 
         // Different DiContainer instance but with the same role list
         $this->assertNotSame($this->dic, $obj->dic);
-        $this->assertSame($objProp->getValue($obj->dic), $dicProp->getValue($this->dic));
+        $this->assertSame($listVar->getValue($obj->dic), $listVar->getValue($this->dic));
     }
 
     public function testOverriddenRule()
