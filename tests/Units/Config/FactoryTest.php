@@ -6,6 +6,7 @@ use Xynha\Tests\Data\ComplexMapperDep;
 use Xynha\Tests\Data\FactoryInterfaceDep;
 use Xynha\Tests\Data\FactoryInterfaceImpl;
 use Xynha\Tests\Data\GeneratorDep;
+use Xynha\Tests\Data\MapFactory;
 use Xynha\Tests\Data\MapperDep;
 use Xynha\Tests\Units\Config\AbstractConfigTest;
 
@@ -34,5 +35,9 @@ final class FactoryTest extends AbstractConfigTest
         $generator = $this->dic->get(GeneratorDep::class);
 
         $this->assertSame($mapper->mapper->map, $generator->gen->map);
+
+        $factory = $this->dic->get(MapFactory::class);
+        $this->assertSame($mapper->mapper, $factory->getMapper());
+        $this->assertSame($generator->gen, $factory->getGenerator());
     }
 }

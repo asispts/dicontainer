@@ -103,17 +103,6 @@ class MapperDep
     }
 }
 
-class ComplexMapperDep
-{
-    public $interface;
-    public $mapper;
-    public function __construct(FactoryInterface $interface, ClassMapper $mapper)
-    {
-        $this->interface = $interface;
-        $this->mapper = $mapper;
-    }
-}
-
 class GeneratorDep
 {
     public $gen;
