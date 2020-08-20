@@ -52,6 +52,11 @@ final class DiRule
         return $this->rules['call'] ?? [];
     }
 
+    public function getFrom() : array
+    {
+        return $this->rules['getFrom'] ?? [];
+    }
+
     public function cloneFrom(DiRule $rule) : void
     {
         switch ($rule->getKey()) {

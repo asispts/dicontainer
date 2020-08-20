@@ -30,7 +30,33 @@ abstract class AbstractDiContainer implements ContainerInterface
 
     public function get($id)
     {
-        return $this->doGet($id);
+        if ($this->has($id) === false) {
+            throw new NotFoundException(sprintf('Class or rule %s does not exist', $id));
+        }
+
+        $rule = $this->list->getRule($id);
+        if ($rule->getClassname() === static::class) {
+            return clone $this;
+        }
+
+        $fromMethod = '';
+        $fromArg = [];
+        if (!empty($rule->getFrom())) {
+            list($fromClass, $fromMethod, $fromArg) = $rule->getFrom();
+            $rule = $this->list->getRule($fromClass);
+        }
+
+        if (isset($this->instances[$rule->getKey()])) {
+            $object = $this->instances[$rule->getKey()];
+        } else {
+            $object = $this->doGet($rule);
+        }
+
+        if ($fromMethod) {
+            return call_user_func_array([$object, $fromMethod], $fromArg);
+        }
+
+        return $object;
     }
 
     public function has($id)
@@ -42,21 +68,8 @@ abstract class AbstractDiContainer implements ContainerInterface
         return false;
     }
 
-    private function doGet(string $id) : object
+    private function doGet(DiRule $rule) : object
     {
-        if ($this->has($id) === false) {
-            throw new NotFoundException(sprintf('Class or rule %s does not exist', $id));
-        }
-
-        $rule = $this->list->getRule($id);
-        if ($rule->getClassname() === static::class) {
-            return clone $this;
-        }
-
-        if (isset($this->instances[$rule->getKey()])) {
-            return $this->instances[$rule->getKey()];
-        }
-
         if (array_key_exists($rule->getKey(), $this->curKeys) || in_array($rule->getClassname(), $this->curKeys)) {
             throw new ContainerException('Cyclic dependencies detected');
         }

@@ -16,9 +16,7 @@ final class DiContainer extends AbstractDiContainer
         }
 
         $params = $this->parser->parse($ref->getConstructor(), $rule->getParams(), $rule->getSubstitutions());
-        $object = $this->getObject($ref, $params);
-
-        return $this->doCall($ref, $object, $rule->call());
+        return $this->getObject($ref, $params);
     }
 
     /**
@@ -32,29 +30,5 @@ final class DiContainer extends AbstractDiContainer
         } catch (Error $exc) {
             throw new ContainerException($exc->getMessage(), 1, $exc);
         }
-    }
-
-    /**
-     * @param ReflectionClass<Object> $ref
-     * @param array<array<mixed>> $calls
-     */
-    private function doCall(ReflectionClass $ref, object $retObj, array $calls) : object
-    {
-        foreach ($calls as $args) {
-            $fn = array_shift($args);
-            $type = null;
-            if (count($args) === 2) {
-                $type = array_pop($args);
-            }
-            $args = array_shift($args);
-
-            $method = $ref->getMethod($fn);
-            $params = $this->parser->parse($method, $args, []);
-            if ($type === '.:CHAIN:.') {
-                $retObj = $method->invokeArgs($retObj, $params);
-            }
-        }
-
-        return $retObj;
     }
 }

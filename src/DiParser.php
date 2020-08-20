@@ -148,12 +148,8 @@ final class DiParser
         }
     }
 
-    /**
-     * @param array<mixed> $values
-     *
-     * @return object|string|null
-     */
-    private function getObjectValue(string $className, array &$values)
+    /** @param array<mixed> $values */
+    private function getObjectValue(string $className, array &$values) : ?object
     {
         if (!isset($values[0])) {
             return null;
@@ -163,33 +159,6 @@ final class DiParser
             return array_shift($values);
         }
 
-        if (key((array)$values[0]) !== '.:INSTANCE:.') {
-            return null;
-        }
-
-        $data = $values[0];
-        if (!is_array($data['.:INSTANCE:.'])) {
-            if (is_object($data['.:INSTANCE:.']) && $data['.:INSTANCE:.'] instanceof $className) {
-                return $data['.:INSTANCE:.'];
-            }
-
-            $object = call_user_func_array($this->creator, [$data['.:INSTANCE:.']]);
-            if ($object instanceof $className) {
-                unset($values[0]);
-                return $object;
-            }
-        }
-
-        list($class, $fn) = $data['.:INSTANCE:.'];
-        $object = call_user_func_array($this->creator, [$class]);
-
-        /** @var callable $callable */
-        $callable = [$object, $fn];
-        $retval = call_user_func_array($callable, []);
-
-        if ($retval instanceof $className) {
-            unset($values[0]);
-            return $retval;
-        }
+        return null;
     }
 }
