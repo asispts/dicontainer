@@ -3,12 +3,90 @@
 namespace Xynha\Container;
 
 use Error;
+use Psr\Container\ContainerInterface;
 use ReflectionClass;
+use Throwable;
 
-final class DiContainer extends AbstractDiContainer
+final class DiContainer implements ContainerInterface
 {
 
-    protected function createObject(DiRule $rule) : Object
+    /** @var DiParser */
+    private $parser;
+
+    /** @var DiRuleList */
+    private $list;
+
+    /** @var object[] */
+    private $instances;
+
+    /** @var array<string,string> */
+    private $curKeys = [];
+
+    public function __construct(DiRuleList $list)
+    {
+        $this->list = $list;
+        $this->parser = new DiParser([$this, 'get']);
+    }
+
+    public function has($id)
+    {
+        return $this->list->hasRule($id) || class_exists($id);
+    }
+
+    public function get($id)
+    {
+        if ($this->has($id) === false) {
+            throw new NotFoundException(sprintf('Class or rule %s does not exist', $id));
+        }
+
+        $rule = $this->list->getRule($id);
+        if ($rule->getClassname() === __CLASS__) {
+            return clone $this;
+        }
+
+        $fromMethod = '';
+        $fromArg = [];
+        if (!empty($rule->getFrom())) {
+            list($fromClass, $fromMethod, $fromArg) = $rule->getFrom();
+            $rule = $this->list->getRule($fromClass);
+        }
+
+        $object = $this->getInstance($rule);
+        if ($fromMethod) {
+            return call_user_func_array([$object, $fromMethod], $fromArg);
+        }
+
+        return $object;
+    }
+
+    private function getInstance(DiRule $rule) : object
+    {
+        if (isset($this->instances[$rule->getKey()])) {
+            return $this->instances[$rule->getKey()];
+        }
+
+        if (array_key_exists($rule->getKey(), $this->curKeys) || in_array($rule->getClassname(), $this->curKeys)) {
+            throw new ContainerException('Cyclic dependencies detected');
+        }
+
+        $this->curKeys[$rule->getKey()] = $rule->getClassname();
+
+        try {
+            $object = $this->createObject($rule);
+            unset($this->curKeys[$rule->getKey()]);
+        } catch (Throwable $exc) {
+            unset($this->curKeys[$rule->getKey()]);
+            throw $exc;
+        }
+
+        if ($rule->isShared()) {
+            $this->instances[$rule->getKey()] = $object;
+        }
+
+        return $object;
+    }
+
+    private function createObject(DiRule $rule) : Object
     {
         $ref = new ReflectionClass($rule->getClassname());
         if ($ref->isAbstract()) {

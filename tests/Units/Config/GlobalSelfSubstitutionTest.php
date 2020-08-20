@@ -1,7 +1,6 @@
 <?php declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
-use Xynha\Container\AbstractDiContainer;
 use Xynha\Container\DiContainer;
 use Xynha\Container\DiRuleList;
 use Xynha\Container\NotFoundException;
@@ -25,7 +24,7 @@ final class GlobalSelfSubstitutionTest extends AbstractConfigTest
     {
         $obj = $this->dic->get(DicDependant::class);
 
-        $listVar = new ReflectionProperty(AbstractDiContainer::class, 'list');
+        $listVar = new ReflectionProperty(DiContainer::class, 'list');
         $listVar->setAccessible(true);
 
         // Different DiContainer instance but with the same role list
