@@ -111,8 +111,8 @@ final class ConstructParamsTest extends AbstractConfigTest
 
         $null = new ObjectAllowsNull(new NoConstructor);
         $rule['constructParams'] = [$null];
-        $rlist = $this->loadList('constructparams');
-        $rlist = $rlist->addRule(ObjectDependencies::class, $rule);
+
+        $rlist = $this->rlist->addRule(ObjectDependencies::class, $rule);
         $dic = new DiContainer($rlist);
 
         $obj = $dic->get(ObjectDependencies::class);

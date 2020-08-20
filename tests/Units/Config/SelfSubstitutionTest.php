@@ -38,15 +38,15 @@ final class SelfSubstitutionTest extends AbstractConfigTest
 
     public function testOverriddenRule()
     {
-        $rlist = $this->loadList('selfsubstitution');
-
-        $dic = new DiContainer($rlist);
-        $obj = $dic->get(DicDependant::class);
+        $obj = $this->dic->get(DicDependant::class);
         $this->assertInstanceOf(DiContainer::class, $obj->dic);
 
         $orule['substitutions'] = [ContainerInterface::class => OverriddenDic::class];
-        $rlist = $rlist->addRule(DicDependant::class, $orule);
+
+        $rlist = $this->rlist->addRule(DicDependant::class, $orule);
         $dic = new DiContainer($rlist);
-        $obj = $dic->get(OverriddenDic::class);
+
+        $obj = $dic->get(DicDependant::class);
+        $this->assertInstanceOf(OverriddenDic::class, $obj->dic);
     }
 }

@@ -46,16 +46,13 @@ final class InterfaceTest extends AbstractConfigTest
 
     public function testOverrideInstance()
     {
-        $rlist = $this->loadList('interface');
-        $dic = new DiContainer($rlist);
-
         $obj = $this->dic->get(SubsInterfaceDep::class);
         $this->assertInstanceOf(OverriddenGlobalSubsImpl::class, $obj->obj);
         $this->assertSame('passed value from config', $obj->obj->arg);
 
-
         $rule['constructParams'] = [new SubsInterfaceImpl('Overridden value')];
-        $rlist = $rlist->addRule(SubsInterfaceDep::class, $rule);
+
+        $rlist = $this->rlist->addRule(SubsInterfaceDep::class, $rule);
         $dic = new DiContainer($rlist);
 
         $obj = $dic->get(SubsInterfaceDep::class);
@@ -65,11 +62,10 @@ final class InterfaceTest extends AbstractConfigTest
 
     public function testOverrideClassWithMock()
     {
-        $rlist = $this->loadList('interface');
-
         $mock = $this->createMock(SubsInterfaceImpl::class);
         $rule['constructParams'] = [$mock];
-        $rlist = $rlist->addRule(SubsInterfaceDep::class, $rule);
+
+        $rlist = $this->rlist->addRule(SubsInterfaceDep::class, $rule);
         $dic = new DiContainer($rlist);
 
         $obj = $dic->get(SubsInterfaceDep::class);
@@ -79,11 +75,10 @@ final class InterfaceTest extends AbstractConfigTest
 
     public function testOverrideInterfaceWithMock()
     {
-        $rlist = $this->loadList('interface');
-
         $mock = $this->createMock(SubsInterface::class);
         $rule['constructParams'] = [$mock];
-        $rlist = $rlist->addRule(SubsInterfaceDep::class, $rule);
+
+        $rlist = $this->rlist->addRule(SubsInterfaceDep::class, $rule);
         $dic = new DiContainer($rlist);
 
         $obj = $dic->get(SubsInterfaceDep::class);

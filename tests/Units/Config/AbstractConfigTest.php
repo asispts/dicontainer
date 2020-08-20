@@ -12,6 +12,9 @@ abstract class AbstractConfigTest extends TestCase
     /** @var DiContainer */
     protected $dic;
 
+    /** @var DiRuleList */
+    protected $rlist;
+
     protected function setUp()
     {
         $nspaces = explode('\\', static::class);
@@ -23,11 +26,11 @@ abstract class AbstractConfigTest extends TestCase
             require_once $unit;
         }
 
-        $rlist = $this->loadList(strtolower($filename));
-        $this->dic = new DiContainer($rlist);
+        $this->rlist = $this->loadList($filename);
+        $this->dic = new DiContainer($this->rlist);
     }
 
-    protected function loadList(string $filename) : DiRuleList
+    private function loadList(string $filename) : DiRuleList
     {
         $content = (string)file_get_contents(DATA_DIR . '/config/' . $filename . '.json');
 
