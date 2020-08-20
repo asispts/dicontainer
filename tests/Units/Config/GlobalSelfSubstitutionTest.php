@@ -9,7 +9,7 @@ use Xynha\Tests\Data\DicDependant;
 use Xynha\Tests\Data\OverriddenDic;
 use Xynha\Tests\Units\Config\AbstractConfigTest;
 
-final class SelfSubstitutionTest extends AbstractConfigTest
+final class GlobalSelfSubstitutionTest extends AbstractConfigTest
 {
 
     public function testEmptySelfDependencyRule()
