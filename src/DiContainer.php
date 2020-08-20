@@ -40,7 +40,7 @@ final class DiContainer implements ContainerInterface
         }
 
         $rule = $this->list->getRule($id);
-        if ($rule->getClassname() === __CLASS__) {
+        if ($rule->classname() === __CLASS__) {
             return clone $this;
         }
 
@@ -62,26 +62,26 @@ final class DiContainer implements ContainerInterface
 
     private function getInstance(DiRule $rule) : object
     {
-        if (isset($this->instances[$rule->getKey()])) {
-            return $this->instances[$rule->getKey()];
+        if (isset($this->instances[$rule->key()])) {
+            return $this->instances[$rule->key()];
         }
 
-        if (array_key_exists($rule->getKey(), $this->curKeys) || in_array($rule->getClassname(), $this->curKeys)) {
+        if (array_key_exists($rule->key(), $this->curKeys) || in_array($rule->classname(), $this->curKeys)) {
             throw new ContainerException('Cyclic dependencies detected');
         }
 
-        $this->curKeys[$rule->getKey()] = $rule->getClassname();
+        $this->curKeys[$rule->key()] = $rule->classname();
 
         try {
             $object = $this->createObject($rule);
-            unset($this->curKeys[$rule->getKey()]);
+            unset($this->curKeys[$rule->key()]);
         } catch (Throwable $exc) {
-            unset($this->curKeys[$rule->getKey()]);
+            unset($this->curKeys[$rule->key()]);
             throw $exc;
         }
 
         if ($rule->isShared()) {
-            $this->instances[$rule->getKey()] = $object;
+            $this->instances[$rule->key()] = $object;
         }
 
         return $object;
@@ -89,12 +89,12 @@ final class DiContainer implements ContainerInterface
 
     private function createObject(DiRule $rule) : Object
     {
-        $ref = new ReflectionClass($rule->getClassname());
+        $ref = new ReflectionClass($rule->classname());
         if ($ref->isAbstract()) {
-            throw new ContainerException('Cannot instantiate abstract class ' . $rule->getClassname());
+            throw new ContainerException('Cannot instantiate abstract class ' . $rule->classname());
         }
 
-        $params = $this->parser->parse($ref->getConstructor(), $rule->getParams(), $rule->getSubstitutions());
+        $params = $this->parser->parse($ref->getConstructor(), $rule->params(), $rule->substitutions());
         return $this->getObject($ref, $params);
     }
 

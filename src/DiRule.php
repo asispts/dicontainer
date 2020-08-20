@@ -18,15 +18,17 @@ final class DiRule
         $this->rules = $rules;
     }
 
-    public function getKey() : string
+    public function key() : string
     {
         return $this->key;
     }
 
     /** @return class-string */
-    public function getClassname() : string
+    public function classname() : string
     {
-        return $this->rules['instanceOf'] ?? $this->getKey();
+        /** @var class-string $class */
+        $class = $this->rules['instanceOf'] ?? $this->key;
+        return $class;
     }
 
     public function isShared() : bool
@@ -35,21 +37,15 @@ final class DiRule
     }
 
     /** @return array<int,mixed> */
-    public function getParams() : array
+    public function params() : array
     {
         return $this->rules['constructParams'] ?? [];
     }
 
     /** @return array<string,string> */
-    public function getSubstitutions() : array
+    public function substitutions() : array
     {
         return $this->rules['substitutions'] ?? [];
-    }
-
-    /** @return array<array<mixed>> */
-    public function call() : array
-    {
-        return $this->rules['call'] ?? [];
     }
 
     /** @return array{class-string,string,array<mixed>} */
@@ -65,7 +61,6 @@ final class DiRule
                 case 'instanceOf':
                 case 'shared':
                 case 'constructParams':
-                case 'call':
                     $this->rules[$key] = $values;
                     break;
                 case 'substitutions':

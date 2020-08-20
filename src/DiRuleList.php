@@ -50,11 +50,11 @@ final class DiRuleList
 
     private function addToList(DiRuleList $list, DiRule $rule) : void
     {
-        if (array_key_exists($rule->getKey(), $list->rules)) {
-            $oldRule = $list->rules[$rule->getKey()];
+        if (array_key_exists($rule->key(), $list->rules)) {
+            $oldRule = $list->rules[$rule->key()];
             $oldRule->cloneFrom($rule);
             $rule = $oldRule;
         }
-        $list->rules[$rule->getKey()] = $rule;
+        $list->rules[$rule->key()] = $rule;
     }
 }
