@@ -69,47 +69,6 @@ final class DiRuleListTest extends TestCase
         $this->assertSame([['method', []]], $rule->call());
     }
 
-    public function testInheritRule()
-    {
-        $newSubs = [
-                    'InterfaceOverwrite' => 'ClassOverwrite',
-                    'NewInterface'       => 'NewClass'
-                   ];
-
-        $rules = [
-                  'instanceOf'      => 'OverwriteInstance',
-                  'shared'          => true,
-                  'constructParams' => ['overwrite'],
-                  'substitutions'   => $newSubs,
-                  'call'            => ['overwriteMethod', []]
-                 ];
-
-        $rlist = $this->rlist->addRule('*', $rules);
-
-        $emptyRule = $rlist->getRule('$empty');
-        $this->assertSame('$empty', $emptyRule->getKey());
-        $this->assertSame(true, $emptyRule->isShared());
-        $this->assertSame('OverwriteInstance', $emptyRule->getClassname());
-        $this->assertSame($newSubs, $emptyRule->getSubstitutions());
-        $this->assertSame(['overwrite'], $emptyRule->getParams());
-        $this->assertSame([], $emptyRule->call());
-
-
-        $fullSubs = [
-                     'FullInterface'      => 'FullClass',
-                     'InterfaceOverwrite' => 'InitialClass',
-                     'NewInterface'       => 'NewClass'
-                    ];
-
-        $fullRule = $rlist->getRule('$full');
-        $this->assertSame('$full', $fullRule->getKey());
-        $this->assertSame(false, $fullRule->isShared());
-        $this->assertSame('FullClassName', $fullRule->getClassname());
-        $this->assertSame($fullSubs, $fullRule->getSubstitutions());
-        $this->assertSame(['Initial value'], $fullRule->getParams());
-        $this->assertSame([['method', []]], $fullRule->call());
-    }
-
     public function testMergeRule()
     {
         $newSubs = [

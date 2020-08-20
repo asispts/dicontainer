@@ -24,13 +24,6 @@ final class InterfaceTest extends AbstractConfigTest
         $this->dic->get(ArrayAccess::class);
     }
 
-    public function testGlobalSubstitute()
-    {
-        $obj = $this->dic->get(GlobalInterfaceDep::class);
-        $this->assertInstanceOf(GlobalInterfaceImpl::class, $obj->obj);
-        $this->assertSame('passed value from config', $obj->obj->arg);
-    }
-
     public function testOverriddenGlobalSubs()
     {
         $obj = $this->dic->get(SubsInterfaceDep::class);

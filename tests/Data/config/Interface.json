@@ -1,10 +1,4 @@
 {
-    "*": {
-        "substitutions": {
-            "Xynha\\Tests\\Data\\GlobalInterface": "Xynha\\Tests\\Data\\GlobalInterfaceImpl",
-            "Xynha\\Tests\\Data\\SubsInterface": "Xynha\\Tests\\Data\\SubsInterfaceImpl"
-        }
-    },
     "Xynha\\Tests\\Data\\GlobalInterfaceImpl": {
         "constructParams": [
             "passed value from config"

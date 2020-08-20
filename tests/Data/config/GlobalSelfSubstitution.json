@@ -1,7 +1,0 @@
-{
-    "*": {
-        "substitutions": {
-            "Psr\\Container\\ContainerInterface": "Xynha\\Container\\DiContainer"
-        }
-    }
-}

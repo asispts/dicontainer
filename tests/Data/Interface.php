@@ -2,27 +2,6 @@
 
 namespace Xynha\Tests\Data;
 
-interface GlobalInterface{}
-
-class GlobalInterfaceImpl implements GlobalInterface
-{
-    public $arg;
-    public function __construct(string $arg)
-    {
-        $this->arg = $arg;
-    }
-}
-
-class GlobalInterfaceDep
-{
-    public $obj;
-    public function __construct(GlobalInterface $arg)
-    {
-        $this->obj = $arg;
-    }
-}
-
-
 interface SubsInterface{}
 class SubsInterfaceImpl implements SubsInterface{
     public $arg;

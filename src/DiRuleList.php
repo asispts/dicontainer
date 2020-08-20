@@ -28,34 +28,12 @@ final class DiRuleList
         return $new;
     }
 
-    public function getRule(string $key) : DiRule
-    {
-        $rule = $this->findRule($key);
-
-        if (array_key_exists('*', $this->rules)) {
-            $rule = clone $rule;
-            $rule->cloneFrom($this->rules['*']);
-        }
-
-        return $rule;
-    }
-
     public function hasRule(string $key) : bool
     {
         return array_key_exists($key, $this->rules);
     }
 
-    private function addToList(DiRuleList $list, DiRule $rule) : void
-    {
-        if (array_key_exists($rule->getKey(), $list->rules)) {
-            $oldRule = $list->rules[$rule->getKey()];
-            $oldRule->cloneFrom($rule);
-            $rule = $oldRule;
-        }
-        $list->rules[$rule->getKey()] = $rule;
-    }
-
-    private function findRule(string $key) : DiRule
+    public function getRule(string $key) : DiRule
     {
         if ($this->hasRule($key)) {
             return $this->rules[$key];
@@ -68,5 +46,15 @@ final class DiRuleList
         }
 
         throw new NotFoundException(sprintf('Rule %s does not exist', $key));
+    }
+
+    private function addToList(DiRuleList $list, DiRule $rule) : void
+    {
+        if (array_key_exists($rule->getKey(), $list->rules)) {
+            $oldRule = $list->rules[$rule->getKey()];
+            $oldRule->cloneFrom($rule);
+            $rule = $oldRule;
+        }
+        $list->rules[$rule->getKey()] = $rule;
     }
 }

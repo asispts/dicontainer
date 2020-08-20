@@ -60,41 +60,6 @@ final class DiRule
 
     public function cloneFrom(DiRule $rule) : void
     {
-        switch ($rule->getKey()) {
-            case '*':
-                $this->inheritRule($rule);
-                return;
-            case $this->getKey(): // same key
-                $this->mergeRule($rule);
-                return;
-            default:
-                throw new ContainerException('Unimplemented feature');
-        }
-    }
-
-    private function inheritRule(DiRule $rule) : void
-    {
-        foreach ($rule->rules as $key => $values) {
-            switch ($key) {
-                case 'instanceOf':
-                case 'shared':
-                case 'constructParams':
-                    if (!isset($this->rules[$key])) {
-                        $this->rules[$key] = $values;
-                    }
-                    break;
-                case 'substitutions':
-                    $this->inheritInterface($values);
-                    break;
-                case 'call':
-                    // Do not overwrite call
-                    break;
-            }
-        }
-    }
-
-    private function mergeRule(DiRule $rule) : void
-    {
         foreach ($rule->rules as $key => $values) {
             switch ($key) {
                 case 'instanceOf':
@@ -106,21 +71,6 @@ final class DiRule
                 case 'substitutions':
                     $this->mergeInterface($values);
                     break;
-            }
-        }
-    }
-
-    /** @param array<string,string> $values */
-    private function inheritInterface(array $values) : void
-    {
-        if (!isset($this->rules['substitutions'])) {
-            $this->rules['substitutions'] = $values;
-            return;
-        }
-
-        foreach ($values as $key => $class) {
-            if (!array_key_exists($key, $this->rules['substitutions'])) {
-                $this->rules['substitutions'][$key] = $class;
             }
         }
     }
