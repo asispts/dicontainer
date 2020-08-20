@@ -3,9 +3,6 @@
 namespace Xynha\Tests\Data;
 
 trait TraitTest {
-    public function sayHello() {
-        echo 'Hello ';
-    }
 }
 
 abstract class AbstractClass{}
