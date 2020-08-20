@@ -33,6 +33,7 @@ final class DiRuleList
         $rule = $this->findRule($key);
 
         if (array_key_exists('*', $this->rules)) {
+            $rule = clone $rule;
             $rule->cloneFrom($this->rules['*']);
         }
 
@@ -46,6 +47,11 @@ final class DiRuleList
 
     private function addToList(DiRuleList $list, DiRule $rule) : void
     {
+        if (array_key_exists($rule->getKey(), $list->rules)) {
+            $oldRule = $list->rules[$rule->getKey()];
+            $oldRule->cloneFrom($rule);
+            $rule = $oldRule;
+        }
         $list->rules[$rule->getKey()] = $rule;
     }
 
