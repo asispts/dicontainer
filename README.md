@@ -1,8 +1,10 @@
 # DiContainer
-[![License](https://poser.pugx.org/xynha/dicontainer/license)](//packagist.org/packages/xynha/dicontainer)
-[![Latest Stable Version](https://poser.pugx.org/xynha/dicontainer/v)](//packagist.org/packages/xynha/dicontainer)
-[![Latest Unstable Version](https://poser.pugx.org/xynha/dicontainer/v/unstable)](//packagist.org/packages/xynha/dicontainer)
-[![Total Downloads](https://poser.pugx.org/xynha/dicontainer/downloads)](//packagist.org/packages/xynha/dicontainer)
+[![Build](https://github.com/pattisahusiwa/dicontainer/workflows/Build/badge.svg?branch=master)](https://github.com/pattisahusiwa/dicontainer/actions)
+[![Coverage Status](https://coveralls.io/repos/github/pattisahusiwa/dicontainer/badge.svg?branch=master)](https://coveralls.io/github/pattisahusiwa/dicontainer?branch=master)
+[![License](https://img.shields.io/github/license/pattisahusiwa/dicontainer)](https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE)
+[![PHP Version](https://img.shields.io/packagist/php-v/xynha/dicontainer)](https://packagist.org/packages/xynha/dicontainer)
+[![Stable](https://img.shields.io/packagist/v/xynha/dicontainer?label=stable)](https://packagist.org/packages/xynha/dicontainer)
+[![unstable](https://img.shields.io/packagist/v/xynha/dicontainer?include_prereleases&label=unstable)](https://packagist.org/packages/xynha/dicontainer)
 
 PSR-11 compliant PHP dependency injection container.
 
