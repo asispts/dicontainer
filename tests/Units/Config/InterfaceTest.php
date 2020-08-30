@@ -1,9 +1,13 @@
 <?php declare(strict_types=1);
 
+use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
+use Xynha\Container\DiRuleList;
 use Xynha\Container\NotFoundException;
+use Xynha\Tests\Data\DefaultNullInterface;
 use Xynha\Tests\Data\GenericInterfaceDep;
 use Xynha\Tests\Data\GenericInterfaceImpl;
+use Xynha\Tests\Data\NullableInterface;
 use Xynha\Tests\Data\OverriddenGlobalSubsImpl;
 use Xynha\Tests\Data\SubsInterface;
 use Xynha\Tests\Data\SubsInterfaceDep;
@@ -20,6 +24,30 @@ final class InterfaceTest extends AbstractConfigTest
         $this->expectExceptionMessage($msg);
 
         $this->dic->get(ArrayAccess::class);
+    }
+
+    public function testInvalidSubstitution()
+    {
+        $this->expectException(ContainerException::class);
+
+        $rule['substitutions'] = [SubsInterface::class => GenericInterfaceImpl::class];
+        $rlist = new DiRuleList();
+        $rlist = $rlist->addRule(SubsInterfaceDep::class, $rule);
+        $dic = new DiContainer($rlist);
+
+        $dic->get(SubsInterfaceDep::class);
+    }
+
+    public function testPassInvalidInstance()
+    {
+        $this->expectException(NotFoundException::class);
+
+        $rule['constructParams'] = [new GenericInterfaceImpl];
+        $rlist = new DiRuleList();
+        $rlist = $rlist->addRule(SubsInterfaceDep::class, $rule);
+        $dic = new DiContainer($rlist);
+
+        $dic->get(SubsInterfaceDep::class);
     }
 
     public function testOverriddenGlobalSubs()
@@ -84,5 +112,21 @@ final class InterfaceTest extends AbstractConfigTest
 
         $obj = $dic->get(SubsInterfaceDep::class);
         $this->assertInstanceOf(SubsInterface::class, $obj->obj);
+    }
+
+    public function testDefaultValue()
+    {
+        $dic = new DiContainer(new DiRuleList);
+        $obj = $dic->get(DefaultNullInterface::class);
+
+        $this->assertInstanceOf(DefaultNullInterface::class, $obj);
+    }
+
+    public function testAllowsNull()
+    {
+        $dic = new DiContainer(new DiRuleList);
+        $obj = $dic->get(NullableInterface::class);
+
+        $this->assertInstanceOf(NullableInterface::class, $obj);
     }
 }

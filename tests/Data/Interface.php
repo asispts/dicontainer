@@ -36,3 +36,21 @@ class GenericInterfaceDep
         $this->obj = $arg;
     }
 }
+
+class NullableInterface
+{
+    public $obj;
+    public function __construct(?GenericInterface $arg)
+    {
+        $this->obj = $arg;
+    }
+}
+
+class DefaultNullInterface
+{
+    public $obj;
+    public function __construct(GenericInterface $arg = null)
+    {
+        $this->obj = $arg;
+    }
+}
