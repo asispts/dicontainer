@@ -75,7 +75,11 @@ final class DiContainer implements ContainerInterface
             throw new ContainerException('Cyclic dependencies detected');
         }
 
-        $this->curKeys[$rule->key()] = $rule->classname();
+        $classname = $rule->classname();
+        if (is_object($classname)) {
+            return $classname;
+        }
+        $this->curKeys[$rule->key()] = $classname;
 
         try {
             $object = $this->createObject($rule);

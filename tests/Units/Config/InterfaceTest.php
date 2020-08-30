@@ -129,4 +129,17 @@ final class InterfaceTest extends AbstractConfigTest
 
         $this->assertInstanceOf(NullableInterface::class, $obj);
     }
+
+    public function testPassObjectAsInstanceOf()
+    {
+        $instance = new SubsInterfaceImpl('Object');
+
+        $rule['instanceOf'] = $instance;
+        $rlist = new DiRuleList();
+        $rlist = $rlist->addRule(SubsInterface::class, $rule);
+        $dic = new DiContainer($rlist);
+
+        $obj = $dic->get(SubsInterfaceDep::class);
+        $this->assertSame($instance, $obj->obj);
+    }
 }

@@ -23,10 +23,10 @@ final class DiRule
         return $this->key;
     }
 
-    /** @return class-string */
-    public function classname() : string
+    /** @return class-string|object */
+    public function classname()
     {
-        /** @var class-string $class */
+        /** @var class-string|object $class */
         $class = $this->rules['instanceOf'] ?? $this->key;
         return $class;
     }
