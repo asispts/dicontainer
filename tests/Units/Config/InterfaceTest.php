@@ -4,8 +4,6 @@ use Xynha\Container\DiContainer;
 use Xynha\Container\NotFoundException;
 use Xynha\Tests\Data\GenericInterfaceDep;
 use Xynha\Tests\Data\GenericInterfaceImpl;
-use Xynha\Tests\Data\GlobalInterfaceDep;
-use Xynha\Tests\Data\GlobalInterfaceImpl;
 use Xynha\Tests\Data\OverriddenGlobalSubsImpl;
 use Xynha\Tests\Data\SubsInterface;
 use Xynha\Tests\Data\SubsInterfaceDep;

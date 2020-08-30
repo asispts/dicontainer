@@ -1,8 +1,5 @@
 <?php declare(strict_types=1);
 
-use Xynha\Tests\Data\ClassGenerator;
-use Xynha\Tests\Data\ClassMapper;
-use Xynha\Tests\Data\ComplexMapperDep;
 use Xynha\Tests\Data\FactoryInterfaceDep;
 use Xynha\Tests\Data\FactoryInterfaceImpl;
 use Xynha\Tests\Data\GeneratorDep;

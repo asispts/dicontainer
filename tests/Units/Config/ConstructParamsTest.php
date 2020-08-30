@@ -1,7 +1,5 @@
 <?php declare(strict_types=1);
 
-namespace Xynha\Tests\Units;
-
 use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
 use Xynha\Container\DiRuleList;

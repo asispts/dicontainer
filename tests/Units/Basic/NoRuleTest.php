@@ -1,9 +1,5 @@
 <?php declare(strict_types=1);
 
-namespace Xynha\Tests\Units;
-
-use ArrayAccess;
-use DateTime;
 use Xynha\Container\ContainerException;
 use Xynha\Container\NotFoundException;
 use Xynha\Tests\Units\AbstractTestCase;
