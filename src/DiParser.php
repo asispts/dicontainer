@@ -3,6 +3,7 @@
 namespace Xynha\Container;
 
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 
 final class DiParser
@@ -41,16 +42,11 @@ final class DiParser
         $params = $method->getParameters();
         foreach ($params as $arg) {
             $varName = $arg->getName();
+            $type = $arg->getType();
 
-            if (is_object($arg->getClass()) && $arg->getClass()->isInterface()) {
-                $classname = $arg->getClass()->getName();
-                $tParams[$varName] = $this->interfaceValue($arg, $classname, $subs, $passedValues);
-                continue;
-            }
-
-            if (is_object($arg->getClass())) {
-                $classname = $arg->getClass()->getName();
-                $tParams[$varName] = $this->classValue($arg, $classname, $passedValues);
+            if ($type instanceof ReflectionNamedType) {
+                $typeName = $type->getName();
+                $tParams[$varName] = $this->processNameType($arg, $typeName, $subs, $passedValues);
                 continue;
             }
 
@@ -58,6 +54,25 @@ final class DiParser
         }
 
         return $tParams;
+    }
+
+    /**
+     * @param array<string,string> $subs
+     * @param array<mixed> $passedValues
+     *
+     * @return mixed
+     */
+    private function processNameType(ReflectionParameter $param, string $typeName, array $subs, array &$passedValues)
+    {
+        if (interface_exists($typeName)) {
+            return $this->interfaceValue($param, $typeName, $subs, $passedValues);
+        }
+
+        if (class_exists($typeName)) {
+            return $this->classValue($param, $typeName, $passedValues);
+        }
+
+        return $this->scalarValue($param, $passedValues);
     }
 
     /**
