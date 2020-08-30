@@ -48,16 +48,20 @@ final class DiContainer implements ContainerInterface
             return $this->getInstance($rule);
         }
 
+        if (count($rule->getFrom()) !== 3) {
+            throw new ContainerException('Invalid getFrom format');
+        }
+
         list($fromClass, $fromMethod, $fromArg) = $rule->getFrom();
         $fromRule = $this->list->getRule($fromClass);
         $object = $this->getInstance($fromRule);
         $callback = [$object, $fromMethod];
 
-        if (is_callable($callback)) {
-            return call_user_func_array($callback, $fromArg);
+        if (!is_callable($callback)) {
+            throw new ContainerException('Rule getFrom is not callable');
         }
 
-        throw new ContainerException('Rule getFrom is not callable');
+        return call_user_func_array($callback, $fromArg);
     }
 
     /** @return object */

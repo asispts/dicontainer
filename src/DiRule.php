@@ -48,7 +48,7 @@ final class DiRule
         return $this->rules['substitutions'] ?? [];
     }
 
-    /** @return array{class-string,string,array<mixed>} */
+    /** @return array<mixed>*/
     public function getFrom() : array
     {
         return $this->rules['getFrom'] ?? [];
