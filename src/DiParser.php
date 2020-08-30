@@ -99,10 +99,6 @@ final class DiParser
             return null;
         }
 
-        if ($param->isOptional()) {
-            return;
-        }
-
         return call_user_func_array($this->creator, [$name]);
     }
 
@@ -123,10 +119,6 @@ final class DiParser
 
         if ($param->allowsNull()) {
             return null;
-        }
-
-        if ($param->isOptional()) {
-            return;
         }
 
         return call_user_func_array($this->creator, [$className]);
