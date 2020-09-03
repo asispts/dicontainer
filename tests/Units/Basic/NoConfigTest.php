@@ -6,6 +6,7 @@ use Xynha\Container\DiRuleList;
 use Xynha\Tests\Data\ClassGraph;
 use Xynha\Tests\Data\ObjectAllowsNull;
 use Xynha\Tests\Data\ObjectDefaultValue;
+use Xynha\Tests\Data\ScalarAllowsNull;
 use Xynha\Tests\Data\ScalarTypeDefaultValue;
 
 final class NoConfigTest extends TestCase
@@ -79,5 +80,17 @@ final class NoConfigTest extends TestCase
         $this->assertSame(['default', 'value'], $obj->stringArray);
         $this->assertSame([6, 11, 7], $obj->intArray);
         $this->assertSame([3.14, 3.8], $obj->floatArray);
+    }
+
+    public function testScalarAllowsNull()
+    {
+        $obj = $this->dic->get(ScalarAllowsNull::class);
+
+        $this->assertInstanceOf(ScalarAllowsNull::class, $obj);
+        $this->assertNull($obj->bool);
+        $this->assertNull($obj->string);
+        $this->assertNull($obj->int);
+        $this->assertNull($obj->float);
+        $this->assertNull($obj->array);
     }
 }
