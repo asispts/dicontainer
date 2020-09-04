@@ -9,6 +9,9 @@ use Xynha\Container\DiRuleList;
 abstract class AbstractConfigTestCase extends TestCase
 {
 
+    /** @var DiRuleList */
+    protected $rlist;
+
     /** @var DiContainer */
     protected $dic;
 
@@ -36,7 +39,7 @@ abstract class AbstractConfigTestCase extends TestCase
         }
 
         $rlist = new DiRuleList();
-        $rlist = $rlist->addRules($json);
-        $this->dic = new DiContainer($rlist);
+        $this->rlist = $rlist->addRules($json);
+        $this->dic = new DiContainer($this->rlist);
     }
 }

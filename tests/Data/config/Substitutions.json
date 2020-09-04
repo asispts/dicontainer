@@ -1,0 +1,17 @@
+{
+    "Xynha\\Tests\\Data\\ImplementInterfaceA": {
+        "constructParams": [
+            "Config value"
+        ]
+    },
+    "Xynha\\Tests\\Data\\DependInterfaceA": {
+        "substitutions": {
+            "Xynha\\Tests\\Data\\InterfaceA": "Xynha\\Tests\\Data\\ImplementInterfaceA"
+        }
+    },
+    "Xynha\\Tests\\Data\\DependInvalidSubsInterface": {
+        "substitutions": {
+            "Xynha\\Tests\\Data\\InvalidSubsInterface": "Xynha\\Tests\\Data\\ImplementInterfaceA"
+        }
+    }
+}
