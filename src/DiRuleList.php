@@ -39,13 +39,9 @@ final class DiRuleList
             return $this->rules[$key];
         }
 
-        if (class_exists($key)) {
-            $rule = new DiRule($key, []);
-            $this->addToList($this, $rule);
-            return $rule;
-        }
-
-        throw new NotFoundException(sprintf('Rule %s does not exist', $key));
+        $rule = new DiRule($key, []);
+        $this->addToList($this, $rule);
+        return $rule;
     }
 
     private function addToList(DiRuleList $list, DiRule $rule) : void
