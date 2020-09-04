@@ -3,7 +3,9 @@
 use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
 use Xynha\Container\NotFoundException;
+use Xynha\Tests\Data\AllowsNullInterface;
 use Xynha\Tests\Data\ClassNoRule;
+use Xynha\Tests\Data\DefaultValueInterface;
 use Xynha\Tests\Data\DependInterfaceA;
 use Xynha\Tests\Data\DependInvalidSubsInterface;
 use Xynha\Tests\Data\ImplementInterfaceA;
@@ -59,5 +61,19 @@ final class SubstitutionsTest extends AbstractConfigTestCase
         $obj = $dic->get(DependInvalidSubsInterface::class);
 
         $this->assertSame($passedObj, $obj->obj);
+    }
+
+    public function testAllowsNullInterface()
+    {
+        $obj = $this->dic->get(AllowsNullInterface::class);
+
+        $this->assertNull($obj->obj);
+    }
+
+    public function testDefaultValueInterface()
+    {
+        $obj = $this->dic->get(DefaultValueInterface::class);
+
+        $this->assertNull($obj->obj);
     }
 }

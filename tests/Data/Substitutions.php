@@ -35,3 +35,20 @@ class DependInvalidSubsInterface {
         $this->obj = $obj;
     }
 }
+
+
+class AllowsNullInterface {
+    public $obj;
+    public function __construct(?InterfaceA $obj)
+    {
+        $this->obj = $obj;
+    }
+}
+
+class DefaultValueInterface {
+    public $obj;
+    public function __construct(InterfaceA $obj = null)
+    {
+        $this->obj = $obj;
+    }
+}
