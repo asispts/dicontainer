@@ -48,4 +48,16 @@ final class SubstitutionsTest extends AbstractConfigTestCase
 
         $this->assertInstanceOf(ImplInvalidSubsInterface::class, $obj->obj);
     }
+
+    public function testOverrideWithConstructParams()
+    {
+        $passedObj = new ImplInvalidSubsInterface;
+        $rule['constructParams'] = [$passedObj];
+        $rlist = $this->rlist->addRule(DependInvalidSubsInterface::class, $rule);
+        $dic = new DiContainer($rlist);
+
+        $obj = $dic->get(DependInvalidSubsInterface::class);
+
+        $this->assertSame($passedObj, $obj->obj);
+    }
 }
