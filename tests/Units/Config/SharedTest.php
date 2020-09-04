@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use Xynha\Container\DiContainer;
 use Xynha\Tests\Data\ClassGraph;
 use Xynha\Tests\Data\ObjectAllowsNull;
 use Xynha\Tests\Units\Config\AbstractConfigTestCase;
@@ -35,5 +36,16 @@ final class SharedTest extends AbstractConfigTestCase
 
         $objB->b->c->e->f = null;
         $this->assertNull($objA->b->c->e->f);
+    }
+
+    public function testOverrideSharedRule()
+    {
+        $rlist = $this->rlist->addRule(ObjectAllowsNull::class, ['shared' => false]);
+        $dic = new DiContainer($rlist);
+
+        $objA = $dic->get(ObjectAllowsNull::class);
+        $objB = $dic->get(ObjectAllowsNull::class);
+
+        $this->assertNotSame($objA, $objB);
     }
 }
