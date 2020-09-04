@@ -1,6 +1,6 @@
 # DiContainer
 [![Build](https://github.com/pattisahusiwa/dicontainer/workflows/Build/badge.svg?branch=master)](https://github.com/pattisahusiwa/dicontainer/actions)
-[![Coverage Status](https://coveralls.io/repos/github/pattisahusiwa/dicontainer/badge.svg?branch=master)](https://coveralls.io/github/pattisahusiwa/dicontainer?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/pattisahusiwa/dicontainer/badge.svg?branch=master&service=github)](https://coveralls.io/github/pattisahusiwa/dicontainer?branch=master)
 [![License](https://img.shields.io/github/license/pattisahusiwa/dicontainer)](https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE)
 [![PHP Version](https://img.shields.io/packagist/php-v/xynha/dicontainer)](https://packagist.org/packages/xynha/dicontainer)
 [![Stable](https://img.shields.io/packagist/v/xynha/dicontainer?label=stable)](https://packagist.org/packages/xynha/dicontainer)
