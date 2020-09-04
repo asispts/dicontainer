@@ -38,13 +38,10 @@ class ScalarRequired
     }
 }
 
-class ObjectDependencies
-{
-    public $scalar;
-    public $obj;
-    public function __construct(ScalarAllowsNull $scalar, ObjectAllowsNull $obj)
+class MixedArgument{
+    public $arg;
+    public function __construct($arg)
     {
-        $this->scalar = $scalar;
-        $this->obj = $obj;
+        $this->arg = $arg;
     }
 }

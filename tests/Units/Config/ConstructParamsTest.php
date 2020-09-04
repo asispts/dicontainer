@@ -3,7 +3,7 @@
 use Xynha\Container\DiContainer;
 use Xynha\Container\DiRuleList;
 use Xynha\Tests\Data\ClassGraph;
-use Xynha\Tests\Data\ObjectAllowsNull;
+use Xynha\Tests\Data\MixedArgument;
 use Xynha\Tests\Data\ObjectDefaultValue;
 use Xynha\Tests\Data\ScalarRequired;
 use Xynha\Tests\Units\Config\AbstractConfigTestCase;
@@ -33,6 +33,19 @@ final class ConstructParamsTest extends AbstractConfigTestCase
         $this->assertSame([0.1, 0.2], $obj->floatArray);
     }
 
+    public function testPassInstanceToOptionalArg()
+    {
+        $passedObj = $this->dic->get(ClassGraph::class);
+        $rules['constructParams'] = [$passedObj];
+
+        $rlist = new DiRuleList();
+        $rlist = $rlist->addRule(ObjectDefaultValue::class, $rules);
+        $dic = new DiContainer($rlist);
+        $obj = $dic->get(ObjectDefaultValue::class);
+
+        $this->assertSame($passedObj, $obj->obj);
+    }
+
     public function testUseDefaultValue()
     {
         $rules['constructParams'] = [['invalid type']];
@@ -45,16 +58,17 @@ final class ConstructParamsTest extends AbstractConfigTestCase
         $this->assertNull($obj->obj);
     }
 
-    public function testPassInstanceToOptionalArg()
+    public function testOverrideConstructParams()
     {
-        $passedObj = $this->dic->get(ClassGraph::class);
-        $rules['constructParams'] = [$passedObj];
+        $obj = $this->dic->get(MixedArgument::class);
+        $this->assertSame('From config', $obj->arg);
 
-        $rlist = new DiRuleList();
-        $rlist = $rlist->addRule(ObjectDefaultValue::class, $rules);
+        $passedValue = new stdClass;
+        $rule['constructParams'] = [$passedValue, 'test value'];
+        $rlist = $this->rlist->addRule(MixedArgument::class, $rule);
         $dic = new DiContainer($rlist);
-        $obj = $dic->get(ObjectDefaultValue::class);
 
-        $this->assertSame($passedObj, $obj->obj);
+        $obj = $dic->get(MixedArgument::class);
+        $this->assertSame($passedValue, $obj->arg);
     }
 }

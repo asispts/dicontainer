@@ -23,5 +23,10 @@
                 0.2
             ]
         ]
+    },
+    "Xynha\\Tests\\Data\\MixedArgument": {
+        "constructParams": [
+            "From config"
+        ]
     }
 }
