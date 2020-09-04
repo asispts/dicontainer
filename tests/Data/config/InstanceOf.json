@@ -1,0 +1,8 @@
+{
+    "Xynha\\Tests\\Data\\InterfaceInstanceOf": {
+        "instanceOf": "Xynha\\Tests\\Data\\ImplementInterfaceInstanceOf"
+    },
+    "Xynha\\Tests\\Data\\ClassInstanceOf": {
+        "instanceOf": "Xynha\\Tests\\Data\\OverrideClassInstanceOf"
+    }
+}
