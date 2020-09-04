@@ -99,7 +99,17 @@ final class DiParser
             return null;
         }
 
-        return call_user_func_array($this->creator, [$name]);
+        try {
+            return call_user_func_array($this->creator, [$name]);
+        } catch (NotFoundException $exc) {
+            $msg = sprintf(
+                'Missing required substitutions %s passed to %s::%s()',
+                $name,
+                $param->getDeclaringClass()->getName(), // @phpstan-ignore-line
+                $param->getDeclaringFunction()->getName()  // @phpstan-ignore-line
+            );
+            throw new ContainerException($msg, $exc->getCode(), $exc);
+        }
     }
 
     /**

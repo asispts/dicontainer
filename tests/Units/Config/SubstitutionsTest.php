@@ -2,7 +2,6 @@
 
 use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
-use Xynha\Container\NotFoundException;
 use Xynha\Tests\Data\AllowsNullInterface;
 use Xynha\Tests\Data\ClassNoRule;
 use Xynha\Tests\Data\DefaultValueInterface;
@@ -19,8 +18,12 @@ final class SubstitutionsTest extends AbstractConfigTestCase
 
     public function testMissingSubstitution()
     {
-        $msg = sprintf('Class or rule %s does not exist', InterfaceNoRule::class);
-        $this->expectException(NotFoundException::class);
+        $msg = sprintf(
+            'Missing required substitutions %s passed to %s::__construct()',
+            InterfaceNoRule::class,
+            ClassNoRule::class
+        );
+        $this->expectException(ContainerException::class);
         $this->expectExceptionMessage($msg);
 
         $this->dic->get(ClassNoRule::class);
