@@ -1,5 +1,5 @@
 {
-    "Xynha\\Tests\\Data\\ObjectAllowsNull": {
+    "stdClass": {
         "shared": true
     },
     "Xynha\\Tests\\Data\\E": {

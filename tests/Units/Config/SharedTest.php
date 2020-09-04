@@ -2,7 +2,6 @@
 
 use Xynha\Container\DiContainer;
 use Xynha\Tests\Data\ClassGraph;
-use Xynha\Tests\Data\ObjectAllowsNull;
 use Xynha\Tests\Units\Config\AbstractConfigTestCase;
 
 final class SharedTest extends AbstractConfigTestCase
@@ -12,17 +11,6 @@ final class SharedTest extends AbstractConfigTestCase
     {
         $this->files = ['BasicClass.php'];
         parent::setUp();
-    }
-
-    public function testSharedInstance()
-    {
-        $objA = $this->dic->get(ObjectAllowsNull::class);
-        $objB = $this->dic->get(ObjectAllowsNull::class);
-
-        $this->assertSame($objA, $objB);
-
-        $objA->std = $this->dic->get(ClassGraph::class);
-        $this->assertSame($objA->std, $objB->std);
     }
 
     public function testSharedArgument()
@@ -38,13 +26,24 @@ final class SharedTest extends AbstractConfigTestCase
         $this->assertNull($objA->b->c->e->f);
     }
 
+    public function testSharedInstance()
+    {
+        $objA = $this->dic->get(stdClass::class);
+        $objB = $this->dic->get(stdClass::class);
+
+        $this->assertSame($objA, $objB);
+
+        $objA->value = 'Test shared';
+        $this->assertSame($objA->value, $objB->value);
+    }
+
     public function testOverrideSharedRule()
     {
-        $rlist = $this->rlist->addRule(ObjectAllowsNull::class, ['shared' => false]);
+        $rlist = $this->rlist->addRule(stdClass::class, ['shared' => false]);
         $dic = new DiContainer($rlist);
 
-        $objA = $dic->get(ObjectAllowsNull::class);
-        $objB = $dic->get(ObjectAllowsNull::class);
+        $objA = $dic->get(stdClass::class);
+        $objB = $dic->get(stdClass::class);
 
         $this->assertNotSame($objA, $objB);
     }
