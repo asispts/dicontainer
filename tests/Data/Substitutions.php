@@ -8,6 +8,7 @@ class ClassNoRule {
     public function __construct(InterfaceNoRule $obj){}
 }
 
+
 interface InterfaceA{}
 class ImplementInterfaceA implements InterfaceA {
     public $arg;
@@ -16,7 +17,6 @@ class ImplementInterfaceA implements InterfaceA {
         $this->arg = $arg;
     }
 }
-
 class DependInterfaceA {
     public $obj;
     public function __construct(InterfaceA $obj)
@@ -29,8 +29,9 @@ class DependInterfaceA {
 interface InvalidSubsInterface{}
 class ImplInvalidSubsInterface implements InvalidSubsInterface{}
 class DependInvalidSubsInterface {
+    public $obj;
     public function __construct(InvalidSubsInterface $obj)
     {
-
+        $this->obj = $obj;
     }
 }

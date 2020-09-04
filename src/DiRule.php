@@ -59,7 +59,11 @@ final class DiRule
         foreach ($rule->rules as $key => $values) {
             switch ($key) {
                 case 'instanceOf':
+                    $this->rules[$key] = $values;
+                    break;
                 case 'shared':
+                    $this->rules[$key] = $values;
+                    break;
                 case 'constructParams':
                     $this->rules[$key] = $values;
                     break;
@@ -73,11 +77,6 @@ final class DiRule
     /** @param array<string,string> $values */
     private function mergeInterface(array $values) : void
     {
-        if (!isset($this->rules['substitutions'])) {
-            $this->rules['substitutions'] = $values;
-            return;
-        }
-
         foreach ($values as $key => $class) {
             $this->rules['substitutions'][$key] = $class;
         }
