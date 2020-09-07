@@ -70,6 +70,9 @@ final class DiRule
                 case 'substitutions':
                     $this->mergeInterface($values);
                     break;
+                case 'getFrom':
+                    $this->rules[$key] = $values;
+                    break;
             }
         }
     }

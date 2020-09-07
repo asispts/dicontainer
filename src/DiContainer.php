@@ -13,6 +13,9 @@ final class DiContainer implements ContainerInterface
     /** @var DiParser */
     private $parser;
 
+    /** @var CallbackHelper */
+    private $callback;
+
     /** @var DiRuleList */
     private $list;
 
@@ -26,6 +29,7 @@ final class DiContainer implements ContainerInterface
     {
         $this->list = $list;
         $this->parser = new DiParser([$this, 'get']);
+        $this->callback = new CallbackHelper($this);
     }
 
     public function has($id)
@@ -48,20 +52,16 @@ final class DiContainer implements ContainerInterface
             return $this->getInstance($rule);
         }
 
-        if (count($rule->getFrom()) !== 3) {
-            throw new ContainerException('Invalid getFrom format');
-        }
-
-        list($fromClass, $fromMethod, $fromArg) = $rule->getFrom();
-        $fromRule = $this->list->getRule($fromClass);
-        $object = $this->getInstance($fromRule);
-        $callback = [$object, $fromMethod];
+        $getFrom = $rule->getFrom();
+        $callback = array_shift($getFrom);
+        $args = array_shift($getFrom);
 
         if (!is_callable($callback)) {
-            throw new ContainerException('Rule getFrom is not callable');
+            throw new ContainerException('getFrom rule is not callable');
         }
 
-        return call_user_func_array($callback, $fromArg);
+        $callback = $this->callback->normalize($callback);
+        return call_user_func_array($callback, (array)$args);
     }
 
     /** @return object */

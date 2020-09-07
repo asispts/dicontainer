@@ -14,40 +14,12 @@ use Xynha\Tests\Units\Config\AbstractConfigTestCase;
 final class GetFromTest extends AbstractConfigTestCase
 {
 
-    public function testInvalidGetFromFormat()
-    {
-        $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage('Invalid getFrom format');
-
-        $rule['getFrom'] = ['invalid'];
-
-        $rlist = new DiRuleList();
-        $rlist = $rlist->addRule(FactoryInterface::class, $rule);
-        $dic = new DiContainer($rlist);
-
-        $dic->get(FactoryInterfaceDep::class);
-    }
-
-    public function testGetFromFormatTooManyFields()
-    {
-        $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage('Invalid getFrom format');
-
-        $rule['getFrom'] = ['invalid', '', '', ''];
-
-        $rlist = new DiRuleList();
-        $rlist = $rlist->addRule(FactoryInterface::class, $rule);
-        $dic = new DiContainer($rlist);
-
-        $dic->get(FactoryInterfaceDep::class);
-    }
-
     public function testGetFromIsNotCallable()
     {
         $this->expectException(ContainerException::class);
-        $this->expectExceptionMessage('Rule getFrom is not callable');
+        $this->expectExceptionMessage('getFrom rule is not callable');
 
-        $rule['getFrom'] = ['DateTime', 'Invalid', 'method'];
+        $rule['getFrom'] = ['callback'];
 
         $rlist = new DiRuleList();
         $rlist = $rlist->addRule(FactoryInterface::class, $rule);
@@ -72,7 +44,7 @@ final class GetFromTest extends AbstractConfigTestCase
         $this->assertInstanceOf(MapperDep::class, $mapper);
     }
 
-    public function testSharedFactory()
+    public function testSharedFactoryClass()
     {
         $mapper = $this->dic->get(MapperDep::class);
         $generator = $this->dic->get(GeneratorDep::class);
@@ -82,5 +54,31 @@ final class GetFromTest extends AbstractConfigTestCase
         $factory = $this->dic->get(MapFactory::class);
         $this->assertSame($mapper->mapper, $factory->getMapper());
         $this->assertSame($generator->gen, $factory->getGenerator());
+    }
+
+    public function testSharedFactoryInterface()
+    {
+        $objA = $this->dic->get(FactoryInterfaceDep::class);
+        $objB = $this->dic->get(FactoryInterfaceDep::class);
+
+        $this->assertSame($objA->obj, $objB->obj);
+    }
+
+    public function testOverrideGetFrom()
+    {
+        $closure = function (string $value) : FactoryInterface {
+            $factory = new FactoryInterfaceImpl('From closure');
+            $factory->setValue($value);
+            return $factory;
+        };
+        $rule['getFrom'] = [$closure, 'Override test'];
+
+        $rlist = $this->rlist->addRule(FactoryInterface::class, $rule);
+        $dic = new DiContainer($rlist);
+
+        $obj = $dic->get(FactoryInterfaceDep::class);
+
+        $this->assertSame('From closure', $obj->obj->generated);
+        $this->assertSame('Override test', $obj->obj->passed);
     }
 }

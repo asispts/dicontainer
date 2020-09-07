@@ -1,8 +1,13 @@
 {
+    "Xynha\\Tests\\Data\\FactoryInterfaceFactory": {
+        "shared": true
+    },
     "Xynha\\Tests\\Data\\FactoryInterface": {
         "getFrom": [
-            "Xynha\\Tests\\Data\\FactoryInterfaceFactory",
-            "getInstance",
+            [
+                "Xynha\\Tests\\Data\\FactoryInterfaceFactory",
+                "getInstance"
+            ],
             [
                 "passed value from config"
             ]
@@ -13,15 +18,19 @@
     },
     "Xynha\\Tests\\Data\\ClassMapper": {
         "getFrom": [
-            "Xynha\\Tests\\Data\\MapFactory",
-            "getMapper",
+            [
+                "Xynha\\Tests\\Data\\MapFactory",
+                "getMapper"
+            ],
             []
         ]
     },
     "Xynha\\Tests\\Data\\ClassGenerator": {
         "getFrom": [
-            "Xynha\\Tests\\Data\\MapFactory",
-            "getGenerator",
+            [
+                "Xynha\\Tests\\Data\\MapFactory",
+                "getGenerator"
+            ],
             []
         ]
     }
