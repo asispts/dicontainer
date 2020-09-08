@@ -47,9 +47,21 @@ final class ConstructParamsTest extends AbstractConfigTestCase
         $this->assertSame($passedObj, $obj->obj);
     }
 
-    public function testUseDefaultValue()
+    public function testObjectDefaultValuePassEmptyArray()
     {
-        $rules['constructParams'] = [['invalid type']];
+        $rules['constructParams'] = [[]];
+
+        $rlist = new DiRuleList();
+        $rlist = $rlist->addRule(ObjectDefaultValue::class, $rules);
+        $dic = new DiContainer($rlist);
+        $obj = $dic->get(ObjectDefaultValue::class);
+
+        $this->assertNull($obj->obj);
+    }
+
+    public function testObjectDefaultValuePassArray()
+    {
+        $rules['constructParams'] = [['Invalid']];
 
         $rlist = new DiRuleList();
         $rlist = $rlist->addRule(ObjectDefaultValue::class, $rules);

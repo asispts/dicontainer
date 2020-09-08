@@ -186,7 +186,7 @@ final class DiParser
         }
 
         if ($values[0][0] === 'CALL::OBJECT') {
-            throw new ContainerException('Invalid order of constructParams value');
+            throw new ContainerException('Require CALL::SCALAR, CALL::OBJECT given');
         }
 
         return $this->doCall(array_shift($values));
@@ -211,8 +211,16 @@ final class DiParser
             return null;
         }
 
-        if (!isset($values[0][0]) || $values[0][0] !== 'CALL::OBJECT') {
+        if (!isset($values[0][0])) {
             return null;
+        }
+
+        if ($values[0][0] !== 'CALL::OBJECT' && $values[0][0] !== 'CALL::SCALAR') {
+            return null;
+        }
+
+        if ($values[0][0] === 'CALL::SCALAR') {
+            throw new ContainerException('Require CALL::OBJECT, CALL::SCALAR given');
         }
 
         return $this->doCall(array_shift($values));
