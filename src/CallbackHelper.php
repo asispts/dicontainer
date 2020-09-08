@@ -58,16 +58,13 @@ final class CallbackHelper
         return null;
     }
 
-    // @phpstan-ignore-next-line
+    /** @param array{string|object,string} $callback */
     private function fromArray(array $callback) : ?ReflectionMethod
     {
-        $class = array_shift($callback);
-        $method = array_shift($callback);
-
-        if (is_object($class)) {
+        if (is_object($callback[0])) {
             return null;
         }
 
-        return new ReflectionMethod($class, $method);
+        return new ReflectionMethod($callback[0], $callback[1]);
     }
 }
