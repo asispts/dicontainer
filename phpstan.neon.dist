@@ -14,6 +14,9 @@ parameters:
         -
             message: '#[\w\\]+::(set[uU]p|test\w+)\(\) has no return typehint specified#'
             path: tests/
+        -
+            message: "#array\\('ExtendStaticClass', 'parent::callback'\\) given.#"
+            path: tests/Units/Utils/CallbackHelperTest.php
 
     # Miscellaneous parameters
     inferPrivatePropertyTypeFromConstructor: true

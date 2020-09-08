@@ -125,13 +125,17 @@ final class CallbackHelperTest extends TestCase
     public function testClassMethod()
     {
         $callback = ['InvokeClass', 'callback'];
+        /** @var array{object,string} $norm */
         $norm = $this->callback->normalize($callback);
 
         $this->assertNotSame($callback, $norm);
         $this->assertInstanceOf('InvokeClass', $norm[0]);
 
         $expected = ['String value', ['array', 'value']];
-        $retval = call_user_func_array($norm, $expected);
+
+        /** @var callable */
+        $callback = $norm;
+        $retval = call_user_func_array($callback, $expected);
         $this->assertSame(array_merge(['InvokeClass'], $expected), $retval);
     }
 }

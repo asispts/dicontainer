@@ -30,7 +30,8 @@ final class CallbackHelper
                 $classname = $ref->getDeclaringClass()->getName();
                 $methodName = $ref->getName();
                 $obj = $this->dic->get($classname);
-                return [$obj, $methodName];
+                /** @var callable $callback */
+                $callback = [$obj, $methodName];
             }
 
             return $callback;
@@ -52,6 +53,7 @@ final class CallbackHelper
         return null;
     }
 
+    // @phpstan-ignore-next-line
     private function fromArray(array $callback) : ?ReflectionMethod
     {
         $class = array_shift($callback);
