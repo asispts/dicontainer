@@ -31,10 +31,7 @@ final class DiParser
 
         if ($method->isPrivate() || $method->isProtected()) {
             $name = $method->getDeclaringClass()->getName();
-            $msg = 'Access to non-public method of class ' . $name;
-            if ($method->isConstructor()) {
-                $msg = 'Access to non-public constructor of class ' . $name;
-            }
+            $msg = 'Access to non-public constructor of class ' . $name;
             throw new ContainerException($msg);
         }
 
