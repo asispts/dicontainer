@@ -107,7 +107,7 @@ final class DiParser
                 'Missing required substitutions %s passed to %s::%s()',
                 $name,
                 $param->getDeclaringClass()->getName(), // @phpstan-ignore-line
-                $param->getDeclaringFunction()->getName()  // @phpstan-ignore-line
+                $param->getDeclaringFunction()->getName()
             );
             throw new ContainerException($msg, $exc->getCode(), $exc);
         }
@@ -160,7 +160,7 @@ final class DiParser
                 'Missing required argument $%s passed to %s::%s()',
                 $param->getName(),
                 $param->getDeclaringClass()->getName(), // @phpstan-ignore-line
-                $param->getDeclaringFunction()->getName()  // @phpstan-ignore-line
+                $param->getDeclaringFunction()->getName()
             );
             throw new ContainerException($msg);
         }
