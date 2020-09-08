@@ -59,7 +59,7 @@ final class ConstructParamsTest extends AbstractConfigTestCase
         $this->assertNull($obj->obj);
     }
 
-    public function testAllowsNull()
+    public function testObjectAllowsNull()
     {
         $rules['constructParams'] = ['invalid type'];
 
