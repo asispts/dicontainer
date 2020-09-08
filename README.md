@@ -8,6 +8,22 @@
 
 PSR-11 compliant PHP dependency injection container.
 
+## Table of Contents
+- [DiContainer](#dicontainer)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [DiContainer rules](#dicontainer-rules)
+    - [\# `shared`: `boolean` (default `false`)](#-shared-boolean-default-false)
+    - [\# `instanceOf`: `string|object` (default `null`)](#-instanceof-stringobject-default-null)
+    - [\# `constructParams`: `array` (default `null`)](#-constructparams-array-default-null)
+    - [\# `substitutions`: associative `array` (default `null`)](#-substitutions-associative-array-default-null)
+    - [\# `getFrom`: `array` (default `null`)](#-getfrom-array-default-null)
+  - [Use cases](#use-cases)
+  - [Changelog](#changelog)
+  - [Contributing](#contributing)
+  - [License](#license)
+
 ## Installation
 Use [composer](https://getcomposer.org/) to install the library.
 ```bash
@@ -66,7 +82,7 @@ Where:
     - `substitutions`
     - `getFrom`
 
-### # `shared`: `boolean` (default `false`)
+### \# `shared`: `boolean` (default `false`)
   - Possible values:
     * `true`, if the constructed instance can be shared betwen classes during execution,
     * `false`, otherwise.
@@ -80,7 +96,7 @@ Where:
     }
     ````
 
-### # `instanceOf`: `string|object` (default `null`)
+### \# `instanceOf`: `string|object` (default `null`)
   - To override class or interface defined in `rule_key`.
   - Possible values:
     - `string`: class namespace
@@ -98,7 +114,7 @@ Where:
     $rlist = $rlist->addRules($rule);
     ````
 
-### # `constructParams`: `array` (default `null`)
+### \# `constructParams`: `array` (default `null`)
   - `constructParams` is a list of constructor argument values.
   - Example:
     ````json
@@ -152,7 +168,7 @@ Where:
   $driver = $dic->get(DatabaseDriver::class);
   ````
 
-### # `substitutions`: associative `array` (default `null`)
+### \# `substitutions`: associative `array` (default `null`)
   - Substitute interface in the constructor argument with a substituted class.
   - Example
     ````json
@@ -164,7 +180,7 @@ Where:
     }
     ````
 
-### # `getFrom`: `array` (default `null`)
+### \# `getFrom`: `array` (default `null`)
   - Get `rule_key` instance from a factory or a class.
   - `getFrom` format
     ````json
@@ -189,9 +205,12 @@ Where:
     }
     ````
 
-## Use Cases
-
+## Use cases
 Please check unit test configuration files in `tests/Data/config` and the corresponding tests.
+
+
+## Changelog
+See [CHANGELOG.md](https://github.com/pattisahusiwa/dicontainer/blob/master/CHANGELOG.md)
 
 
 ## Contributing
