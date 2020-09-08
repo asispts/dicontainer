@@ -12,5 +12,17 @@
                 ]
             ]
         ]
+    },
+    "Xynha\\Tests\\Data\\ArrayInjected": {
+        "constructParams": [
+            [
+                "CALL::SCALAR",
+                [
+                    "Xynha\\Tests\\Data\\Injector",
+                    "getArray"
+                ],
+                []
+            ]
+        ]
     }
 }

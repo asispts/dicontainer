@@ -5,7 +5,6 @@ namespace Xynha\Container;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
-use RuntimeException;
 
 final class DiParser
 {
@@ -145,7 +144,7 @@ final class DiParser
     {
         // @todo: Validate scalar type
         if (array_key_exists(0, $values)) {
-            return array_shift($values);
+            return $this->scalarFromValue($values);
         }
 
         if ($param->isDefaultValueAvailable()) {
@@ -165,6 +164,32 @@ final class DiParser
             );
             throw new ContainerException($msg);
         }
+    }
+
+    /**
+     * @param array<mixed> $values
+     *
+     * @return mixed
+     */
+    private function scalarFromValue(array &$values)
+    {
+        if (!is_array($values[0])) {
+            return array_shift($values);
+        }
+
+        if (!isset($values[0][0])) {
+            return array_shift($values);
+        }
+
+        if ($values[0][0] !== 'CALL::OBJECT' && $values[0][0] !== 'CALL::SCALAR') {
+            return array_shift($values);
+        }
+
+        if ($values[0][0] === 'CALL::OBJECT') {
+            throw new ContainerException('Invalid order of constructParams value');
+        }
+
+        return $this->doCall(array_shift($values));
     }
 
     /**
@@ -190,10 +215,19 @@ final class DiParser
             return null;
         }
 
-        $call = array_shift($values);
-        array_shift($call);
-        $callback = array_shift($call);
-        $args = array_shift($call);
+        return $this->doCall(array_shift($values));
+    }
+
+    /**
+     * @param array{string,string,array<mixed>} $values
+     *
+     * @return  mixed
+     */
+    private function doCall(array $values)
+    {
+        array_shift($values);
+        $callback = array_shift($values);
+        $args = array_shift($values);
 
         $callback = $this->helper->toCallback($callback);
         return call_user_func_array($callback, (array)$args);
