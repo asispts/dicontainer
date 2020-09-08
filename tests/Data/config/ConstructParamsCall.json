@@ -1,0 +1,16 @@
+{
+    "Xynha\\Tests\\Data\\ClassInjected": {
+        "constructParams": [
+            [
+                "CALL::OBJECT",
+                [
+                    "Xynha\\Tests\\Data\\Injector",
+                    "getClass"
+                ],
+                [
+                    "Call object value"
+                ]
+            ]
+        ]
+    }
+}

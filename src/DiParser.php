@@ -5,6 +5,7 @@ namespace Xynha\Container;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use RuntimeException;
 
 final class DiParser
 {
@@ -12,9 +13,13 @@ final class DiParser
     /** @var callable */
     private $creator;
 
-    public function __construct(callable $creator)
+    /** @var CallbackHelper */
+    private $helper;
+
+    public function __construct(callable $creator, CallbackHelper $helper)
     {
         $this->creator = $creator;
+        $this->helper = $helper;
     }
 
     /**
@@ -177,6 +182,20 @@ final class DiParser
             return array_shift($values);
         }
 
-        return null;
+        if (!is_array($values[0])) {
+            return null;
+        }
+
+        if (!isset($values[0][0]) || $values[0][0] !== 'CALL::OBJECT') {
+            return null;
+        }
+
+        $call = array_shift($values);
+        array_shift($call);
+        $callback = array_shift($call);
+        $args = array_shift($call);
+
+        $callback = $this->helper->toCallback($callback);
+        return call_user_func_array($callback, (array)$args);
     }
 }

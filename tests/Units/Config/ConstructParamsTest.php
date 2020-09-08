@@ -4,6 +4,7 @@ use Xynha\Container\DiContainer;
 use Xynha\Container\DiRuleList;
 use Xynha\Tests\Data\ClassGraph;
 use Xynha\Tests\Data\MixedArgument;
+use Xynha\Tests\Data\ObjectAllowsNull;
 use Xynha\Tests\Data\ObjectDefaultValue;
 use Xynha\Tests\Data\ScalarRequired;
 use Xynha\Tests\Units\Config\AbstractConfigTestCase;
@@ -56,6 +57,18 @@ final class ConstructParamsTest extends AbstractConfigTestCase
         $obj = $dic->get(ObjectDefaultValue::class);
 
         $this->assertNull($obj->obj);
+    }
+
+    public function testAllowsNull()
+    {
+        $rules['constructParams'] = ['invalid type'];
+
+        $rlist = new DiRuleList();
+        $rlist = $rlist->addRule(ObjectAllowsNull::class, $rules);
+        $dic = new DiContainer($rlist);
+        $obj = $dic->get(ObjectAllowsNull::class);
+
+        $this->assertNull($obj->std);
     }
 
     public function testOverrideConstructParams()

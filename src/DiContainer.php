@@ -28,8 +28,8 @@ final class DiContainer implements ContainerInterface
     public function __construct(DiRuleList $list)
     {
         $this->list = $list;
-        $this->parser = new DiParser([$this, 'get']);
         $this->callback = new CallbackHelper($this);
+        $this->parser = new DiParser([$this, 'get'], $this->callback);
     }
 
     public function has($id)
