@@ -10,10 +10,8 @@
 
 use PHPUnit\Framework\Error\Warning;
 use Xynha\Container\ContainerException;
-use Xynha\Container\DiContainer;
 use Xynha\Tests\Data\ArrayInjected;
 use Xynha\Tests\Data\ClassInjected;
-use Xynha\Tests\Data\Injector;
 use Xynha\Tests\Data\MixedArgument;
 use Xynha\Tests\Units\Config\AbstractConfigTestCase;
 
@@ -40,38 +38,28 @@ final class ConstructParamsCallTest extends AbstractConfigTestCase
         $this->assertSame(['Injector', 'getArray'], $obj->values);
     }
 
-    public function testInvalidCallScalarInCallObjectRule()
+    public function testCallObjectInvalidScalar()
     {
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage('Require CALL::OBJECT, CALL::SCALAR given');
 
-        $rule['constructParams'] = [
-                                    [
-                                     'CALL::SCALAR',
-                                     [Injector::class, 'getClass'],
-                                    ],
-                                   ];
-        $rlist = $this->rlist->addRule(ClassInjected::class, $rule);
-        $dic = new DiContainer($rlist);
-
-        $dic->get(ClassInjected::class);
+        $this->dic->get('$callobject_invalid_scalar');
     }
 
-    public function testInvalidCallObjectInCallScalarRule()
+    public function testCallObjectInvalidConstant()
+    {
+        $this->expectException(ContainerException::class);
+        $this->expectExceptionMessage('Require CALL::OBJECT, CALL::CONSTANT given');
+
+        $this->dic->get('$callobject_invalid_constant');
+    }
+
+    public function testCallScalarInvalidObject()
     {
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage('Require CALL::SCALAR or CALL::CONSTANT, CALL::OBJECT given');
 
-        $rule['constructParams'] = [
-                                    [
-                                     'CALL::OBJECT',
-                                     [Injector::class, 'getClass'],
-                                    ],
-                                   ];
-        $rlist = $this->rlist->addRule(ArrayInjected::class, $rule);
-        $dic = new DiContainer($rlist);
-
-        $dic->get(ArrayInjected::class);
+        $this->dic->get('$callscalar_invalid_object');
     }
 
     public function testCallConstantBuiltin()

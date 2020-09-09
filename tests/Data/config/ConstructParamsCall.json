@@ -13,6 +13,28 @@
             ]
         ]
     },
+    "$callobject_invalid_scalar": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassInjected",
+        "constructParams": [
+            [
+                "CALL::SCALAR",
+                [
+                    "Xynha\\Tests\\Data\\Injector",
+                    "getClass"
+                ],
+                []
+            ]
+        ]
+    },
+    "$callobject_invalid_constant": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassInjected",
+        "constructParams": [
+            [
+                "CALL::CONSTANT",
+                ""
+            ]
+        ]
+    },
     "Xynha\\Tests\\Data\\ArrayInjected": {
         "constructParams": [
             [
@@ -22,6 +44,21 @@
                     "getArray"
                 ],
                 []
+            ]
+        ]
+    },
+    "$callscalar_invalid_object": {
+        "instanceOf": "Xynha\\Tests\\Data\\ArrayInjected",
+        "constructParams": [
+            [
+                "CALL::OBJECT",
+                [
+                    "Xynha\\Tests\\Data\\Injector",
+                    "getClass"
+                ],
+                [
+                    "Call object value"
+                ]
             ]
         ]
     },
