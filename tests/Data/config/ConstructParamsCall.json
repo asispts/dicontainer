@@ -24,5 +24,69 @@
                 []
             ]
         ]
+    },
+    "$const_builtin": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                "CALL::CONSTANT",
+                "PDO::ERRMODE_EXCEPTION"
+            ]
+        ]
+    },
+    "$const_class": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                "CALL::CONSTANT",
+                "Xynha\\Tests\\Data\\MixedArgument::PUBLIC_CONST"
+            ]
+        ]
+    },
+    "$define": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                "CALL::CONSTANT",
+                "DATA_DIR"
+            ]
+        ]
+    },
+    "$const_private": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                "CALL::CONSTANT",
+                "Xynha\\Tests\\Data\\MixedArgument::PRIVATE_CONST"
+            ]
+        ]
+    },
+    "$const_unknown": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                "CALL::CONSTANT",
+                "1"
+            ]
+        ]
+    },
+    "$const_empty": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                "CALL::CONSTANT"
+            ]
+        ]
+    },
+    "$const_array": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                "CALL::CONSTANT",
+                [
+                    "1"
+                ]
+            ]
+        ]
     }
 }

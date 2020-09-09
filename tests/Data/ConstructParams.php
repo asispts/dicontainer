@@ -46,6 +46,9 @@ class ScalarRequired
 }
 
 class MixedArgument{
+    public const PUBLIC_CONST = 1;
+    private const PRIVATE_CONST = -1;
+
     public $arg;
     public function __construct($arg)
     {

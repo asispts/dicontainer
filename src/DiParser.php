@@ -184,19 +184,21 @@ final class DiParser
             return array_shift($values);
         }
 
-        if (!isset($values[0][0])) {
-            return array_shift($values);
+        $call = $values[0][0] ?? '';
+        switch ($call) {
+            case 'CALL::OBJECT':
+                throw new ContainerException('Require CALL::SCALAR or CALL::CONSTANT, CALL::OBJECT given');
+            case 'CALL::SCALAR':
+                return $this->doCall(array_shift($values));
+            case 'CALL::CONSTANT':
+                $const = array_shift($values);
+                if (empty($const[1]) || !is_string($const[1])) {
+                    throw new ContainerException('Invalid CALL::CONSTANT format');
+                }
+                return constant($const[1]);
+            default:
+                return array_shift($values);
         }
-
-        if ($values[0][0] !== 'CALL::OBJECT' && $values[0][0] !== 'CALL::SCALAR') {
-            return array_shift($values);
-        }
-
-        if ($values[0][0] === 'CALL::OBJECT') {
-            throw new ContainerException('Require CALL::SCALAR, CALL::OBJECT given');
-        }
-
-        return $this->doCall(array_shift($values));
     }
 
     /**
@@ -222,15 +224,16 @@ final class DiParser
             return null;
         }
 
-        if ($values[0][0] !== 'CALL::OBJECT' && $values[0][0] !== 'CALL::SCALAR') {
-            return null;
+        switch ($values[0][0]) {
+            case 'CALL::OBJECT':
+                return $this->doCall(array_shift($values));
+            case 'CALL::SCALAR':
+                throw new ContainerException('Require CALL::OBJECT, CALL::SCALAR given');
+            case 'CALL::CONSTANT':
+                throw new ContainerException('Require CALL::OBJECT, CALL::CONSTANT given');
+            default:
+                return null;
         }
-
-        if ($values[0][0] === 'CALL::SCALAR') {
-            throw new ContainerException('Require CALL::OBJECT, CALL::SCALAR given');
-        }
-
-        return $this->doCall(array_shift($values));
     }
 
     /**
