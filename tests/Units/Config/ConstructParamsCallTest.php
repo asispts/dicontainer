@@ -7,6 +7,8 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
+
+use PHPUnit\Framework\Exception;
 use Xynha\Container\ContainerException;
 use Xynha\Tests\Data\ArrayInjected;
 use Xynha\Tests\Data\ClassInjected;
@@ -84,7 +86,7 @@ final class ConstructParamsCallTest extends AbstractConfigTestCase
     public function testCallPrivateConstant()
     {
         $msg = sprintf('constant(): Couldn\'t find constant %s::PRIVATE_CONST', MixedArgument::class);
-        $this->expectException(RuntimeException::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage($msg);
 
         $this->dic->get('$const_private');
@@ -92,7 +94,7 @@ final class ConstructParamsCallTest extends AbstractConfigTestCase
 
     public function testCallConstantUnknown()
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('constant(): Couldn\'t find constant 1');
 
         $this->dic->get('$const_unknown');
