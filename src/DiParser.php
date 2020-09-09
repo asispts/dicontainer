@@ -184,7 +184,7 @@ final class DiParser
             return array_shift($values);
         }
 
-        $call = $values[0][0] ?? '';
+        $call = (string)($values[0][0] ?? '');
         switch ($call) {
             case 'CALL::OBJECT':
                 throw new ContainerException('Require CALL::SCALAR or CALL::CONSTANT, CALL::OBJECT given');
@@ -220,11 +220,8 @@ final class DiParser
             return null;
         }
 
-        if (!isset($values[0][0])) {
-            return null;
-        }
-
-        switch ($values[0][0]) {
+        $call = (string)($values[0][0] ?? '');
+        switch ($call) {
             case 'CALL::OBJECT':
                 return $this->doCall(array_shift($values));
             case 'CALL::SCALAR':

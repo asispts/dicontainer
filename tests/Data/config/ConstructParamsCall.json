@@ -107,5 +107,21 @@
                 ]
             ]
         ]
+    },
+    "$callobject_true": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassInjected",
+        "constructParams": [
+            [
+                true
+            ]
+        ]
+    },
+    "$callscalar_true": {
+        "instanceOf": "Xynha\\Tests\\Data\\ArrayInjected",
+        "constructParams": [
+            [
+                true
+            ]
+        ]
     }
 }

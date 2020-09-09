@@ -97,4 +97,18 @@ final class ConstructParamsCallTest extends AbstractConfigTestCase
 
         $this->dic->get('$const_array');
     }
+
+    public function testCallObjectTrue()
+    {
+        $obj = $this->dic->get('$callobject_true');
+        $this->assertInstanceOf(ClassInjected::class, $obj);
+        $this->assertNull($obj->obj->arg);
+    }
+
+    public function testCallScalarTrue()
+    {
+        $obj = $this->dic->get('$callscalar_true');
+        $this->assertInstanceOf(ArrayInjected::class, $obj);
+        $this->assertSame([true], $obj->values);
+    }
 }
