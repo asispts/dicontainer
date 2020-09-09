@@ -82,21 +82,6 @@ final class ConstructParamsCallTest extends AbstractConfigTestCase
         $this->assertSame(DATA_DIR, $obj->arg);
     }
 
-    public function testCallPrivateConstant()
-    {
-        $msg = sprintf('constant(): Couldn\'t find constant %s::PRIVATE_CONST', MixedArgument::class);
-        $this->expectExceptionMessage($msg);
-
-        $this->dic->get('$const_private');
-    }
-
-    public function testCallConstantUnknown()
-    {
-        $this->expectExceptionMessage('constant(): Couldn\'t find constant 1');
-
-        $this->dic->get('$const_unknown');
-    }
-
     public function testCallConstantInvalidEmpty()
     {
         $this->expectException(ContainerException::class);

@@ -89,24 +89,6 @@
             ]
         ]
     },
-    "$const_private": {
-        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
-        "constructParams": [
-            [
-                "CALL::CONSTANT",
-                "Xynha\\Tests\\Data\\MixedArgument::PRIVATE_CONST"
-            ]
-        ]
-    },
-    "$const_unknown": {
-        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
-        "constructParams": [
-            [
-                "CALL::CONSTANT",
-                "1"
-            ]
-        ]
-    },
     "$const_empty": {
         "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
         "constructParams": [
