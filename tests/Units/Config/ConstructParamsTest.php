@@ -7,6 +7,8 @@
  * @copyright 2020 Asis Pattisahusiwa
  * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
  */
+
+use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
 use Xynha\Container\DiRuleList;
 use Xynha\Tests\Data\ClassGraph;
@@ -23,6 +25,20 @@ final class ConstructParamsTest extends AbstractConfigTestCase
     {
         $this->files = ['BasicClass.php'];
         parent::setUp();
+    }
+
+    public function testMissingConstructParams()
+    {
+        $this->expectException(ContainerException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Missing required argument $%s passed to %s::__construct()',
+                'bool',
+                ScalarRequired::class
+            )
+        );
+
+        $this->dic->get('$missing');
     }
 
     public function testScalarType()

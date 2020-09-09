@@ -1,4 +1,7 @@
 {
+    "$missing": {
+        "instanceOf": "Xynha\\Tests\\Data\\ScalarRequired"
+    },
     "Xynha\\Tests\\Data\\ScalarRequired": {
         "constructParams": [
             true,
