@@ -1,4 +1,28 @@
 {
+    "$callobject_true": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassInjected",
+        "constructParams": [
+            [
+                true
+            ]
+        ]
+    },
+    "$callscalar_true": {
+        "instanceOf": "Xynha\\Tests\\Data\\ArrayInjected",
+        "constructParams": [
+            [
+                true
+            ]
+        ]
+    },
+    "$callscalar_mixed_true": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                true
+            ]
+        ]
+    },
     "Xynha\\Tests\\Data\\ClassInjected": {
         "constructParams": [
             [
@@ -13,25 +37,19 @@
             ]
         ]
     },
-    "$callobject_invalid_scalar": {
+    "$callobject_scalar": {
         "instanceOf": "Xynha\\Tests\\Data\\ClassInjected",
         "constructParams": [
             [
-                "CALL::SCALAR",
-                [
-                    "Xynha\\Tests\\Data\\Injector",
-                    "getClass"
-                ],
-                []
+                "CALL::SCALAR"
             ]
         ]
     },
-    "$callobject_invalid_constant": {
+    "$callobject_constant": {
         "instanceOf": "Xynha\\Tests\\Data\\ClassInjected",
         "constructParams": [
             [
-                "CALL::CONSTANT",
-                ""
+                "CALL::CONSTANT"
             ]
         ]
     },
@@ -47,41 +65,16 @@
             ]
         ]
     },
-    "$callscalar_invalid_object": {
+    "$callscalar_object": {
         "instanceOf": "Xynha\\Tests\\Data\\ArrayInjected",
         "constructParams": [
             [
-                "CALL::OBJECT",
-                [
-                    "Xynha\\Tests\\Data\\Injector",
-                    "getClass"
-                ],
-                [
-                    "Call object value"
-                ]
+                "CALL::OBJECT"
             ]
         ]
     },
-    "$const_builtin": {
-        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
-        "constructParams": [
-            [
-                "CALL::CONSTANT",
-                "PDO::ERRMODE_EXCEPTION"
-            ]
-        ]
-    },
-    "$const_class": {
-        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
-        "constructParams": [
-            [
-                "CALL::CONSTANT",
-                "Xynha\\Tests\\Data\\MixedArgument::PUBLIC_CONST"
-            ]
-        ]
-    },
-    "$define": {
-        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+    "$callconstant_scalar": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassString",
         "constructParams": [
             [
                 "CALL::CONSTANT",
@@ -89,16 +82,17 @@
             ]
         ]
     },
-    "$const_empty": {
-        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+    "$callconstant_scalar_empty": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassString",
         "constructParams": [
             [
-                "CALL::CONSTANT"
+                "CALL::CONSTANT",
+                ""
             ]
         ]
     },
-    "$const_array": {
-        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+    "$callconstant_scalar_non_string": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassString",
         "constructParams": [
             [
                 "CALL::CONSTANT",
@@ -108,19 +102,58 @@
             ]
         ]
     },
-    "$callobject_true": {
-        "instanceOf": "Xynha\\Tests\\Data\\ClassInjected",
+    "$mixed_callobject": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
         "constructParams": [
             [
-                true
+                "CALL::OBJECT",
+                [
+                    "Xynha\\Tests\\Data\\Injector",
+                    "getMixedObject"
+                ],
+                [
+                    "Mixed object"
+                ]
             ]
         ]
     },
-    "$callscalar_true": {
-        "instanceOf": "Xynha\\Tests\\Data\\ArrayInjected",
+    "$mixed_callscalar": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
         "constructParams": [
             [
-                true
+                "CALL::SCALAR",
+                [
+                    "Xynha\\Tests\\Data\\Injector",
+                    "getArray"
+                ]
+            ]
+        ]
+    },
+    "$mixed_callconstant": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                "CALL::CONSTANT",
+                "DATA_DIR"
+            ]
+        ]
+    },
+    "$mixed_callconstant_empty": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                "CALL::CONSTANT"
+            ]
+        ]
+    },
+    "$mixed_callconstant_non_string": {
+        "instanceOf": "Xynha\\Tests\\Data\\MixedArgument",
+        "constructParams": [
+            [
+                "CALL::CONSTANT",
+                [
+                    "test"
+                ]
             ]
         ]
     }

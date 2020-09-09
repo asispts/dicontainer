@@ -9,16 +9,27 @@
  */
 namespace Xynha\Tests\Data;
 
+use stdClass;
+
 class Injector
 {
-    public function getClass(string $value) : MixedArgument
+    public function getClass(string $value) : stdClass
     {
-        return new MixedArgument('Injector::getClass => ' . $value);
+        $std = new stdClass;
+        $std->arg = 'Injector::getClass => ' . $value;
+        return $std;
     }
 
     public function getArray() : array
     {
         return ['Injector', 'getArray'];
+    }
+
+    public function getMixedObject(string $value) : stdClass
+    {
+        $std = new stdClass;
+        $std->value = $value;
+        return $std;
     }
 }
 
@@ -26,7 +37,7 @@ class Injector
 class ClassInjected
 {
     public $obj;
-    public function __construct(MixedArgument $obj){
+    public function __construct(stdClass $obj){
         $this->obj = $obj;
     }
 }

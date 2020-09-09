@@ -1,35 +1,58 @@
 {
-    "$missing": {
-        "instanceOf": "Xynha\\Tests\\Data\\ScalarRequired"
+    "$no_constructParams": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassString"
     },
-    "Xynha\\Tests\\Data\\ScalarRequired": {
+    "$invalidType": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassString",
         "constructParams": [
-            true,
-            "String value",
-            2020,
-            0.1,
-            [],
-            [
-                false,
-                true
-            ],
-            [
-                "string",
-                "value"
-            ],
-            [
-                2019,
-                2020
-            ],
-            [
-                0.1,
-                0.2
-            ]
+            true
         ]
     },
     "Xynha\\Tests\\Data\\MixedArgument": {
         "constructParams": [
             "From config"
+        ]
+    },
+    "$bool": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassBool",
+        "constructParams": [
+            false
+        ]
+    },
+    "$string": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassString",
+        "constructParams": [
+            "Test string"
+        ]
+    },
+    "$int": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassInt",
+        "constructParams": [
+            2020
+        ]
+    },
+    "$float": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassFloat",
+        "constructParams": [
+            1e9
+        ]
+    },
+    "$array": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassArray",
+        "constructParams": [
+            []
+        ]
+    },
+    "$scalar_type": {
+        "instanceOf": "Xynha\\Tests\\Data\\ObjectScalar"
+    },
+    "$mixed_missing_value": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassMixed"
+    },
+    "$mixed": {
+        "instanceOf": "Xynha\\Tests\\Data\\ClassMixed",
+        "constructParams": [
+            null
         ]
     }
 }

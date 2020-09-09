@@ -9,39 +9,89 @@
  */
 namespace Xynha\Tests\Data;
 
-class ScalarRequired
-{
+use stdClass;
+
+class ClassString{
+    public $required;
+    public $optional;
+    public $null;
+    public function __construct(string $required, string $optional = 'Optional', ?string $null)
+    {
+        $this->required = $required;
+        $this->optional = $optional;
+        $this->null = $null;
+    }
+}
+
+class ClassBool{
+    public function __construct(bool $required, bool $optional = true, ?bool $null)
+    {
+        $this->required = $required;
+        $this->optional = $optional;
+        $this->null = $null;
+    }
+}
+
+class ClassInt extends ClassString{
+    public function __construct(int $required, int $optional = 2019, ?int $null)
+    {
+        $this->required = $required;
+        $this->optional = $optional;
+        $this->null = $null;
+    }
+}
+
+class ClassFloat extends ClassString{
+    public function __construct(float $required, float $optional = 3.14, ?float $null)
+    {
+        $this->required = $required;
+        $this->optional = $optional;
+        $this->null = $null;
+    }
+}
+
+class ClassArray extends ClassString{
+    public function __construct(array $required, array $optional = [3.14], ?array $null)
+    {
+        $this->required = $required;
+        $this->optional = $optional;
+        $this->null = $null;
+    }
+}
+
+class ClassMixed extends ClassString{
+    public function __construct($required, $optional = 'Optional', $null = null)
+    {
+        $this->required = $required;
+        $this->optional = $optional;
+        $this->null = $null;
+    }
+}
+
+class ObjectScalar{
+    public $obj;
     public $bool;
     public $string;
     public $int;
     public $float;
-    public $boolArray;
-    public $emptyArray;
-    public $stringArray;
-    public $intArray;
-    public $floatArray;
-
+    public $array;
+    public $mixed;
     public function __construct(
-        bool $bool,
-        string $string,
-        int $int,
-        float $float,
-        array $emptyArray,
-        array $boolArray,
-        array $stringArray,
-        array $intArray,
-        array $floatArray
+        ?stdClass $std,
+        ?bool $bool,
+        ?string $string,
+        ?int $int,
+        ?float $float,
+        ?array $array,
+        $mixed = null
     ) {
+        $this->obj = $std;
         $this->bool = $bool;
-        $this->string = $string;
         $this->string = $string;
         $this->int = $int;
         $this->float = $float;
-        $this->emptyArray = $emptyArray;
-        $this->boolArray = $boolArray;
-        $this->stringArray = $stringArray;
-        $this->intArray = $intArray;
-        $this->floatArray = $floatArray;
+        $this->array = $array;
+        $this->mixed = $mixed;
     }
 }
 

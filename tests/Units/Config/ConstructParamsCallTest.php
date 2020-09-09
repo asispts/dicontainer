@@ -23,18 +23,45 @@ final class ConstructParamsCallTest extends AbstractConfigTestCase
         parent::setUp();
     }
 
-    public function testInjectClass()
+    // Required test
+    public function testCallObjectTrue()
+    {
+        $std = new stdClass;
+
+        $obj = $this->dic->get('$callobject_true');
+        $this->assertInstanceOf(ClassInjected::class, $obj);
+        $this->assertEquals($std, $obj->obj);
+    }
+
+    /**
+     * Required test
+     *
+     * @coversNothing
+     */
+    public function testCallScalarTrue()
+    {
+        $obj = $this->dic->get('$callscalar_true');
+        $this->assertInstanceOf(ArrayInjected::class, $obj);
+        $this->assertSame([true], $obj->values);
+    }
+
+    /**
+     * Required test
+     *
+     * @coversNothing
+     */
+    public function testCallScalarMixedTrue()
+    {
+        $obj = $this->dic->get('$callscalar_mixed_true');
+        $this->assertInstanceOf(MixedArgument::class, $obj);
+        $this->assertSame([true], $obj->arg);
+    }
+
+    public function testCallObject()
     {
         $obj = $this->dic->get(ClassInjected::class);
 
         $this->assertSame('Injector::getClass => Call object value', $obj->obj->arg);
-    }
-
-    public function testInjectArray()
-    {
-        $obj = $this->dic->get(ArrayInjected::class);
-
-        $this->assertSame(['Injector', 'getArray'], $obj->values);
     }
 
     public function testCallObjectInvalidScalar()
@@ -42,7 +69,7 @@ final class ConstructParamsCallTest extends AbstractConfigTestCase
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage('Require CALL::OBJECT, CALL::SCALAR given');
 
-        $this->dic->get('$callobject_invalid_scalar');
+        $this->dic->get('$callobject_scalar');
     }
 
     public function testCallObjectInvalidConstant()
@@ -50,7 +77,14 @@ final class ConstructParamsCallTest extends AbstractConfigTestCase
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage('Require CALL::OBJECT, CALL::CONSTANT given');
 
-        $this->dic->get('$callobject_invalid_constant');
+        $this->dic->get('$callobject_constant');
+    }
+
+    public function testCallScalar()
+    {
+        $obj = $this->dic->get(ArrayInjected::class);
+
+        $this->assertSame(['Injector', 'getArray'], $obj->values);
     }
 
     public function testCallScalarInvalidObject()
@@ -58,57 +92,66 @@ final class ConstructParamsCallTest extends AbstractConfigTestCase
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage('Require CALL::SCALAR or CALL::CONSTANT, CALL::OBJECT given');
 
-        $this->dic->get('$callscalar_invalid_object');
+        $this->dic->get('$callscalar_object');
     }
 
-    public function testCallConstantBuiltin()
+    public function testCallConstantScalar()
     {
-        $obj = $this->dic->get('$const_builtin');
+        $obj = $this->dic->get('$callconstant_scalar');
 
-        $this->assertSame(PDO::ERRMODE_EXCEPTION, $obj->arg);
+        $this->assertSame(DATA_DIR, $obj->required);
     }
 
-    public function testCallConstantClass()
+    public function testCallConstantScalarEmpty()
     {
-        $obj = $this->dic->get('$const_class');
+        $this->expectException(ContainerException::class);
+        $this->expectExceptionMessage('Invalid CALL::CONSTANT format');
 
-        $this->assertSame(MixedArgument::PUBLIC_CONST, $obj->arg);
+        $this->dic->get('$callconstant_scalar_empty');
     }
 
-    public function testCallConstantFromDefine()
+    public function testCallConstantScalarNonString()
     {
-        $obj = $this->dic->get('$define');
+        $this->expectException(ContainerException::class);
+        $this->expectExceptionMessage('Invalid CALL::CONSTANT format');
+
+        $this->dic->get('$callconstant_scalar_non_string');
+    }
+
+    public function testMixedCallObject()
+    {
+        $obj = $this->dic->get('$mixed_callobject');
+
+        $this->assertSame('Mixed object', $obj->arg->value);
+    }
+
+    public function testMixedCallScalar()
+    {
+        $obj = $this->dic->get('$mixed_callscalar');
+
+        $this->assertSame(['Injector', 'getArray'], $obj->arg);
+    }
+
+    public function testMixedCallConstant()
+    {
+        $obj = $this->dic->get('$mixed_callconstant');
 
         $this->assertSame(DATA_DIR, $obj->arg);
     }
 
-    public function testCallConstantInvalidEmpty()
+    public function testMixedCallConstantScalarEmpty()
     {
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage('Invalid CALL::CONSTANT format');
 
-        $this->dic->get('$const_empty');
+        $this->dic->get('$mixed_callconstant_empty');
     }
 
-    public function testCallConstantInvalidArray()
+    public function testMixedCallConstantScalarNonString()
     {
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage('Invalid CALL::CONSTANT format');
 
-        $this->dic->get('$const_array');
-    }
-
-    public function testCallObjectTrue()
-    {
-        $obj = $this->dic->get('$callobject_true');
-        $this->assertInstanceOf(ClassInjected::class, $obj);
-        $this->assertNull($obj->obj->arg);
-    }
-
-    public function testCallScalarTrue()
-    {
-        $obj = $this->dic->get('$callscalar_true');
-        $this->assertInstanceOf(ArrayInjected::class, $obj);
-        $this->assertSame([true], $obj->values);
+        $this->dic->get('$mixed_callconstant_non_string');
     }
 }

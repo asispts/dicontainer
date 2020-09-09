@@ -10,12 +10,8 @@
 
 use Xynha\Container\ContainerException;
 use Xynha\Container\DiContainer;
-use Xynha\Container\DiRuleList;
-use Xynha\Tests\Data\ClassGraph;
-use Xynha\Tests\Data\MixedArgument;
-use Xynha\Tests\Data\ObjectAllowsNull;
-use Xynha\Tests\Data\ObjectDefaultValue;
-use Xynha\Tests\Data\ScalarRequired;
+use Xynha\Tests\Data\ClassMixed;
+use Xynha\Tests\Data\ClassString;
 use Xynha\Tests\Units\Config\AbstractConfigTestCase;
 
 final class ConstructParamsTest extends AbstractConfigTestCase
@@ -27,96 +23,111 @@ final class ConstructParamsTest extends AbstractConfigTestCase
         parent::setUp();
     }
 
-    public function testMissingConstructParams()
+    public function testNoConstructParams()
     {
         $this->expectException(ContainerException::class);
         $this->expectExceptionMessage(
             sprintf(
                 'Missing required argument $%s passed to %s::__construct()',
-                'bool',
-                ScalarRequired::class
+                'required',
+                ClassString::class
             )
         );
 
-        $this->dic->get('$missing');
+        $this->dic->get('$no_constructParams');
+    }
+
+    public function testInvalidType()
+    {
+        $this->expectException(ContainerException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Missing required argument $%s passed to %s::__construct()',
+                'required',
+                ClassString::class
+            )
+        );
+
+        $this->dic->get('$invalidType');
+    }
+
+    public function testBool()
+    {
+        $obj = $this->dic->get('$bool');
+
+        $this->assertSame(false, $obj->required);
+        $this->assertSame(true, $obj->optional);
+        $this->assertSame(null, $obj->null);
+    }
+
+    public function testString()
+    {
+        $obj = $this->dic->get('$string');
+
+        $this->assertSame('Test string', $obj->required);
+        $this->assertSame('Optional', $obj->optional);
+        $this->assertSame(null, $obj->null);
+    }
+
+    public function testInt()
+    {
+        $obj = $this->dic->get('$int');
+
+        $this->assertSame(2020, $obj->required);
+        $this->assertSame(2019, $obj->optional);
+        $this->assertSame(null, $obj->null);
+    }
+
+    public function testFloat()
+    {
+        $obj = $this->dic->get('$float');
+
+        $this->assertSame(1e9, $obj->required);
+        $this->assertSame(3.14, $obj->optional);
+        $this->assertSame(null, $obj->null);
+    }
+
+    public function testArray()
+    {
+        $obj = $this->dic->get('$array');
+
+        $this->assertSame([], $obj->required);
+        $this->assertSame([3.14], $obj->optional);
+        $this->assertSame(null, $obj->null);
     }
 
     public function testScalarType()
     {
-        $obj = $this->dic->get(ScalarRequired::class);
-
-        $this->assertInstanceOf(ScalarRequired::class, $obj);
-        $this->assertSame(true, $obj->bool);
-        $this->assertSame('String value', $obj->string);
-        $this->assertSame(2020, $obj->int);
-        $this->assertSame(0.1, $obj->float);
-        $this->assertSame([], $obj->emptyArray);
-        $this->assertSame([false, true], $obj->boolArray);
-        $this->assertSame(['string', 'value'], $obj->stringArray);
-        $this->assertSame([2019, 2020], $obj->intArray);
-        $this->assertSame([0.1, 0.2], $obj->floatArray);
-    }
-
-    public function testPassInstanceToOptionalArg()
-    {
-        $passedObj = $this->dic->get(ClassGraph::class);
-        $rules['constructParams'] = [$passedObj];
-
-        $rlist = new DiRuleList();
-        $rlist = $rlist->addRule(ObjectDefaultValue::class, $rules);
-        $dic = new DiContainer($rlist);
-        $obj = $dic->get(ObjectDefaultValue::class);
-
-        $this->assertSame($passedObj, $obj->obj);
-    }
-
-    public function testObjectDefaultValuePassEmptyArray()
-    {
-        $rules['constructParams'] = [[]];
-
-        $rlist = new DiRuleList();
-        $rlist = $rlist->addRule(ObjectDefaultValue::class, $rules);
-        $dic = new DiContainer($rlist);
-        $obj = $dic->get(ObjectDefaultValue::class);
-
-        $this->assertNull($obj->obj);
-    }
-
-    public function testObjectDefaultValuePassArray()
-    {
-        $rules['constructParams'] = [['Invalid']];
-
-        $rlist = new DiRuleList();
-        $rlist = $rlist->addRule(ObjectDefaultValue::class, $rules);
-        $dic = new DiContainer($rlist);
-        $obj = $dic->get(ObjectDefaultValue::class);
-
-        $this->assertNull($obj->obj);
-    }
-
-    public function testObjectAllowsNull()
-    {
-        $rules['constructParams'] = ['invalid type'];
-
-        $rlist = new DiRuleList();
-        $rlist = $rlist->addRule(ObjectAllowsNull::class, $rules);
-        $dic = new DiContainer($rlist);
-        $obj = $dic->get(ObjectAllowsNull::class);
-
-        $this->assertNull($obj->std);
-    }
-
-    public function testOverrideConstructParams()
-    {
-        $obj = $this->dic->get(MixedArgument::class);
-        $this->assertSame('From config', $obj->arg);
-
-        $passedValue = new stdClass;
-        $rule['constructParams'] = [$passedValue, 'test value'];
-        $rlist = $this->rlist->addRule(MixedArgument::class, $rule);
+        $dt = new DateTime();
+        $rule['constructParams'] = [$dt];
+        $rlist = $this->rlist->addRule('$scalar_type', $rule);
         $dic = new DiContainer($rlist);
 
-        $obj = $dic->get(MixedArgument::class);
-        $this->assertSame($passedValue, $obj->arg);
+        $obj = $dic->get('$scalar_type');
+
+        $this->assertSame($dt, $obj->mixed);
+    }
+
+    public function testMixedMissingValue()
+    {
+        $this->expectException(ContainerException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                'Missing required argument $%s passed to %s::__construct()',
+                'required',
+                ClassMixed::class
+            )
+        );
+
+        $this->dic->get('$mixed_missing_value');
+    }
+
+    public function testMixed()
+    {
+        $obj = $this->dic->get('$mixed');
+
+        $this->assertSame(null, $obj->required);
+        $this->assertSame('Optional', $obj->optional);
+        $this->assertSame(null, $obj->null);
     }
 }
