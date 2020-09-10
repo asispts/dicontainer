@@ -9,6 +9,7 @@
  */
 namespace Xynha\Tests\Data;
 
+use ArrayAccess;
 use stdClass;
 
 class ClassString{
@@ -69,7 +70,8 @@ class ClassMixed extends ClassString{
 }
 
 class ObjectScalar{
-    public $obj;
+    public $interface;
+    public $class;
     public $bool;
     public $string;
     public $int;
@@ -77,15 +79,17 @@ class ObjectScalar{
     public $array;
     public $mixed;
     public function __construct(
-        ?stdClass $std,
+        ?ArrayAccess $interface,
+        ?stdClass $class,
         ?bool $bool,
         ?string $string,
         ?int $int,
         ?float $float,
         ?array $array,
-        $mixed = null
+        $mixed
     ) {
-        $this->obj = $std;
+        $this->interface = $interface;
+        $this->class = $class;
         $this->bool = $bool;
         $this->string = $string;
         $this->int = $int;

@@ -99,11 +99,20 @@ final class ConstructParamsTest extends AbstractConfigTestCase
     public function testScalarType()
     {
         $dt = new DateTime();
-        $rule['constructParams'] = [$dt];
-        $rlist = $this->rlist->addRule('$scalar_type', $rule);
+        $rule['constructParams'] = [
+                                    null, // $interface
+                                    null, // $class
+                                    null, // $bool
+                                    null, // $string
+                                    null, // $int
+                                    null, // $float
+                                    null, // $array
+                                    $dt, // $mixed
+                                   ];
+        $rlist = $this->rlist->addRule('$scalar_type_null', $rule);
         $dic = new DiContainer($rlist);
 
-        $obj = $dic->get('$scalar_type');
+        $obj = $dic->get('$scalar_type_null');
 
         $this->assertSame($dt, $obj->mixed);
     }

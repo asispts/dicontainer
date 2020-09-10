@@ -43,7 +43,7 @@
             []
         ]
     },
-    "$scalar_type": {
+    "$scalar_type_null": {
         "instanceOf": "Xynha\\Tests\\Data\\ObjectScalar"
     },
     "$mixed_missing_value": {

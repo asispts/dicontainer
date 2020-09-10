@@ -90,8 +90,9 @@ final class DiParser
      */
     private function interfaceValue(ReflectionParameter $param, ReflectionNamedType $type, array $subs, array &$values)
     {
-        if ($obj = $this->getObjectValue($type->getName(), $values)) {
-            return $obj;
+        try {
+            return $this->getObjectValue($type->getName(), $values, $param->allowsNull());
+        } catch (NoValueException $exc) {
         }
 
         if (array_key_exists($type->getName(), $subs)) {
@@ -126,8 +127,9 @@ final class DiParser
      */
     private function classValue(ReflectionParameter $param, ReflectionNamedType $type, array &$values)
     {
-        if ($obj = $this->getObjectValue($type->getName(), $values)) {
-            return $obj;
+        try {
+            return $this->getObjectValue($type->getName(), $values, $param->allowsNull());
+        } catch (NoValueException $exc) {
         }
 
         if ($param->isDefaultValueAvailable()) {
@@ -148,9 +150,9 @@ final class DiParser
      */
     private function scalarValue(ReflectionParameter $param, ReflectionNamedType $type, array &$values)
     {
-        $retval = $this->scalarFromValue($type, $values);
-        if ($retval !== null) {
-            return $retval;
+        try {
+            return $this->scalarFromValue($type, $values, $param->allowsNull());
+        } catch (NoValueException $exc) {
         }
 
         if ($param->isDefaultValueAvailable()) {
@@ -175,10 +177,10 @@ final class DiParser
      *
      * @return mixed
      */
-    private function scalarFromValue(ReflectionNamedType $type, array &$values)
+    private function scalarFromValue(ReflectionNamedType $type, array &$values, bool $allowsNull)
     {
-        if (!isset($values[0])) {
-            return;
+        if (count($values) <= 0) {
+            throw new NoValueException();
         }
 
         if (is_array($values[0])) {
@@ -200,6 +202,12 @@ final class DiParser
         if ($this->sameType($type->getName(), $values[0])) {
             return array_shift($values);
         }
+
+        if ($values[0] === null && $allowsNull === true) {
+            return array_shift($values);
+        }
+
+        throw new NoValueException();
     }
 
     /** @param mixed $value */
@@ -224,18 +232,18 @@ final class DiParser
      *
      * @return object|null
      */
-    private function getObjectValue(string $className, array &$values)
+    private function getObjectValue(string $className, array &$values, bool $allowsNull)
     {
-        if (!isset($values[0])) {
-            return null;
+        if (count($values) <= 0) {
+            throw new NoValueException();
         }
 
         if (is_object($values[0]) && ($values[0] instanceof $className)) {
             return array_shift($values);
         }
 
-        if (!is_array($values[0])) {
-            return null;
+        if ($values[0] === null && $allowsNull === true) {
+            return array_shift($values);
         }
 
         $call = (string)($values[0][0] ?? '');
@@ -247,7 +255,7 @@ final class DiParser
             case 'CALL::CONSTANT':
                 throw new ContainerException('Require CALL::OBJECT, CALL::CONSTANT given');
             default:
-                return null;
+                throw new NoValueException();
         }
     }
 
