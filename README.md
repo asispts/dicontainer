@@ -167,7 +167,20 @@ Where:
   ````php
   $driver = $dic->get(DatabaseDriver::class);
   ````
-
+  - A constant can be passed to constructor arguments by using `CALL::CONSTANT`, for example
+  ````json
+  {
+    "$pdo": {
+      "instanceOf": "DatabaseDriver",
+      "constructParams": [
+        [
+          ["CALL::CONSTANT", "PDO::ATTR_ERRMODE"],
+          ["CALL::CONSTANT", "PDO::ERRMODE_EXCEPTION"]
+        ]
+      ]
+    }
+  }
+  ````
 ### \# `substitutions`: associative `array` (default `null`)
   - Substitute interface in the constructor argument with a substituted class.
   - Example
