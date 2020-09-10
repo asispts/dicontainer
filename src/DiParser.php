@@ -65,7 +65,7 @@ final class DiParser
 
     /**
      * @param array<string,string> $subs
-     * @param array<mixed> $passedValues
+     * @param array<mixed> $values
      *
      * @return mixed
      */
@@ -202,6 +202,7 @@ final class DiParser
         }
     }
 
+    /** @param mixed $value */
     private function sameType(string $type, $value) : bool
     {
         switch ($type) {
@@ -265,6 +266,11 @@ final class DiParser
         return call_user_func_array($callback, (array)$args);
     }
 
+    /**
+     * @param array<mixed> $values
+     *
+     * @return mixed
+     */
     private function mixedValue(ReflectionParameter $param, array &$values)
     {
         if (isset($values[0]) && is_array($values[0])) {
