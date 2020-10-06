@@ -23,7 +23,7 @@ final class CallbackHelperTest extends TestCase
     {
         require_once DATA_DIR . '/utils/callback.php';
 
-        $dic = new DiContainer(new DiRuleList);
+        $dic            = new DiContainer(new DiRuleList());
         $this->callback = new CallbackHelper($dic);
     }
 
@@ -37,12 +37,12 @@ final class CallbackHelperTest extends TestCase
     public function testFunctionCallback()
     {
         $callback = 'fnCallback';
-        $norm = $this->callback->toCallback($callback);
+        $norm     = $this->callback->toCallback($callback);
 
         $this->assertSame($callback, $norm);
 
         $expected = ['String value', ['array', 'value']];
-        $retval = call_user_func_array($norm, $expected);
+        $retval   = call_user_func_array($norm, $expected);
 
         $this->assertSame($expected, $retval);
     }
@@ -50,90 +50,90 @@ final class CallbackHelperTest extends TestCase
     public function testStaticClassString()
     {
         $callback = 'StaticClass::callback';
-        $norm = $this->callback->toCallback($callback);
+        $norm     = $this->callback->toCallback($callback);
 
         $this->assertSame($callback, $norm);
 
         $expected = ['String value', ['array', 'value']];
-        $retval = call_user_func_array($norm, $expected);
+        $retval   = call_user_func_array($norm, $expected);
         $this->assertSame(array_merge(['StaticClass'], $expected), $retval);
     }
 
     public function testStaticClassArray()
     {
         $callback = ['StaticClass', 'callback'];
-        $norm = $this->callback->toCallback($callback);
+        $norm     = $this->callback->toCallback($callback);
 
         $this->assertSame($callback, $norm);
 
         $expected = ['String value', ['array', 'value']];
-        $retval = call_user_func_array($norm, $expected);
+        $retval   = call_user_func_array($norm, $expected);
         $this->assertSame(array_merge(['StaticClass'], $expected), $retval);
     }
 
     public function testExtendStaticClass()
     {
         $callback = ['ExtendStaticClass', 'callback'];
-        $norm = $this->callback->toCallback($callback);
+        $norm     = $this->callback->toCallback($callback);
 
         $this->assertSame($callback, $norm);
 
         $expected = ['String value', ['array', 'value']];
-        $retval = call_user_func_array($norm, $expected);
+        $retval   = call_user_func_array($norm, $expected);
         $this->assertSame(array_merge(['ExtendStaticClass'], $expected), $retval);
     }
 
     public function testExtendStaticClassParent()
     {
         $callback = ['ExtendStaticClass', 'parent::callback'];
-        $norm = $this->callback->toCallback($callback);
+        $norm     = $this->callback->toCallback($callback);
 
         $this->assertSame($callback, $norm);
 
         $expected = ['String value', ['array', 'value']];
-        $retval = call_user_func_array($norm, $expected);
+        $retval   = call_user_func_array($norm, $expected);
         $this->assertSame(array_merge(['StaticClass'], $expected), $retval);
     }
 
     public function testInvokeClass()
     {
-        $obj = new InvokeClass();
+        $obj      = new InvokeClass();
         $callback = [$obj, 'callback'];
-        $norm = $this->callback->toCallback($callback);
+        $norm     = $this->callback->toCallback($callback);
 
         $this->assertSame($callback, $norm);
 
         $expected = ['String value', ['array', 'value']];
-        $retval = call_user_func_array($norm, $expected);
+        $retval   = call_user_func_array($norm, $expected);
         $this->assertSame(array_merge(['InvokeClass'], $expected), $retval);
     }
 
     public function testInvokeObject()
     {
-        $obj = new InvokeClass();
+        $obj      = new InvokeClass();
         $callback = $obj;
-        $norm = $this->callback->toCallback($callback);
+        $norm     = $this->callback->toCallback($callback);
 
         $this->assertSame($callback, $norm);
 
         $expected = ['String value', ['array', 'value']];
-        $retval = call_user_func_array($norm, $expected);
+        $retval   = call_user_func_array($norm, $expected);
         $this->assertSame(array_merge(['InvokeClass::__invoke'], $expected), $retval);
     }
 
     public function testClosureCallback()
     {
-        $closure = function (string $string, array $array) : array {
+        $closure = function (string $string, array $array): array {
             return ['Closure', $string, $array];
         };
 
         $callback = $closure;
-        $norm = $this->callback->toCallback($callback);
+        $norm     = $this->callback->toCallback($callback);
 
         $this->assertSame($callback, $norm);
 
         $expected = ['String value', ['array', 'value']];
-        $retval = call_user_func_array($norm, $expected);
+        $retval   = call_user_func_array($norm, $expected);
         $this->assertSame(array_merge(['Closure'], $expected), $retval);
     }
 
@@ -150,7 +150,7 @@ final class CallbackHelperTest extends TestCase
 
         /** @var callable */
         $callback = $norm;
-        $retval = call_user_func_array($callback, $expected);
+        $retval   = call_user_func_array($callback, $expected);
         $this->assertSame(array_merge(['InvokeClass'], $expected), $retval);
     }
 }

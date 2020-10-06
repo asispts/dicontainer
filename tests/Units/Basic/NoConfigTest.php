@@ -24,7 +24,7 @@ final class NoConfigTest extends TestCase
 
     protected function setUp()
     {
-        $rlist = new DiRuleList();
+        $rlist     = new DiRuleList();
         $this->dic = new DiContainer($rlist);
 
         require_once DATA_DIR . '/BasicClass.php';
@@ -33,7 +33,7 @@ final class NoConfigTest extends TestCase
     public function testInternalClass()
     {
         $obj = $this->dic->get(DateTime::class);
-        $dt = date_create();
+        $dt  = date_create();
 
         $this->assertInstanceOf(DateTime::class, $obj);
         $this->assertSame($obj->format(DATE_W3C), $dt->format(DATE_W3C)); // @phpstan-ignore-line

@@ -30,7 +30,7 @@ final class GetFromTest extends AbstractConfigTestCase
 
         $rlist = new DiRuleList();
         $rlist = $rlist->addRule(FactoryInterface::class, $rule);
-        $dic = new DiContainer($rlist);
+        $dic   = new DiContainer($rlist);
 
         $dic->get(FactoryInterfaceDep::class);
     }
@@ -53,7 +53,7 @@ final class GetFromTest extends AbstractConfigTestCase
 
     public function testSharedFactoryClass()
     {
-        $mapper = $this->dic->get(MapperDep::class);
+        $mapper    = $this->dic->get(MapperDep::class);
         $generator = $this->dic->get(GeneratorDep::class);
 
         $this->assertSame($mapper->mapper->map, $generator->gen->map);
@@ -73,7 +73,7 @@ final class GetFromTest extends AbstractConfigTestCase
 
     public function testOverrideGetFrom()
     {
-        $closure = function (string $value) : FactoryInterface {
+        $closure         = function (string $value): FactoryInterface {
             $factory = new FactoryInterfaceImpl('From closure');
             $factory->setValue($value);
             return $factory;
@@ -81,7 +81,7 @@ final class GetFromTest extends AbstractConfigTestCase
         $rule['getFrom'] = [$closure, 'Override test'];
 
         $rlist = $this->rlist->addRule(FactoryInterface::class, $rule);
-        $dic = new DiContainer($rlist);
+        $dic   = new DiContainer($rlist);
 
         $obj = $dic->get(FactoryInterfaceDep::class);
 

@@ -12,7 +12,9 @@
   <exclude-pattern>tests/Data</exclude-pattern>
   <exclude-pattern>docs</exclude-pattern>
 
-  <rule ref="ptscs"/>
+  <rule ref="ptscs">
+    <exclude name="PSR12.Files.FileHeader.IncorrectOrder"/>
+  </rule>
 
   <rule ref="Squiz.Arrays.ArrayDeclaration">
     <exclude name="Squiz.Arrays.ArrayDeclaration.SingleLineNotAllowed"/>

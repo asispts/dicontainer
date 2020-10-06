@@ -24,7 +24,7 @@ final class CallbackHelper
     }
 
     /** @param mixed $callback */
-    public function toCallback($callback) : callable
+    public function toCallback($callback): callable
     {
         try {
             $ref = $this->getReflection($callback);
@@ -34,17 +34,17 @@ final class CallbackHelper
             }
 
             if ($ref->isStatic() === false) {
-                $classname = $ref->getDeclaringClass()->getName();
+                $classname  = $ref->getDeclaringClass()->getName();
                 $methodName = $ref->getName();
-                $obj = $this->dic->get($classname);
-                $callback = [$obj, $methodName];
+                $obj        = $this->dic->get($classname);
+                $callback   = [$obj, $methodName];
             }
 
             return $callback;
         } catch (ReflectionException $exc) {
         }
 
-        if (is_callable($callback)) {
+        if (is_callable($callback) === true) {
             return $callback;
         }
 
@@ -52,7 +52,7 @@ final class CallbackHelper
     }
 
     /** @param mixed $callback */
-    private function getReflection($callback) : ?ReflectionMethod
+    private function getReflection($callback): ?ReflectionMethod
     {
         switch (true) {
             case is_string($callback):
@@ -66,9 +66,9 @@ final class CallbackHelper
     }
 
     /** @param array{string|object,string} $callback */
-    private function fromArray(array $callback) : ?ReflectionMethod
+    private function fromArray(array $callback): ?ReflectionMethod
     {
-        if (is_object($callback[0])) {
+        if (is_object($callback[0]) === true) {
             return null;
         }
 

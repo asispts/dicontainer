@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 
 /**
- * This file is part of xynha/dicontainer package.
- *
- * @author Asis Pattisahusiwa <asis.pattisahusiwa@gmail.com>
- * @copyright 2020 Asis Pattisahusiwa
- * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
- */
+* This file is part of xynha/dicontainer package.
+*
+* @author Asis Pattisahusiwa <asis.pattisahusiwa@gmail.com>
+* @copyright 2020 Asis Pattisahusiwa
+* @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
+*/
+
 namespace Xynha\Container;
 
 use Error;
@@ -34,9 +35,9 @@ final class DiContainer implements ContainerInterface
 
     public function __construct(DiRuleList $list)
     {
-        $this->list = $list;
+        $this->list     = $list;
         $this->callback = new CallbackHelper($this);
-        $this->parser = new DiParser([$this, 'get'], $this->callback);
+        $this->parser   = new DiParser([$this, 'get'], $this->callback);
     }
 
     public function has($id)
@@ -55,31 +56,34 @@ final class DiContainer implements ContainerInterface
             return clone $this;
         }
 
-        if (empty($rule->getFrom())) {
+        if (empty($rule->getFrom()) === true) {
             return $this->getInstance($rule);
         }
 
-        $getFrom = $rule->getFrom();
+        $getFrom  = $rule->getFrom();
         $callback = array_shift($getFrom);
-        $args = array_shift($getFrom);
+        $args     = array_shift($getFrom);
 
         $callback = $this->callback->toCallback($callback);
-        return call_user_func_array($callback, (array)$args);
+        return call_user_func_array($callback, (array) $args);
     }
 
     /** @return object */
     private function getInstance(DiRule $rule)
     {
-        if (isset($this->instances[$rule->key()])) {
+        if (isset($this->instances[$rule->key()]) === true) {
             return $this->instances[$rule->key()];
         }
 
-        if (array_key_exists($rule->key(), $this->curKeys) || in_array($rule->classname(), $this->curKeys)) {
+        if (
+            array_key_exists($rule->key(), $this->curKeys) === true
+            || in_array($rule->classname(), $this->curKeys) === true
+        ) {
             throw new ContainerException('Cyclic dependencies detected');
         }
 
         $classname = $rule->classname();
-        if (is_object($classname)) {
+        if (is_object($classname) === true) {
             return $classname;
         }
         $this->curKeys[$rule->key()] = $classname;
@@ -92,7 +96,7 @@ final class DiContainer implements ContainerInterface
             throw $exc;
         }
 
-        if ($rule->isShared()) {
+        if ($rule->isShared() === true) {
             $this->instances[$rule->key()] = $object;
         }
 
@@ -103,7 +107,7 @@ final class DiContainer implements ContainerInterface
     private function createObject(DiRule $rule)
     {
         $ref = new ReflectionClass($rule->classname());
-        if ($ref->isAbstract()) {
+        if ($ref->isAbstract() === true) {
             throw new ContainerException('Cannot instantiate abstract class ' . $rule->classname());
         }
 

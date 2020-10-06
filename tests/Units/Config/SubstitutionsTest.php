@@ -53,8 +53,8 @@ final class SubstitutionsTest extends AbstractConfigTestCase
     public function testOverrideSubstitutionsRule()
     {
         $rule['substitutions'] = [InvalidSubsInterface::class => ImplInvalidSubsInterface::class];
-        $rlist = $this->rlist->addRule(DependInvalidSubsInterface::class, $rule);
-        $dic = new DiContainer($rlist);
+        $rlist                 = $this->rlist->addRule(DependInvalidSubsInterface::class, $rule);
+        $dic                   = new DiContainer($rlist);
 
         $obj = $dic->get(DependInvalidSubsInterface::class);
 
@@ -63,10 +63,10 @@ final class SubstitutionsTest extends AbstractConfigTestCase
 
     public function testOverrideWithConstructParams()
     {
-        $passedObj = new ImplInvalidSubsInterface;
+        $passedObj               = new ImplInvalidSubsInterface();
         $rule['constructParams'] = [$passedObj];
-        $rlist = $this->rlist->addRule(DependInvalidSubsInterface::class, $rule);
-        $dic = new DiContainer($rlist);
+        $rlist                   = $this->rlist->addRule(DependInvalidSubsInterface::class, $rule);
+        $dic                     = new DiContainer($rlist);
 
         $obj = $dic->get(DependInvalidSubsInterface::class);
 

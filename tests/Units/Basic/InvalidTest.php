@@ -26,7 +26,7 @@ final class InvalidTest extends TestCase
 
     protected function setUp()
     {
-        $rlist = new DiRuleList();
+        $rlist     = new DiRuleList();
         $this->dic = new DiContainer($rlist);
 
         require_once DATA_DIR . '/Invalid.php';

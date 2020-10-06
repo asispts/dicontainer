@@ -16,7 +16,7 @@ final class DiRuleList
     private $rules = [];
 
     /** @param array<string,mixed> $rule */
-    public function addRule(string $key, array $rule) : self
+    public function addRule(string $key, array $rule): self
     {
         $new = clone $this;
         $this->addToList($new, new DiRule($key, $rule));
@@ -24,7 +24,7 @@ final class DiRuleList
     }
 
     /** @param array<string,array<string,mixed>> $rules */
-    public function addRules(array $rules) : self
+    public function addRules(array $rules): self
     {
         $new = clone $this;
 
@@ -35,14 +35,14 @@ final class DiRuleList
         return $new;
     }
 
-    public function hasRule(string $key) : bool
+    public function hasRule(string $key): bool
     {
         return array_key_exists($key, $this->rules);
     }
 
-    public function getRule(string $key) : DiRule
+    public function getRule(string $key): DiRule
     {
-        if ($this->hasRule($key)) {
+        if ($this->hasRule($key) === true) {
             return $this->rules[$key];
         }
 
@@ -51,9 +51,9 @@ final class DiRuleList
         return $rule;
     }
 
-    private function addToList(DiRuleList $list, DiRule $rule) : void
+    private function addToList(DiRuleList $list, DiRule $rule): void
     {
-        if (array_key_exists($rule->key(), $list->rules)) {
+        if (array_key_exists($rule->key(), $list->rules) === true) {
             $oldRule = $list->rules[$rule->key()];
             $oldRule->cloneFrom($rule);
             $rule = $oldRule;

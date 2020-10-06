@@ -26,7 +26,7 @@ final class ConstructParamsCallTest extends AbstractConfigTestCase
     // Required test
     public function testCallObjectTrue()
     {
-        $std = new stdClass;
+        $std = new stdClass();
 
         $obj = $this->dic->get('$callobject_true');
         $this->assertInstanceOf(ClassInjected::class, $obj);

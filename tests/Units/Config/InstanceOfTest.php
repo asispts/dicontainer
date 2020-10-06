@@ -34,12 +34,12 @@ final class InstanceOfTest extends AbstractConfigTestCase
 
     public function testPassObjectAsInstanceOf()
     {
-        $passedObj = new ImplementInterfaceInstanceOf();
+        $passedObj          = new ImplementInterfaceInstanceOf();
         $rule['instanceOf'] = $passedObj;
 
         $rlist = new DiRuleList();
         $rlist = $this->rlist->addRule(InterfaceInstanceOf::class, $rule);
-        $dic = new DiContainer($rlist);
+        $dic   = new DiContainer($rlist);
 
         $obj = $dic->get(InterfaceInstanceOf::class);
 

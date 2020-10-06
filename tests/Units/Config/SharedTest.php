@@ -47,7 +47,7 @@ final class SharedTest extends AbstractConfigTestCase
     public function testOverrideSharedRule()
     {
         $rlist = $this->rlist->addRule(stdClass::class, ['shared' => false]);
-        $dic = new DiContainer($rlist);
+        $dic   = new DiContainer($rlist);
 
         $objA = $dic->get(stdClass::class);
         $objB = $dic->get(stdClass::class);
