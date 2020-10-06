@@ -10,6 +10,7 @@
 namespace Xynha\Tests\Units\Config;
 
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Xynha\Container\DiContainer;
 use Xynha\Container\DiRuleList;
 
@@ -27,9 +28,8 @@ abstract class AbstractConfigTestCase extends TestCase
 
     protected function setUp()
     {
-        $nspaces  = explode('\\', static::class);
-        $filename = str_replace('Test', '', array_pop($nspaces)); // @phpstan-ignore-line
-
+        $classname   = (new ReflectionClass(static::class))->getShortName();
+        $filename    = str_replace('Test', '', $classname);
         $this->files = array_merge($this->files, [$filename . '.php']);
         foreach ($this->files as $file) {
             $path = DATA_DIR . '/' . $file;
