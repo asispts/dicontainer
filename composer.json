@@ -41,7 +41,8 @@
         "psr/container": "^1.0"
     },
     "require-dev": {
-        "pattisahusiwa/coding-standard": "^0.3.0",
+        "pattisahusiwa/coding-standard": "~0.3",
+        "phpstan/phpstan-phpunit": "~0.12.16",
         "phpunit/phpunit": "^7.0"
     }
 }
