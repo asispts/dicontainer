@@ -1,13 +1,6 @@
 <?php declare(strict_types=1);
 
-/**
- * This file is part of xynha/dicontainer package.
- *
- * @author Asis Pattisahusiwa <asis.pattisahusiwa@gmail.com>
- * @copyright 2020 Asis Pattisahusiwa
- * @license https://github.com/pattisahusiwa/dicontainer/blob/master/LICENSE Apache-2.0 License
- */
-namespace Xynha\Container;
+namespace Hinasila\DiContainer;
 
 use Psr\Container\ContainerInterface;
 use ReflectionException;
@@ -15,7 +8,6 @@ use ReflectionMethod;
 
 final class CallbackHelper
 {
-
     private $dic;
 
     public function __construct(ContainerInterface $dic)
@@ -44,7 +36,7 @@ final class CallbackHelper
         } catch (ReflectionException $exc) {
         }
 
-        if (is_callable($callback) === true) {
+        if (\is_callable($callback) === true) {
             return $callback;
         }
 
@@ -55,9 +47,9 @@ final class CallbackHelper
     private function getReflection($callback): ?ReflectionMethod
     {
         switch (true) {
-            case is_string($callback):
+            case \is_string($callback):
                 return new ReflectionMethod($callback);
-            case is_array($callback):
+            case \is_array($callback):
                 return $this->fromArray($callback);
         }
 
@@ -68,7 +60,7 @@ final class CallbackHelper
     /** @param array{string|object,string} $callback */
     private function fromArray(array $callback): ?ReflectionMethod
     {
-        if (is_object($callback[0]) === true) {
+        if (\is_object($callback[0]) === true) {
             return null;
         }
 
