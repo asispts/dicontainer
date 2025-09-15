@@ -2,7 +2,13 @@
 
 namespace Hinasila\DiContainer;
 
+use Closure;
 use Error;
+use Hinasila\DiContainer\Exception\ContainerException;
+use Hinasila\DiContainer\Exception\NotFoundException;
+use Hinasila\DiContainer\Internal\CallbackHelper;
+use Hinasila\DiContainer\Internal\DiParser;
+use Hinasila\DiContainer\Internal\InjectRule;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Throwable;
@@ -10,124 +16,149 @@ use Throwable;
 final class DiContainer implements ContainerInterface
 {
     /**
-     * @var DiParser
+     * @var array<string,InjectRule>
      */
-    private $parser;
+    private $rules;
 
-    /**
-     * @var CallbackHelper
-     */
     private $callback;
 
-    /**
-     * @var DiRuleList
-     */
-    private $list;
+    private $parser;
 
     /**
      * @var object[]
      */
-    private $instances;
+    private $instances = [];
 
     /**
      * @var array<string,string>
      */
     private $curKeys = [];
 
-    public function __construct(DiRuleList $list)
+    /**
+     * @param array<string,InjectRule> $rules
+     */
+    public function __construct(array $rules = [])
     {
-        $this->list     = $list;
         $this->callback = new CallbackHelper($this);
         $this->parser   = new DiParser([$this, 'get'], $this->callback);
+
+        $rules[ContainerInterface::class] = new InjectRule(ContainerInterface::class, self::class);
+
+        $this->rules = $rules;
     }
 
-    public function has($id)
+    /**
+     * @param class-string $serviceId
+     */
+    public function has(string $serviceId): bool
     {
-        return $this->list->hasRule($id) || \class_exists($id);
+        return \array_key_exists($serviceId, $this->rules) || \class_exists($serviceId);
     }
 
-    public function get($id)
+    /**
+     * @template T of object
+     *
+     * @param class-string<T> $serviceId
+     * @return T
+     */
+    public function get(string $serviceId)
     {
-        if ($this->has($id) === false) {
-            throw new NotFoundException(\sprintf('Class or rule %s does not exist', $id));
+        if ($this->has($serviceId) === false) {
+            throw new NotFoundException(\sprintf('Service "%s" does not exist', $serviceId));
         }
 
-        $rule = $this->list->getRule($id);
-        if ($rule->classname() === __CLASS__) {
+        $rule = $this->getRule($serviceId);
+        if ($rule->classname() === self::class) {
             return clone $this;
         }
 
-        if (empty($rule->getFrom()) === true) {
-            return $this->getInstance($rule);
+
+        $closure = $rule->getClosure();
+        if ($closure instanceof Closure) {
+            return $closure();
         }
+        return $this->getInstance($rule);
 
-        $getFrom  = $rule->getFrom();
-        $callback = \array_shift($getFrom);
-        $args     = \array_shift($getFrom);
 
-        $callback = $this->callback->toCallback($callback);
-        return \call_user_func_array($callback, (array) $args);
+        // $getFrom = $rule->getFrom();
+        // if ($getFrom === []) {
+        //     return $this->getInstance($rule);
+        // }
+
+        // $callback = \array_shift($getFrom);
+        // $args     = \array_shift($getFrom);
+
+        // $callback = $this->callback->toCallback($callback);
+        // return \call_user_func_array($callback, (array) $args);
     }
 
-    /** @return object */
-    private function getInstance(DiRule $rule)
+    /**
+     * @return object
+     */
+    private function getInstance(InjectRule $rule)
     {
-        if (isset($this->instances[$rule->key()]) === true) {
-            return $this->instances[$rule->key()];
+        if (isset($this->instances[$rule->serviceId()])) {
+            return $this->instances[$rule->serviceId()];
         }
 
         if (
-            \array_key_exists($rule->key(), $this->curKeys) === true
-            || \in_array($rule->classname(), $this->curKeys) === true
+            \array_key_exists($rule->serviceId(), $this->curKeys)
+            || \in_array($rule->classname(), $this->curKeys)
         ) {
             throw new ContainerException('Cyclic dependencies detected');
         }
 
         $classname = $rule->classname();
-        if (\is_object($classname) === true) {
-            return $classname;
-        }
-        $this->curKeys[$rule->key()] = $classname;
+        // if (\is_object($classname)) {
+        //     return $classname;
+        // }
+        $this->curKeys[$rule->serviceId()] = $classname;
 
         try {
             $object = $this->createObject($rule);
-            unset($this->curKeys[$rule->key()]);
+            unset($this->curKeys[$rule->serviceId()]);
         } catch (Throwable $exc) {
-            unset($this->curKeys[$rule->key()]);
+            unset($this->curKeys[$rule->serviceId()]);
             throw $exc;
         }
 
-        if ($rule->isShared() === true) {
-            $this->instances[$rule->key()] = $object;
+        if ($rule->isShared()) {
+            $this->instances[$rule->serviceId()] = $object;
         }
 
         return $object;
     }
 
-    /** @return object */
-    private function createObject(DiRule $rule)
+    private function createObject(InjectRule $rule): object
     {
         $ref = new ReflectionClass($rule->classname());
-        if ($ref->isAbstract() === true) {
+        if ($ref->isAbstract()) {
             throw new ContainerException('Cannot instantiate abstract class ' . $rule->classname());
         }
 
-        $params = $this->parser->parse($ref->getConstructor(), $rule->params(), $rule->substitutions());
+        $params = $this->parser->parse($ref->getConstructor(), $rule->getParams(), $rule->getBindArgs());
         return $this->getObject($ref, $params);
     }
 
     /**
      * @param ReflectionClass<Object> $ref
      * @param array<mixed> $params
-     *
-     * @return object
      */
-    private function getObject(ReflectionClass $ref, array $params)
+    private function getObject(ReflectionClass $ref, array $params): object
     {
         try {
             return $ref->newInstanceArgs($params);
         } catch (Error $exc) {
             throw new ContainerException($exc->getMessage(), 1, $exc);
         }
+    }
+
+    private function getRule(string $serviceId): InjectRule
+    {
+        if (!isset($this->rules[$serviceId])) {
+            return new InjectRule($serviceId);
+        }
+
+        return $this->rules[$serviceId];
     }
 }

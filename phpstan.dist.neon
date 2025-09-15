@@ -4,16 +4,16 @@ includes:
 
 
 parameters:
-    level: 0
+    level: 6
     paths:
         - src
-        - tests/Units
+        - tests/Features
 
     bootstrapFiles:
         - tests/bootstrap.php
 
     scanDirectories:
-        - tests/Data
+        - tests/_fixtures
 
     ignoreErrors:
 
