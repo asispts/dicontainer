@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Hinasila\DiContainer;
+namespace DiContainer;
 
 use Closure;
+use DiContainer\Exception\ContainerException;
+use DiContainer\Exception\NotFoundException;
+use DiContainer\Internal\CallbackHelper;
+use DiContainer\Internal\DiParser;
+use DiContainer\Internal\InjectRule;
 use Error;
-use Hinasila\DiContainer\Exception\ContainerException;
-use Hinasila\DiContainer\Exception\NotFoundException;
-use Hinasila\DiContainer\Internal\CallbackHelper;
-use Hinasila\DiContainer\Internal\DiParser;
-use Hinasila\DiContainer\Internal\InjectRule;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use Throwable;

@@ -2,13 +2,13 @@
 
 namespace Tests\Features\Basic;
 
+use DiContainer\DiContainer;
 use Fixtures\ClassGraph;
 use Fixtures\NullableObject;
 use Fixtures\NullableSubtitution;
 use Fixtures\ObjectDefaultValue;
 use Fixtures\ScalarDefaultValue;
 use Fixtures\ScalarNullable;
-use Hinasila\DiContainer\DiContainer;
 use Tests\DicTestCase;
 
 final class NoConfigTest extends DicTestCase

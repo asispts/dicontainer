@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Hinasila\DiContainer\Internal;
+namespace DiContainer\Internal;
 
-use Hinasila\DiContainer\Exception\ContainerException;
-use Hinasila\DiContainer\Exception\NotFoundException;
-use Hinasila\DiContainer\Exception\NoValueException;
+use DiContainer\Exception\ContainerException;
+use DiContainer\Exception\NotFoundException;
+use DiContainer\Exception\NoValueException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;

@@ -3,12 +3,12 @@
 namespace Tests\Features\Basic;
 
 use ArrayAccess;
+use DiContainer\Exception\ContainerException;
+use DiContainer\Exception\NotFoundException;
 use Fixtures\AbstractClass;
 use Fixtures\PrivateConstructor;
 use Fixtures\ProtectedConstructor;
 use Fixtures\TraitTest;
-use Hinasila\DiContainer\Exception\ContainerException;
-use Hinasila\DiContainer\Exception\NotFoundException;
 use Tests\DicTestCase;
 
 final class InvalidCaseTest extends DicTestCase

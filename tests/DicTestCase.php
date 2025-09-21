@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Hinasila\DiContainer\DiContainer;
+use DiContainer\DiContainer;
 use PHPUnit\Framework\TestCase;
 
 abstract class DicTestCase extends TestCase

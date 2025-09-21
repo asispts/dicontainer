@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Hinasila\DiContainer\Internal;
+namespace DiContainer\Internal;
 
-use Hinasila\DiContainer\Exception\ContainerException;
+use DiContainer\Exception\ContainerException;
 use Psr\Container\ContainerInterface;
 use ReflectionException;
 use ReflectionMethod;

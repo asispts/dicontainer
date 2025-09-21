@@ -2,8 +2,8 @@
 
 namespace Tests\Features\Basic;
 
+use DiContainer\Exception\ContainerException;
 use Fixtures\CyclicA;
-use Hinasila\DiContainer\Exception\ContainerException;
 use Tests\DicTestCase;
 
 final class CyclicTest extends DicTestCase

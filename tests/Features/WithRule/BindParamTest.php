@@ -2,14 +2,14 @@
 
 namespace Tests\Features\WithRule;
 
+use DiContainer\DiContainer;
+use DiContainer\DiContainerBuilder;
+use DiContainer\Exception\ContainerException;
 use Fixtures\ClassArray;
 use Fixtures\ClassBool;
 use Fixtures\ClassFloat;
 use Fixtures\ClassInt;
 use Fixtures\ClassString;
-use Hinasila\DiContainer\DiContainer;
-use Hinasila\DiContainer\DiContainerBuilder;
-use Hinasila\DiContainer\Exception\ContainerException;
 use PHPUnit\Framework\TestCase;
 
 final class BindParamTest extends TestCase

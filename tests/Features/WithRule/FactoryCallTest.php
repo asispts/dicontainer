@@ -2,10 +2,10 @@
 
 namespace Tests\Features\WithRule;
 
+use DiContainer\DiContainerBuilder;
 use Fixtures\FactoryService;
 use Fixtures\ResultFactory;
 use Fixtures\ResultInterface;
-use Hinasila\DiContainer\DiContainerBuilder;
 use PHPUnit\Framework\TestCase;
 
 final class FactoryCallTest extends TestCase

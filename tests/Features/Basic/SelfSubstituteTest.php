@@ -2,8 +2,8 @@
 
 namespace Tests\Features\Basic;
 
+use DiContainer\DiContainer;
 use Fixtures\SelfSubstitute;
-use Hinasila\DiContainer\DiContainer;
 use ReflectionProperty;
 use Tests\DicTestCase;
 

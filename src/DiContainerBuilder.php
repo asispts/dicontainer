@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Hinasila\DiContainer;
+namespace DiContainer;
 
-use Hinasila\DiContainer\Internal\InjectRule;
+use DiContainer\Internal\InjectRule;
 use Psr\Container\ContainerInterface;
 
 final class DiContainerBuilder

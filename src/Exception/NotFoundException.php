@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Hinasila\DiContainer\Exception;
+namespace DiContainer\Exception;
 
 use Psr\Container\NotFoundExceptionInterface;
 

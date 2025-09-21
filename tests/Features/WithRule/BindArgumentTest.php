@@ -2,6 +2,9 @@
 
 namespace Tests\Features\WithRule;
 
+use DiContainer\DiContainer;
+use DiContainer\DiContainerBuilder;
+use DiContainer\Exception\ContainerException;
 use Fixtures\BasicClass;
 use Fixtures\BasicConcrete;
 use Fixtures\BasicInterface;
@@ -10,9 +13,6 @@ use Fixtures\DefaultProvider;
 use Fixtures\DefaultProviderInterface;
 use Fixtures\MainWire;
 use Fixtures\ProviderConfigInterface;
-use Hinasila\DiContainer\DiContainer;
-use Hinasila\DiContainer\DiContainerBuilder;
-use Hinasila\DiContainer\Exception\ContainerException;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 

@@ -1,19 +1,17 @@
 {
-  "name": "hinasila/dicontainer",
-  "description": "PSR-11 compliant PHP dependency injection container",
+  "name": "asispts/dicontainer",
+  "description": "PSR-11 compliant dependency injection container",
   "keywords": [
     "psr-11",
     "dependency-injection",
-    "container",
-    "container-interop",
-    "di"
+    "di-container"
   ],
   "type": "library",
   "license": "MIT",
   "authors": [
     {
       "name": "Asis Pattisahusiwa",
-      "email": "asis.pattisahusiwa@gmail.com"
+      "email": "asispts@gmail.com"
     }
   ],
   "homepage": "https://github.com/hinasila/dicontainer",
@@ -24,7 +22,7 @@
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
-      "Hinasila\\DiContainer\\": "src"
+      "DiContainer\\": "src"
     }
   },
   "autoload-dev": {
@@ -51,7 +49,7 @@
   },
   "extra": {
     "bamarni-bin": {
-      "bin-links": false,
+      "bin-links": true,
       "forward-command": true
     }
   }
