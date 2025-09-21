@@ -11,7 +11,6 @@ concurrency:
 
 permissions:
     contents: read
-    pull-requests: write
 
 jobs:
     lint:
@@ -33,10 +32,10 @@ jobs:
               run: composer install --no-progress --no-suggest
 
             - name: Check style
-              run: vendor-bin/tools/vendor/bin/phpcs
+              run: vendor/bin/phpcs
 
             - name: Run PHPStan
-              run: vendor-bin/tools/vendor/bin/phpstan analyse
+              run: vendor/bin/phpstan analyse
 
     test:
         needs: lint
@@ -59,7 +58,7 @@ jobs:
               run: composer install --no-progress --no-suggest
 
             - name: Run tests
-              run: vendor-bin/tools/vendor/bin/phpunit
+              run: vendor/bin/phpunit
 
     php8:
         needs: lint
@@ -82,4 +81,4 @@ jobs:
               run: composer install --no-progress --no-suggest
 
             - name: Run tests
-              run: vendor-bin/tools/vendor/bin/phpunit
+              run: vendor/bin/phpunit
