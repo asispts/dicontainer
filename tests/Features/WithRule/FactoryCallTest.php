@@ -2,7 +2,7 @@
 
 namespace Tests\Features\WithRule;
 
-use DiContainer\DiContainerBuilder;
+use Asispts\DiContainer\DiContainerBuilder;
 use Fixtures\FactoryService;
 use Fixtures\ResultFactory;
 use Fixtures\ResultInterface;

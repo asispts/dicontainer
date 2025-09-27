@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace DiContainer;
+namespace Asispts\DiContainer;
 
-use DiContainer\Internal\InjectRule;
+use Asispts\DiContainer\Internal\InjectRule;
 use Psr\Container\ContainerInterface;
 
 final class DiContainerBuilder

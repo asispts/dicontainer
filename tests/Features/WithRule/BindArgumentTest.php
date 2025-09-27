@@ -2,9 +2,9 @@
 
 namespace Tests\Features\WithRule;
 
-use DiContainer\DiContainer;
-use DiContainer\DiContainerBuilder;
-use DiContainer\Exception\ContainerException;
+use Asispts\DiContainer\DiContainer;
+use Asispts\DiContainer\DiContainerBuilder;
+use Asispts\DiContainer\Exception\ContainerException;
 use Fixtures\BasicClass;
 use Fixtures\BasicConcrete;
 use Fixtures\BasicInterface;

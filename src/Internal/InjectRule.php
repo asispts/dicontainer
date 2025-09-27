@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace DiContainer\Internal;
+namespace Asispts\DiContainer\Internal;
 
 use Closure;
 

@@ -22,7 +22,7 @@
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
-      "DiContainer\\": "src"
+      "Asispts\\DiContainer\\": "src"
     }
   },
   "autoload-dev": {

@@ -2,7 +2,7 @@
 
 namespace Tests\Features\Basic;
 
-use DiContainer\DiContainer;
+use Asispts\DiContainer\DiContainer;
 use Fixtures\ClassGraph;
 use Fixtures\NullableObject;
 use Fixtures\NullableSubtitution;

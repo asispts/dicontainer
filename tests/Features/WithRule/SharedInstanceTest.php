@@ -2,8 +2,8 @@
 
 namespace Tests\Features\WithRule;
 
-use DiContainer\DiContainer;
-use DiContainer\DiContainerBuilder;
+use Asispts\DiContainer\DiContainer;
+use Asispts\DiContainer\DiContainerBuilder;
 use Fixtures\ClassGraph;
 use PHPUnit\Framework\TestCase;
 use stdClass;
