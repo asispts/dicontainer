@@ -3,8 +3,8 @@
 namespace Tests\Features\Basic;
 
 use ArrayAccess;
-use DiContainer\Exception\ContainerException;
-use DiContainer\Exception\NotFoundException;
+use Asispts\DiContainer\Exception\ContainerException;
+use Asispts\DiContainer\Exception\NotFoundException;
 use Fixtures\AbstractClass;
 use Fixtures\PrivateConstructor;
 use Fixtures\ProtectedConstructor;

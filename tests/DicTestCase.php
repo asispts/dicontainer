@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use DiContainer\DiContainer;
+use Asispts\DiContainer\DiContainer;
 use PHPUnit\Framework\TestCase;
 
 abstract class DicTestCase extends TestCase

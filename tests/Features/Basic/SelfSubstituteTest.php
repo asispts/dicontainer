@@ -2,7 +2,7 @@
 
 namespace Tests\Features\Basic;
 
-use DiContainer\DiContainer;
+use Asispts\DiContainer\DiContainer;
 use Fixtures\SelfSubstitute;
 use ReflectionProperty;
 use Tests\DicTestCase;

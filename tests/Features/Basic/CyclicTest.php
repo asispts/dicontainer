@@ -2,7 +2,7 @@
 
 namespace Tests\Features\Basic;
 
-use DiContainer\Exception\ContainerException;
+use Asispts\DiContainer\Exception\ContainerException;
 use Fixtures\CyclicA;
 use Tests\DicTestCase;
 

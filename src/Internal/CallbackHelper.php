@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace DiContainer\Internal;
+namespace Asispts\DiContainer\Internal;
 
-use DiContainer\Exception\ContainerException;
+use Asispts\DiContainer\Exception\ContainerException;
 use Psr\Container\ContainerInterface;
 use ReflectionException;
 use ReflectionMethod;

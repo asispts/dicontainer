@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace DiContainer;
+namespace Asispts\DiContainer;
 
+use Asispts\DiContainer\Exception\ContainerException;
+use Asispts\DiContainer\Exception\NotFoundException;
+use Asispts\DiContainer\Internal\CallbackHelper;
+use Asispts\DiContainer\Internal\DiParser;
+use Asispts\DiContainer\Internal\InjectRule;
 use Closure;
-use DiContainer\Exception\ContainerException;
-use DiContainer\Exception\NotFoundException;
-use DiContainer\Internal\CallbackHelper;
-use DiContainer\Internal\DiParser;
-use DiContainer\Internal\InjectRule;
 use Error;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
